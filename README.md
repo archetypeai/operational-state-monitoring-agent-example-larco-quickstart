@@ -323,6 +323,22 @@ same drop from test to delivery, mainly on spin and fill.
 
 **Writes:** `fit/out/delivery/scores.json`.
 
+## Results, and they reproduce
+
+We ran the quickstart twice from Stage 0: the second time with a fresh download
+from Zenodo and `fit/out/` moved aside. Every number came out the same:
+
+| stage | first run | fresh run |
+|---|---|---|
+| 1–3 | 9,826,559 rows; 1,224 / 1,760 / 1,587 windows | same |
+| 4 (k 5 / k 31) | 0.8305 / 0.7980 | same |
+| 5 test | 0.8617 | same, with the same confusion matrix, from its own blueprint `…-7ddzrn` |
+| 7 delivery | 0.7707 | same, per cycle too |
+
+So the pipeline and the platform are deterministic here. If your run gives
+different numbers, something differs in your data or setup, and the expected
+outputs above show at which stage.
+
 ## What's left out, compared with the full example
 
 | full example | here | why |
