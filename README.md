@@ -33,6 +33,57 @@
 > different (wash is ~60% of the time, not 83%). It shows how the lifecycle works;
 > for results, see the full example.
 
+## The scenario
+
+- **A customer shares labelled cycles from one washing machine,** the healthy
+  **Becken BWM5381IX** (`becken`). Here that's 14 short cycles.
+- **We report how the agent does on settings of that machine it has never
+  seen** (the test).
+- **We then run it over a second unit of the same model** (`becken-flt`, 5
+  cycles), with its labels hidden, and score the predictions afterwards (the
+  delivery).
+
+Two things about the second unit:
+- **The dataset marks becken-flt as faulty,** without saying what the fault is.
+  It plays no part in any choice here, so its delivery score is a clean
+  "machine the model has never seen" number.
+- **The test number is the easier one:** new settings of the same machine, not a
+  new machine. Stage 7 prints both side by side.
+
+**The model sees only the 9 vibration channels** (3 triaxial accelerometers: back,
+side, top). The dataset also records power, water flow and temperatures at 1 Hz,
+but the labels are derived from exactly those readings, so as inputs they would
+give the answer away. A clip-on accelerometer is all you'd need; no access to the
+machine's controller.
+
+### The states
+
+| state | what the machine is doing | what the accelerometer sees |
+|---|---|---|
+| `fill` | water entering, motor off | water rushing through the valve and pipes: louder than wash |
+| `wash` | drum tumbling back and forth, with pauses | a slow reversing pattern, quiet in the pauses |
+| `spin` | steady high-speed rotation | a strong, steady tone: the loudest state |
+| `drain` | the pump emptying the drum | louder than wash, in short bursts |
+
+### The cycles, and what each role's files are
+
+The 19 cycles are the shortest `warm_*` programs of each role in the full example's
+split. That split assigns whole setting groups (program × temperature × load) to
+roles at random, so near-identical cycles never end up on both sides.
+
+| role | cycles | files | windows at 512 / 512 | labels | used in |
+|---|---|---|---|---|---|
+| library (training) | 8 becken: `warm_15-min_40_2`, `sport_40_2`, `delicate_30_0`, `sport_40_6`, `20-deg_20_0`, `mix_40_2`, `delicate_30_6`, `wool_40_0` | **4, one per state** | 800 (200 per state) | the state, by filename | 4: every trial |
+| validation | 3 becken: `warm_15-min_40_0`, `fast-45_40_2`, `sport_40_0` | 3 | 2,448 | `label` column | 4: scores each trial |
+| test | 3 becken: `warm_20-deg_20_2`, `delicate_30_2`, `fast-45_40_0` | 3 | 3,520 | `label` column | 5: scored once |
+| delivery | 5 becken-flt: `warm_fast-15_0`, `fast-15_2`, `fast-15_6`, `fast-45_40_2`, `sport_40_2` | 5 | 3,178 | none (held back in `delivery_labels/`) | 6: run; 7: scored against the held-back labels |
+
+- **The library:** each state's file holds its windows as continuous pieces from
+  all 8 cycles, in time order with real timestamps. Jumps fall only between
+  pieces, and in training any window across a jump is skipped.
+- **Validation, test and delivery** stay **one continuous file per cycle.** A
+  single scored window across a time jump would fail the whole trial or eval.
+
 ## Setup
 
 ```sh
