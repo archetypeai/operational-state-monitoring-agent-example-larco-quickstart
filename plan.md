@@ -13,6 +13,15 @@ Status (2026-09-30): **built and run end to end (Stages 0–7).**
   files, 3,178 windows, 0 invalid.
 - **Stage 7:** delivery macro-F1 **0.7707** (fill 0.84, wash 0.86, spin 0.67,
   drain 0.71), 0.09 below the test, with the 15-minute programs weakest.
+- **A second run from Stage 0 (2026-09-30, fresh download from Zenodo, `fit/out/`
+  moved aside) reproduced every number exactly:**
+  - Stages 1–3: every count;
+  - Stage 4: 0.8305 / 0.7980 (`opt_544986s7qv96tbdqtkyry73002`);
+  - Stage 5: 0.8617, with the same confusion matrix, from its own blueprint `…-7ddzrn`;
+  - Stage 7: 0.7707.
+
+  So the pipeline and the platform are deterministic here. Times were the same:
+  3–4 min per platform stage.
 - **The platform was far quicker than on the full example** (~12 min per trial,
   ~40 per eval there). That comes down to load or job size, not a fixed cost.
   The README gives the measured times and says they vary.
