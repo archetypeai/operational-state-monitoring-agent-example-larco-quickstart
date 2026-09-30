@@ -1,0 +1,1413 @@
+{
+ "cycles": [
+  {
+   "file": "wm_becken_BWM5381IX_warm_15-min_40_2.csv",
+   "role": "library",
+   "unit": "becken_BWM5381IX",
+   "checks": {
+    "files": [
+     "PASS",
+     ""
+    ],
+    "schema": [
+     "PASS",
+     ""
+    ],
+    "label values": [
+     "PASS",
+     ""
+    ],
+    "label timeline": [
+     "PASS",
+     ""
+    ],
+    "vibration rate": [
+     "PASS",
+     "201.2 Hz"
+    ],
+    "glitches": [
+     "PASS",
+     ""
+    ],
+    "channels": [
+     "PASS",
+     ""
+    ],
+    "states": [
+     "PASS",
+     ""
+    ],
+    "coverage": [
+     "PASS",
+     "99.9% of label seconds; offsets start -1.0 s, end -0.2 s"
+    ],
+    "alignment": [
+     "PASS",
+     "not measurable: no spin end with a clear drop"
+    ]
+   },
+   "date": "2023-08-09",
+   "minutes": 15.7,
+   "offset_s": {
+    "start": -1.0,
+    "end": -0.2
+   },
+   "rate_hz": 201.2,
+   "glitches": 0,
+   "clip_pct_max": 0.0,
+   "seconds": {
+    "fill": 322,
+    "wash": 293,
+    "spin": 108,
+    "drain": 221
+   },
+   "coverage": 0.999,
+   "alignment": {
+    "spin_end_offsets_s": []
+   },
+   "vib_level_g": {
+    "fill": 0.0191,
+    "wash": 0.0073,
+    "spin": 0.2055,
+    "drain": 0.016
+   }
+  },
+  {
+   "file": "wm_becken_BWM5381IX_warm_20-deg_20_0.csv",
+   "role": "library",
+   "unit": "becken_BWM5381IX",
+   "checks": {
+    "files": [
+     "PASS",
+     ""
+    ],
+    "schema": [
+     "PASS",
+     ""
+    ],
+    "label values": [
+     "PASS",
+     ""
+    ],
+    "label timeline": [
+     "PASS",
+     ""
+    ],
+    "vibration rate": [
+     "PASS",
+     "201.2 Hz"
+    ],
+    "glitches": [
+     "PASS",
+     ""
+    ],
+    "channels": [
+     "PASS",
+     ""
+    ],
+    "states": [
+     "PASS",
+     ""
+    ],
+    "coverage": [
+     "PASS",
+     "100.0% of label seconds; offsets start -1.0 s, end -0.2 s"
+    ],
+    "alignment": [
+     "PASS",
+     "vibration drops +10 s from the label's spin end (median of 1)"
+    ]
+   },
+   "date": "2023-07-21",
+   "minutes": 57.7,
+   "offset_s": {
+    "start": -1.0,
+    "end": -0.2
+   },
+   "rate_hz": 201.2,
+   "glitches": 0,
+   "clip_pct_max": 0.0,
+   "seconds": {
+    "fill": 328,
+    "wash": 2038,
+    "spin": 866,
+    "drain": 229
+   },
+   "coverage": 1.0,
+   "alignment": {
+    "spin_end_offsets_s": [
+     10
+    ],
+    "median_s": 10.0
+   },
+   "vib_level_g": {
+    "fill": 0.0189,
+    "wash": 0.007,
+    "spin": 0.0212,
+    "drain": 0.0152
+   }
+  },
+  {
+   "file": "wm_becken_BWM5381IX_warm_delicate_30_0.csv",
+   "role": "library",
+   "unit": "becken_BWM5381IX",
+   "checks": {
+    "files": [
+     "PASS",
+     ""
+    ],
+    "schema": [
+     "PASS",
+     ""
+    ],
+    "label values": [
+     "PASS",
+     ""
+    ],
+    "label timeline": [
+     "PASS",
+     ""
+    ],
+    "vibration rate": [
+     "PASS",
+     "201.2 Hz"
+    ],
+    "glitches": [
+     "PASS",
+     ""
+    ],
+    "channels": [
+     "PASS",
+     ""
+    ],
+    "states": [
+     "PASS",
+     ""
+    ],
+    "coverage": [
+     "PASS",
+     "100.0% of label seconds; offsets start -1.2 s, end -0.5 s"
+    ],
+    "alignment": [
+     "WARN",
+     "vibration drops -81 s from the label's spin end (median of 1)"
+    ]
+   },
+   "date": "2023-07-21",
+   "minutes": 47.9,
+   "offset_s": {
+    "start": -1.2,
+    "end": -0.5
+   },
+   "rate_hz": 201.2,
+   "glitches": 0,
+   "clip_pct_max": 0.0,
+   "seconds": {
+    "fill": 540,
+    "wash": 1725,
+    "spin": 284,
+    "drain": 325
+   },
+   "coverage": 1.0,
+   "alignment": {
+    "spin_end_offsets_s": [
+     -81
+    ],
+    "median_s": -81.0
+   },
+   "vib_level_g": {
+    "fill": 0.0173,
+    "wash": 0.0055,
+    "spin": 0.0195,
+    "drain": 0.0153
+   }
+  },
+  {
+   "file": "wm_becken_BWM5381IX_warm_delicate_30_6.csv",
+   "role": "library",
+   "unit": "becken_BWM5381IX",
+   "checks": {
+    "files": [
+     "PASS",
+     ""
+    ],
+    "schema": [
+     "PASS",
+     ""
+    ],
+    "label values": [
+     "PASS",
+     ""
+    ],
+    "label timeline": [
+     "PASS",
+     ""
+    ],
+    "vibration rate": [
+     "PASS",
+     "200.6 Hz"
+    ],
+    "glitches": [
+     "PASS",
+     ""
+    ],
+    "channels": [
+     "PASS",
+     ""
+    ],
+    "states": [
+     "PASS",
+     ""
+    ],
+    "coverage": [
+     "PASS",
+     "99.9% of label seconds; offsets start -0.8 s, end -0.9 s"
+    ],
+    "alignment": [
+     "PASS",
+     "vibration drops +4 s from the label's spin end (median of 1)"
+    ]
+   },
+   "date": "2023-08-19",
+   "minutes": 65.1,
+   "offset_s": {
+    "start": -0.8,
+    "end": -0.9
+   },
+   "rate_hz": 200.6,
+   "glitches": 0,
+   "clip_pct_max": 0.0,
+   "seconds": {
+    "fill": 491,
+    "wash": 2787,
+    "spin": 277,
+    "drain": 351
+   },
+   "coverage": 0.999,
+   "alignment": {
+    "spin_end_offsets_s": [
+     4
+    ],
+    "median_s": 4.0
+   },
+   "vib_level_g": {
+    "fill": 0.0161,
+    "wash": 0.0055,
+    "spin": 0.0663,
+    "drain": 0.0144
+   }
+  },
+  {
+   "file": "wm_becken_BWM5381IX_warm_mix_40_2.csv",
+   "role": "library",
+   "unit": "becken_BWM5381IX",
+   "checks": {
+    "files": [
+     "PASS",
+     ""
+    ],
+    "schema": [
+     "PASS",
+     ""
+    ],
+    "label values": [
+     "PASS",
+     ""
+    ],
+    "label timeline": [
+     "PASS",
+     ""
+    ],
+    "vibration rate": [
+     "PASS",
+     "200.6 Hz"
+    ],
+    "glitches": [
+     "PASS",
+     ""
+    ],
+    "channels": [
+     "PASS",
+     ""
+    ],
+    "states": [
+     "PASS",
+     ""
+    ],
+    "coverage": [
+     "PASS",
+     "99.9% of label seconds; offsets start -1.6 s, end -0.8 s"
+    ],
+    "alignment": [
+     "PASS",
+     "vibration drops +14 s from the label's spin end (median of 1)"
+    ]
+   },
+   "date": "2023-08-16",
+   "minutes": 62.1,
+   "offset_s": {
+    "start": -1.6,
+    "end": -0.8
+   },
+   "rate_hz": 200.6,
+   "glitches": 0,
+   "clip_pct_max": 0.0,
+   "seconds": {
+    "fill": 337,
+    "wash": 2531,
+    "spin": 528,
+    "drain": 329
+   },
+   "coverage": 0.999,
+   "alignment": {
+    "spin_end_offsets_s": [
+     14
+    ],
+    "median_s": 14.0
+   },
+   "vib_level_g": {
+    "fill": 0.0165,
+    "wash": 0.0076,
+    "spin": 0.0328,
+    "drain": 0.0198
+   }
+  },
+  {
+   "file": "wm_becken_BWM5381IX_warm_sport_40_2.csv",
+   "role": "library",
+   "unit": "becken_BWM5381IX",
+   "checks": {
+    "files": [
+     "PASS",
+     ""
+    ],
+    "schema": [
+     "PASS",
+     ""
+    ],
+    "label values": [
+     "PASS",
+     ""
+    ],
+    "label timeline": [
+     "PASS",
+     ""
+    ],
+    "vibration rate": [
+     "PASS",
+     "201.3 Hz"
+    ],
+    "glitches": [
+     "PASS",
+     ""
+    ],
+    "channels": [
+     "PASS",
+     ""
+    ],
+    "states": [
+     "PASS",
+     ""
+    ],
+    "coverage": [
+     "PASS",
+     "100.0% of label seconds; offsets start -1.4 s, end -0.6 s"
+    ],
+    "alignment": [
+     "PASS",
+     "vibration drops -1 s from the label's spin end (median of 1)"
+    ]
+   },
+   "date": "2023-08-10",
+   "minutes": 46.8,
+   "offset_s": {
+    "start": -1.4,
+    "end": -0.6
+   },
+   "rate_hz": 201.3,
+   "glitches": 0,
+   "clip_pct_max": 0.0,
+   "seconds": {
+    "fill": 324,
+    "wash": 1653,
+    "spin": 523,
+    "drain": 307
+   },
+   "coverage": 1.0,
+   "alignment": {
+    "spin_end_offsets_s": [
+     -1
+    ],
+    "median_s": -1.0
+   },
+   "vib_level_g": {
+    "fill": 0.018,
+    "wash": 0.0069,
+    "spin": 0.0554,
+    "drain": 0.0196
+   }
+  },
+  {
+   "file": "wm_becken_BWM5381IX_warm_sport_40_6.csv",
+   "role": "library",
+   "unit": "becken_BWM5381IX",
+   "checks": {
+    "files": [
+     "PASS",
+     ""
+    ],
+    "schema": [
+     "PASS",
+     ""
+    ],
+    "label values": [
+     "PASS",
+     ""
+    ],
+    "label timeline": [
+     "PASS",
+     ""
+    ],
+    "vibration rate": [
+     "PASS",
+     "200.5 Hz"
+    ],
+    "glitches": [
+     "PASS",
+     ""
+    ],
+    "channels": [
+     "PASS",
+     ""
+    ],
+    "states": [
+     "PASS",
+     ""
+    ],
+    "coverage": [
+     "PASS",
+     "100.0% of label seconds; offsets start -2.0 s, end -0.2 s"
+    ],
+    "alignment": [
+     "PASS",
+     "vibration drops +6 s from the label's spin end (median of 1)"
+    ]
+   },
+   "date": "2023-08-18",
+   "minutes": 48.0,
+   "offset_s": {
+    "start": -2.0,
+    "end": -0.2
+   },
+   "rate_hz": 200.5,
+   "glitches": 0,
+   "clip_pct_max": 0.0,
+   "seconds": {
+    "fill": 399,
+    "wash": 1648,
+    "spin": 499,
+    "drain": 332
+   },
+   "coverage": 1.0,
+   "alignment": {
+    "spin_end_offsets_s": [
+     6
+    ],
+    "median_s": 6.0
+   },
+   "vib_level_g": {
+    "fill": 0.0167,
+    "wash": 0.0065,
+    "spin": 0.0282,
+    "drain": 0.0183
+   }
+  },
+  {
+   "file": "wm_becken_BWM5381IX_warm_wool_40_0.csv",
+   "role": "library",
+   "unit": "becken_BWM5381IX",
+   "checks": {
+    "files": [
+     "PASS",
+     ""
+    ],
+    "schema": [
+     "PASS",
+     ""
+    ],
+    "label values": [
+     "PASS",
+     ""
+    ],
+    "label timeline": [
+     "PASS",
+     ""
+    ],
+    "vibration rate": [
+     "PASS",
+     "201.2 Hz"
+    ],
+    "glitches": [
+     "PASS",
+     ""
+    ],
+    "channels": [
+     "PASS",
+     ""
+    ],
+    "states": [
+     "PASS",
+     ""
+    ],
+    "coverage": [
+     "PASS",
+     "100.0% of label seconds; offsets start -1.2 s, end -0.6 s"
+    ],
+    "alignment": [
+     "WARN",
+     "vibration drops -73 s from the label's spin end (median of 1)"
+    ]
+   },
+   "date": "2023-07-20",
+   "minutes": 85.3,
+   "offset_s": {
+    "start": -1.2,
+    "end": -0.6
+   },
+   "rate_hz": 201.2,
+   "glitches": 0,
+   "clip_pct_max": 0.0,
+   "seconds": {
+    "fill": 607,
+    "wash": 3679,
+    "spin": 469,
+    "drain": 363
+   },
+   "coverage": 1.0,
+   "alignment": {
+    "spin_end_offsets_s": [
+     -73
+    ],
+    "median_s": -73.0
+   },
+   "vib_level_g": {
+    "fill": 0.0182,
+    "wash": 0.0052,
+    "spin": 0.0192,
+    "drain": 0.016
+   }
+  },
+  {
+   "file": "wm_becken_BWM5381IX_warm_15-min_40_0.csv",
+   "role": "validation",
+   "unit": "becken_BWM5381IX",
+   "checks": {
+    "files": [
+     "PASS",
+     ""
+    ],
+    "schema": [
+     "PASS",
+     ""
+    ],
+    "label values": [
+     "PASS",
+     ""
+    ],
+    "label timeline": [
+     "PASS",
+     ""
+    ],
+    "vibration rate": [
+     "PASS",
+     "201.3 Hz"
+    ],
+    "glitches": [
+     "PASS",
+     ""
+    ],
+    "channels": [
+     "PASS",
+     ""
+    ],
+    "states": [
+     "PASS",
+     ""
+    ],
+    "coverage": [
+     "PASS",
+     "99.8% of label seconds; offsets start -0.7 s, end -0.9 s"
+    ],
+    "alignment": [
+     "PASS",
+     "not measurable: no spin end with a clear drop"
+    ]
+   },
+   "date": "2023-07-19",
+   "minutes": 16.5,
+   "offset_s": {
+    "start": -0.7,
+    "end": -0.9
+   },
+   "rate_hz": 201.3,
+   "glitches": 0,
+   "clip_pct_max": 0.0,
+   "seconds": {
+    "fill": 305,
+    "wash": 278,
+    "spin": 217,
+    "drain": 192
+   },
+   "coverage": 0.998,
+   "alignment": {
+    "spin_end_offsets_s": []
+   },
+   "vib_level_g": {
+    "fill": 0.0189,
+    "wash": 0.0071,
+    "spin": 0.0174,
+    "drain": 0.016
+   }
+  },
+  {
+   "file": "wm_becken_BWM5381IX_warm_fast-45_40_2.csv",
+   "role": "validation",
+   "unit": "becken_BWM5381IX",
+   "checks": {
+    "files": [
+     "PASS",
+     ""
+    ],
+    "schema": [
+     "PASS",
+     ""
+    ],
+    "label values": [
+     "PASS",
+     ""
+    ],
+    "label timeline": [
+     "PASS",
+     ""
+    ],
+    "vibration rate": [
+     "PASS",
+     "201.3 Hz"
+    ],
+    "glitches": [
+     "PASS",
+     ""
+    ],
+    "channels": [
+     "PASS",
+     ""
+    ],
+    "states": [
+     "PASS",
+     ""
+    ],
+    "coverage": [
+     "PASS",
+     "100.0% of label seconds; offsets start -1.4 s, end -0.6 s"
+    ],
+    "alignment": [
+     "PASS",
+     "not measurable: no spin end with a clear drop"
+    ]
+   },
+   "date": "2023-08-09",
+   "minutes": 43.1,
+   "offset_s": {
+    "start": -1.4,
+    "end": -0.6
+   },
+   "rate_hz": 201.3,
+   "glitches": 0,
+   "clip_pct_max": 0.0,
+   "seconds": {
+    "fill": 200,
+    "wash": 1939,
+    "spin": 264,
+    "drain": 181
+   },
+   "coverage": 1.0,
+   "alignment": {
+    "spin_end_offsets_s": []
+   },
+   "vib_level_g": {
+    "fill": 0.0183,
+    "wash": 0.0091,
+    "spin": 0.1345,
+    "drain": 0.0167
+   }
+  },
+  {
+   "file": "wm_becken_BWM5381IX_warm_sport_40_0.csv",
+   "role": "validation",
+   "unit": "becken_BWM5381IX",
+   "checks": {
+    "files": [
+     "PASS",
+     ""
+    ],
+    "schema": [
+     "PASS",
+     ""
+    ],
+    "label values": [
+     "PASS",
+     ""
+    ],
+    "label timeline": [
+     "PASS",
+     ""
+    ],
+    "vibration rate": [
+     "PASS",
+     "201.2 Hz"
+    ],
+    "glitches": [
+     "PASS",
+     ""
+    ],
+    "channels": [
+     "PASS",
+     ""
+    ],
+    "states": [
+     "PASS",
+     ""
+    ],
+    "coverage": [
+     "PASS",
+     "100.0% of label seconds; offsets start -1.7 s, end -0.2 s"
+    ],
+    "alignment": [
+     "PASS",
+     "vibration drops -5 s from the label's spin end (median of 1)"
+    ]
+   },
+   "date": "2023-07-20",
+   "minutes": 45.0,
+   "offset_s": {
+    "start": -1.7,
+    "end": -0.2
+   },
+   "rate_hz": 201.2,
+   "glitches": 0,
+   "clip_pct_max": 0.0,
+   "seconds": {
+    "fill": 326,
+    "wash": 1558,
+    "spin": 593,
+    "drain": 224
+   },
+   "coverage": 1.0,
+   "alignment": {
+    "spin_end_offsets_s": [
+     -5
+    ],
+    "median_s": -5.0
+   },
+   "vib_level_g": {
+    "fill": 0.0184,
+    "wash": 0.0064,
+    "spin": 0.0184,
+    "drain": 0.0171
+   }
+  },
+  {
+   "file": "wm_becken_BWM5381IX_warm_20-deg_20_2.csv",
+   "role": "test",
+   "unit": "becken_BWM5381IX",
+   "checks": {
+    "files": [
+     "PASS",
+     ""
+    ],
+    "schema": [
+     "PASS",
+     ""
+    ],
+    "label values": [
+     "PASS",
+     ""
+    ],
+    "label timeline": [
+     "PASS",
+     ""
+    ],
+    "vibration rate": [
+     "PASS",
+     "200.6 Hz"
+    ],
+    "glitches": [
+     "PASS",
+     ""
+    ],
+    "channels": [
+     "PASS",
+     ""
+    ],
+    "states": [
+     "PASS",
+     ""
+    ],
+    "coverage": [
+     "PASS",
+     "100.0% of label seconds; offsets start -1.2 s, end -0.5 s"
+    ],
+    "alignment": [
+     "PASS",
+     "vibration drops +3 s from the label's spin end (median of 3)"
+    ]
+   },
+   "date": "2023-08-16",
+   "minutes": 59.8,
+   "offset_s": {
+    "start": -1.2,
+    "end": -0.5
+   },
+   "rate_hz": 200.6,
+   "glitches": 0,
+   "clip_pct_max": 0.0,
+   "seconds": {
+    "fill": 358,
+    "wash": 1994,
+    "spin": 910,
+    "drain": 329
+   },
+   "coverage": 1.0,
+   "alignment": {
+    "spin_end_offsets_s": [
+     3,
+     4,
+     -1
+    ],
+    "median_s": 3.0
+   },
+   "vib_level_g": {
+    "fill": 0.0164,
+    "wash": 0.0074,
+    "spin": 0.0657,
+    "drain": 0.0163
+   }
+  },
+  {
+   "file": "wm_becken_BWM5381IX_warm_delicate_30_2.csv",
+   "role": "test",
+   "unit": "becken_BWM5381IX",
+   "checks": {
+    "files": [
+     "PASS",
+     ""
+    ],
+    "schema": [
+     "PASS",
+     ""
+    ],
+    "label values": [
+     "PASS",
+     ""
+    ],
+    "label timeline": [
+     "PASS",
+     ""
+    ],
+    "vibration rate": [
+     "PASS",
+     "200.6 Hz"
+    ],
+    "glitches": [
+     "PASS",
+     ""
+    ],
+    "channels": [
+     "PASS",
+     ""
+    ],
+    "states": [
+     "PASS",
+     ""
+    ],
+    "coverage": [
+     "PASS",
+     "100.0% of label seconds; offsets start -0.9 s, end -0.1 s"
+    ],
+    "alignment": [
+     "PASS",
+     "vibration drops +3 s from the label's spin end (median of 1)"
+    ]
+   },
+   "date": "2023-08-14",
+   "minutes": 44.5,
+   "offset_s": {
+    "start": -0.9,
+    "end": -0.1
+   },
+   "rate_hz": 200.6,
+   "glitches": 0,
+   "clip_pct_max": 0.0,
+   "seconds": {
+    "fill": 437,
+    "wash": 1733,
+    "spin": 195,
+    "drain": 306
+   },
+   "coverage": 1.0,
+   "alignment": {
+    "spin_end_offsets_s": [
+     3
+    ],
+    "median_s": 3.0
+   },
+   "vib_level_g": {
+    "fill": 0.0164,
+    "wash": 0.0053,
+    "spin": 0.0561,
+    "drain": 0.0151
+   }
+  },
+  {
+   "file": "wm_becken_BWM5381IX_warm_fast-45_40_0.csv",
+   "role": "test",
+   "unit": "becken_BWM5381IX",
+   "checks": {
+    "files": [
+     "PASS",
+     ""
+    ],
+    "schema": [
+     "PASS",
+     ""
+    ],
+    "label values": [
+     "PASS",
+     ""
+    ],
+    "label timeline": [
+     "PASS",
+     ""
+    ],
+    "vibration rate": [
+     "PASS",
+     "201.3 Hz"
+    ],
+    "glitches": [
+     "PASS",
+     ""
+    ],
+    "channels": [
+     "PASS",
+     ""
+    ],
+    "states": [
+     "PASS",
+     ""
+    ],
+    "coverage": [
+     "PASS",
+     "100.0% of label seconds; offsets start -1.0 s, end -0.2 s"
+    ],
+    "alignment": [
+     "PASS",
+     "vibration drops -2 s from the label's spin end (median of 1)"
+    ]
+   },
+   "date": "2023-07-20",
+   "minutes": 45.9,
+   "offset_s": {
+    "start": -1.0,
+    "end": -0.2
+   },
+   "rate_hz": 201.3,
+   "glitches": 0,
+   "clip_pct_max": 0.0,
+   "seconds": {
+    "fill": 290,
+    "wash": 1959,
+    "spin": 317,
+    "drain": 190
+   },
+   "coverage": 1.0,
+   "alignment": {
+    "spin_end_offsets_s": [
+     -2
+    ],
+    "median_s": -2.0
+   },
+   "vib_level_g": {
+    "fill": 0.0188,
+    "wash": 0.0092,
+    "spin": 0.0199,
+    "drain": 0.0161
+   }
+  },
+  {
+   "file": "wm_becken-flt_BWM5381IX_warm_fast-15_0.csv",
+   "role": "delivery",
+   "unit": "becken-flt_BWM5381IX",
+   "checks": {
+    "files": [
+     "PASS",
+     ""
+    ],
+    "schema": [
+     "PASS",
+     ""
+    ],
+    "label values": [
+     "PASS",
+     ""
+    ],
+    "label timeline": [
+     "PASS",
+     ""
+    ],
+    "vibration rate": [
+     "PASS",
+     "199.4 Hz"
+    ],
+    "glitches": [
+     "PASS",
+     ""
+    ],
+    "channels": [
+     "PASS",
+     ""
+    ],
+    "states": [
+     "PASS",
+     ""
+    ],
+    "coverage": [
+     "PASS",
+     "99.8% of label seconds; offsets start -1.9 s, end -1.0 s"
+    ],
+    "alignment": [
+     "PASS",
+     "not measurable: no spin end with a clear drop"
+    ]
+   },
+   "date": "2023-09-08",
+   "minutes": 17.4,
+   "offset_s": {
+    "start": -1.9,
+    "end": -1.0
+   },
+   "rate_hz": 199.4,
+   "glitches": 0,
+   "clip_pct_max": 0.0,
+   "seconds": {
+    "fill": 333,
+    "wash": 285,
+    "spin": 204,
+    "drain": 221
+   },
+   "coverage": 0.998,
+   "alignment": {
+    "spin_end_offsets_s": []
+   },
+   "vib_level_g": {
+    "fill": 0.0195,
+    "wash": 0.0063,
+    "spin": 0.0176,
+    "drain": 0.0117
+   }
+  },
+  {
+   "file": "wm_becken-flt_BWM5381IX_warm_fast-15_2.csv",
+   "role": "delivery",
+   "unit": "becken-flt_BWM5381IX",
+   "checks": {
+    "files": [
+     "PASS",
+     ""
+    ],
+    "schema": [
+     "PASS",
+     ""
+    ],
+    "label values": [
+     "PASS",
+     ""
+    ],
+    "label timeline": [
+     "PASS",
+     ""
+    ],
+    "vibration rate": [
+     "PASS",
+     "199.9 Hz"
+    ],
+    "glitches": [
+     "PASS",
+     ""
+    ],
+    "channels": [
+     "PASS",
+     ""
+    ],
+    "states": [
+     "PASS",
+     ""
+    ],
+    "coverage": [
+     "PASS",
+     "99.9% of label seconds; offsets start -1.2 s, end -0.3 s"
+    ],
+    "alignment": [
+     "PASS",
+     "not measurable: no spin end with a clear drop"
+    ]
+   },
+   "date": "2023-12-13",
+   "minutes": 15.7,
+   "offset_s": {
+    "start": -1.2,
+    "end": -0.3
+   },
+   "rate_hz": 199.9,
+   "glitches": 0,
+   "clip_pct_max": 0.001,
+   "seconds": {
+    "fill": 323,
+    "wash": 194,
+    "spin": 198,
+    "drain": 227
+   },
+   "coverage": 0.999,
+   "alignment": {
+    "spin_end_offsets_s": []
+   },
+   "vib_level_g": {
+    "fill": 0.017,
+    "wash": 0.0058,
+    "spin": 0.0374,
+    "drain": 0.0107
+   }
+  },
+  {
+   "file": "wm_becken-flt_BWM5381IX_warm_fast-15_6.csv",
+   "role": "delivery",
+   "unit": "becken-flt_BWM5381IX",
+   "checks": {
+    "files": [
+     "PASS",
+     ""
+    ],
+    "schema": [
+     "PASS",
+     ""
+    ],
+    "label values": [
+     "PASS",
+     ""
+    ],
+    "label timeline": [
+     "PASS",
+     ""
+    ],
+    "vibration rate": [
+     "PASS",
+     "199.9 Hz"
+    ],
+    "glitches": [
+     "PASS",
+     ""
+    ],
+    "channels": [
+     "WARN",
+     "clipping % {'side.z': 1.05}"
+    ],
+    "states": [
+     "PASS",
+     ""
+    ],
+    "coverage": [
+     "PASS",
+     "99.8% of label seconds; offsets start -1.7 s, end -0.8 s"
+    ],
+    "alignment": [
+     "PASS",
+     "not measurable: no spin end with a clear drop"
+    ]
+   },
+   "date": "2023-12-15",
+   "minutes": 17.6,
+   "offset_s": {
+    "start": -1.7,
+    "end": -0.8
+   },
+   "rate_hz": 199.9,
+   "glitches": 0,
+   "clip_pct_max": 1.05,
+   "seconds": {
+    "fill": 327,
+    "wash": 319,
+    "spin": 106,
+    "drain": 302
+   },
+   "coverage": 0.998,
+   "alignment": {
+    "spin_end_offsets_s": []
+   },
+   "vib_level_g": {
+    "fill": 0.0159,
+    "wash": 0.0054,
+    "spin": 0.4667,
+    "drain": 0.01
+   }
+  },
+  {
+   "file": "wm_becken-flt_BWM5381IX_warm_fast-45_40_2.csv",
+   "role": "delivery",
+   "unit": "becken-flt_BWM5381IX",
+   "checks": {
+    "files": [
+     "PASS",
+     ""
+    ],
+    "schema": [
+     "PASS",
+     ""
+    ],
+    "label values": [
+     "PASS",
+     ""
+    ],
+    "label timeline": [
+     "PASS",
+     ""
+    ],
+    "vibration rate": [
+     "PASS",
+     "200.0 Hz"
+    ],
+    "glitches": [
+     "PASS",
+     ""
+    ],
+    "channels": [
+     "PASS",
+     ""
+    ],
+    "states": [
+     "PASS",
+     ""
+    ],
+    "coverage": [
+     "PASS",
+     "100.0% of label seconds; offsets start -1.1 s, end -0.3 s"
+    ],
+    "alignment": [
+     "PASS",
+     "not measurable: no spin end with a clear drop"
+    ]
+   },
+   "date": "2023-12-11",
+   "minutes": 42.6,
+   "offset_s": {
+    "start": -1.1,
+    "end": -0.3
+   },
+   "rate_hz": 200.0,
+   "glitches": 0,
+   "clip_pct_max": 0.0,
+   "seconds": {
+    "fill": 202,
+    "wash": 1776,
+    "spin": 400,
+    "drain": 177
+   },
+   "coverage": 1.0,
+   "alignment": {
+    "spin_end_offsets_s": []
+   },
+   "vib_level_g": {
+    "fill": 0.016,
+    "wash": 0.007,
+    "spin": 0.0635,
+    "drain": 0.0106
+   }
+  },
+  {
+   "file": "wm_becken-flt_BWM5381IX_warm_sport_40_2.csv",
+   "role": "delivery",
+   "unit": "becken-flt_BWM5381IX",
+   "checks": {
+    "files": [
+     "PASS",
+     ""
+    ],
+    "schema": [
+     "PASS",
+     ""
+    ],
+    "label values": [
+     "PASS",
+     ""
+    ],
+    "label timeline": [
+     "PASS",
+     ""
+    ],
+    "vibration rate": [
+     "PASS",
+     "200.2 Hz"
+    ],
+    "glitches": [
+     "PASS",
+     ""
+    ],
+    "channels": [
+     "PASS",
+     ""
+    ],
+    "states": [
+     "PASS",
+     ""
+    ],
+    "coverage": [
+     "PASS",
+     "99.9% of label seconds; offsets start -1.8 s, end -1.0 s"
+    ],
+    "alignment": [
+     "PASS",
+     "vibration drops -9 s from the label's spin end (median of 2)"
+    ]
+   },
+   "date": "2023-12-06",
+   "minutes": 42.6,
+   "offset_s": {
+    "start": -1.8,
+    "end": -1.0
+   },
+   "rate_hz": 200.2,
+   "glitches": 0,
+   "clip_pct_max": 0.0,
+   "seconds": {
+    "fill": 290,
+    "wash": 1512,
+    "spin": 536,
+    "drain": 218
+   },
+   "coverage": 0.999,
+   "alignment": {
+    "spin_end_offsets_s": [
+     -16,
+     -2
+    ],
+    "median_s": -9.0
+   },
+   "vib_level_g": {
+    "fill": 0.0161,
+    "wash": 0.0056,
+    "spin": 0.0309,
+    "drain": 0.0113
+   }
+  }
+ ],
+ "failures": 0,
+ "acknowledged": []
+}

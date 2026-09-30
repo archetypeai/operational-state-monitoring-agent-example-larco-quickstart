@@ -1,0 +1,202 @@
+[
+ {
+  "path": "aggregated_data.csv",
+  "archive": "general.zip",
+  "size": 1312274
+ },
+ {
+  "path": "metadata.xlsx",
+  "archive": "general.zip",
+  "size": 90071
+ },
+ {
+  "path": "raw/labels/wm_becken-flt_BWM5381IX_warm_fast-15_0.csv",
+  "archive": "general.zip",
+  "size": 138842
+ },
+ {
+  "path": "raw/labels/wm_becken-flt_BWM5381IX_warm_fast-15_2.csv",
+  "archive": "general.zip",
+  "size": 126516
+ },
+ {
+  "path": "raw/labels/wm_becken-flt_BWM5381IX_warm_fast-15_6.csv",
+  "archive": "general.zip",
+  "size": 141153
+ },
+ {
+  "path": "raw/labels/wm_becken-flt_BWM5381IX_warm_fast-45_40_2.csv",
+  "archive": "general.zip",
+  "size": 325222
+ },
+ {
+  "path": "raw/labels/wm_becken-flt_BWM5381IX_warm_sport_40_2.csv",
+  "archive": "general.zip",
+  "size": 326750
+ },
+ {
+  "path": "raw/labels/wm_becken_BWM5381IX_warm_15-min_40_0.csv",
+  "archive": "general.zip",
+  "size": 127472
+ },
+ {
+  "path": "raw/labels/wm_becken_BWM5381IX_warm_15-min_40_2.csv",
+  "archive": "general.zip",
+  "size": 123079
+ },
+ {
+  "path": "raw/labels/wm_becken_BWM5381IX_warm_20-deg_20_0.csv",
+  "archive": "general.zip",
+  "size": 437163
+ },
+ {
+  "path": "raw/labels/wm_becken_BWM5381IX_warm_20-deg_20_2.csv",
+  "archive": "general.zip",
+  "size": 460947
+ },
+ {
+  "path": "raw/labels/wm_becken_BWM5381IX_warm_delicate_30_0.csv",
+  "archive": "general.zip",
+  "size": 370177
+ },
+ {
+  "path": "raw/labels/wm_becken_BWM5381IX_warm_delicate_30_2.csv",
+  "archive": "general.zip",
+  "size": 341983
+ },
+ {
+  "path": "raw/labels/wm_becken_BWM5381IX_warm_delicate_30_6.csv",
+  "archive": "general.zip",
+  "size": 498943
+ },
+ {
+  "path": "raw/labels/wm_becken_BWM5381IX_warm_fast-45_40_0.csv",
+  "archive": "general.zip",
+  "size": 341641
+ },
+ {
+  "path": "raw/labels/wm_becken_BWM5381IX_warm_fast-45_40_2.csv",
+  "archive": "general.zip",
+  "size": 318429
+ },
+ {
+  "path": "raw/labels/wm_becken_BWM5381IX_warm_mix_40_2.csv",
+  "archive": "general.zip",
+  "size": 474457
+ },
+ {
+  "path": "raw/labels/wm_becken_BWM5381IX_warm_sport_40_0.csv",
+  "archive": "general.zip",
+  "size": 345329
+ },
+ {
+  "path": "raw/labels/wm_becken_BWM5381IX_warm_sport_40_2.csv",
+  "archive": "general.zip",
+  "size": 357829
+ },
+ {
+  "path": "raw/labels/wm_becken_BWM5381IX_warm_sport_40_6.csv",
+  "archive": "general.zip",
+  "size": 370906
+ },
+ {
+  "path": "raw/labels/wm_becken_BWM5381IX_warm_wool_40_0.csv",
+  "archive": "general.zip",
+  "size": 633173
+ },
+ {
+  "path": "raw/vibration/wm_becken-flt_BWM5381IX_warm_fast-15_0_acc.parquet",
+  "archive": "vibrations.zip",
+  "size": 3031108
+ },
+ {
+  "path": "raw/vibration/wm_becken-flt_BWM5381IX_warm_fast-15_2_acc.parquet",
+  "archive": "vibrations.zip",
+  "size": 2925270
+ },
+ {
+  "path": "raw/vibration/wm_becken-flt_BWM5381IX_warm_fast-15_6_acc.parquet",
+  "archive": "vibrations.zip",
+  "size": 3356872
+ },
+ {
+  "path": "raw/vibration/wm_becken-flt_BWM5381IX_warm_fast-45_40_2_acc.parquet",
+  "archive": "vibrations.zip",
+  "size": 7074757
+ },
+ {
+  "path": "raw/vibration/wm_becken-flt_BWM5381IX_warm_sport_40_2_acc.parquet",
+  "archive": "vibrations.zip",
+  "size": 6890695
+ },
+ {
+  "path": "raw/vibration/wm_becken_BWM5381IX_warm_15-min_40_0_acc.parquet",
+  "archive": "vibrations.zip",
+  "size": 2866444
+ },
+ {
+  "path": "raw/vibration/wm_becken_BWM5381IX_warm_15-min_40_2_acc.parquet",
+  "archive": "vibrations.zip",
+  "size": 2925233
+ },
+ {
+  "path": "raw/vibration/wm_becken_BWM5381IX_warm_20-deg_20_0_acc.parquet",
+  "archive": "vibrations.zip",
+  "size": 9256131
+ },
+ {
+  "path": "raw/vibration/wm_becken_BWM5381IX_warm_20-deg_20_2_acc.parquet",
+  "archive": "vibrations.zip",
+  "size": 10274585
+ },
+ {
+  "path": "raw/vibration/wm_becken_BWM5381IX_warm_delicate_30_0_acc.parquet",
+  "archive": "vibrations.zip",
+  "size": 7617711
+ },
+ {
+  "path": "raw/vibration/wm_becken_BWM5381IX_warm_delicate_30_2_acc.parquet",
+  "archive": "vibrations.zip",
+  "size": 7065540
+ },
+ {
+  "path": "raw/vibration/wm_becken_BWM5381IX_warm_delicate_30_6_acc.parquet",
+  "archive": "vibrations.zip",
+  "size": 10531775
+ },
+ {
+  "path": "raw/vibration/wm_becken_BWM5381IX_warm_fast-45_40_0_acc.parquet",
+  "archive": "vibrations.zip",
+  "size": 7336602
+ },
+ {
+  "path": "raw/vibration/wm_becken_BWM5381IX_warm_fast-45_40_2_acc.parquet",
+  "archive": "vibrations.zip",
+  "size": 7134781
+ },
+ {
+  "path": "raw/vibration/wm_becken_BWM5381IX_warm_mix_40_2_acc.parquet",
+  "archive": "vibrations.zip",
+  "size": 9798544
+ },
+ {
+  "path": "raw/vibration/wm_becken_BWM5381IX_warm_sport_40_0_acc.parquet",
+  "archive": "vibrations.zip",
+  "size": 7200804
+ },
+ {
+  "path": "raw/vibration/wm_becken_BWM5381IX_warm_sport_40_2_acc.parquet",
+  "archive": "vibrations.zip",
+  "size": 7911894
+ },
+ {
+  "path": "raw/vibration/wm_becken_BWM5381IX_warm_sport_40_6_acc.parquet",
+  "archive": "vibrations.zip",
+  "size": 8058538
+ },
+ {
+  "path": "raw/vibration/wm_becken_BWM5381IX_warm_wool_40_0_acc.parquet",
+  "archive": "vibrations.zip",
+  "size": 13002984
+ }
+]

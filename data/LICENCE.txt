@@ -1,0 +1,33 @@
+ This deposit contains files under different licenses. Please refer to the 
+mapping below to ensure you comply with the terms for each specific file.
+
+1. DATASET
+  - vibrations.zip
+  - audio.zip
+  - general.zip
+License: Creative Commons Attribution 4.0 International (CC BY 4.0)
+URL: https://creativecommons.org/licenses/by/4.0/
+Summary: You are free to share (copy and redistribute) and adapt (remix, transform,
+or build upon) the material in any medium or format for any purpose, even
+commercially. You must give appropriate credit, provide a link to the license, and
+indicate if changes were made. You may do so in any reasonable manner, but not in
+any way that suggests the licensor endorses you or your use. You may not apply legal
+terms or technological measures that legally restrict others from doing anything the
+license permits.
+
+2. OTHER ASSETS
+File: weather_data.csv
+Source: OpenWeather (https://openweathermap.org/)
+License: Open Data Commons Open Database License (ODbL) v1.0
+URL: https://opendatacommons.org/licenses/odbl/1-0/
+Summary: You are free to share, create, and adapt the database, provided 
+you attribute the source and keep the open license on any derivative work.
+
+2. SOFTWARE / CODE
+Files: /scripts folder (and all contents therein)
+License: MIT License
+Summary: Permission is granted, free of charge, to any person obtaining 
+a copy of this software and associated documentation files.
+  
+---------------------
+DISCLAIMER: The licenses listed above apply to the specific files indicated. 

@@ -1,0 +1,78 @@
+{
+ "seed": 20260928,
+ "allocation": {
+  "cotton": [
+   16,
+   6,
+   6
+  ],
+  "eco": [
+   4,
+   2,
+   1
+  ],
+  "other": [
+   14,
+   5,
+   4
+  ]
+ },
+ "library_unit": "becken_BWM5381IX",
+ "delivery_unit": "becken-flt_BWM5381IX",
+ "subset": "quickstart: the 19 cycles in prep/split.py QUICKSTART, drawn from the full split",
+ "library": {
+  "15-min_40_2": [
+   "wm_becken_BWM5381IX_warm_15-min_40_2.csv"
+  ],
+  "20-deg_20_0": [
+   "wm_becken_BWM5381IX_warm_20-deg_20_0.csv"
+  ],
+  "delicate_30_0": [
+   "wm_becken_BWM5381IX_warm_delicate_30_0.csv"
+  ],
+  "delicate_30_6": [
+   "wm_becken_BWM5381IX_warm_delicate_30_6.csv"
+  ],
+  "mix_40_2": [
+   "wm_becken_BWM5381IX_warm_mix_40_2.csv"
+  ],
+  "sport_40_2": [
+   "wm_becken_BWM5381IX_warm_sport_40_2.csv"
+  ],
+  "sport_40_6": [
+   "wm_becken_BWM5381IX_warm_sport_40_6.csv"
+  ],
+  "wool_40_0": [
+   "wm_becken_BWM5381IX_warm_wool_40_0.csv"
+  ]
+ },
+ "validation": {
+  "15-min_40_0": [
+   "wm_becken_BWM5381IX_warm_15-min_40_0.csv"
+  ],
+  "fast-45_40_2": [
+   "wm_becken_BWM5381IX_warm_fast-45_40_2.csv"
+  ],
+  "sport_40_0": [
+   "wm_becken_BWM5381IX_warm_sport_40_0.csv"
+  ]
+ },
+ "test": {
+  "20-deg_20_2": [
+   "wm_becken_BWM5381IX_warm_20-deg_20_2.csv"
+  ],
+  "delicate_30_2": [
+   "wm_becken_BWM5381IX_warm_delicate_30_2.csv"
+  ],
+  "fast-45_40_0": [
+   "wm_becken_BWM5381IX_warm_fast-45_40_0.csv"
+  ]
+ },
+ "delivery": [
+  "wm_becken-flt_BWM5381IX_warm_fast-15_0.csv",
+  "wm_becken-flt_BWM5381IX_warm_fast-15_2.csv",
+  "wm_becken-flt_BWM5381IX_warm_fast-15_6.csv",
+  "wm_becken-flt_BWM5381IX_warm_fast-45_40_2.csv",
+  "wm_becken-flt_BWM5381IX_warm_sport_40_2.csv"
+ ]
+}

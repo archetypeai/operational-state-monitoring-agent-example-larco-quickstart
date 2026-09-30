@@ -1,0 +1,5000 @@
+{
+ "record": "https://zenodo.org/api/records/19666168",
+ "cycles": [
+  {
+   "file": "wm_becken-flt_BWM5381IX_cold_cotton_0_0.csv",
+   "unit": "becken-flt_BWM5381IX",
+   "room": "cold",
+   "setting": "cotton_0_0",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_cold_cotton_0_0.csv",
+    "entry": [
+     8,
+     237968,
+     71220781,
+     1334795
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_cold_cotton_0_0_acc.parquet",
+    "entry": [
+     8,
+     18511001,
+     5089947193,
+     25341875
+    ]
+   }
+  },
+  {
+   "file": "wm_becken-flt_BWM5381IX_cold_cotton_0_10.csv",
+   "unit": "becken-flt_BWM5381IX",
+   "room": "cold",
+   "setting": "cotton_0_10",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_cold_cotton_0_10.csv",
+    "entry": [
+     8,
+     294322,
+     75696958,
+     1524737
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_cold_cotton_0_10_acc.parquet",
+    "entry": [
+     8,
+     24517843,
+     5194079659,
+     32755512
+    ]
+   }
+  },
+  {
+   "file": "wm_becken-flt_BWM5381IX_cold_cotton_0_11.csv",
+   "unit": "becken-flt_BWM5381IX",
+   "room": "cold",
+   "setting": "cotton_0_11",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_cold_cotton_0_11.csv",
+    "entry": [
+     8,
+     274524,
+     75991437,
+     1409842
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_cold_cotton_0_11_acc.parquet",
+    "entry": [
+     8,
+     22280116,
+     5218597671,
+     29984614
+    ]
+   }
+  },
+  {
+   "file": "wm_becken-flt_BWM5381IX_cold_cotton_0_2.csv",
+   "unit": "becken-flt_BWM5381IX",
+   "room": "cold",
+   "setting": "cotton_0_2",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_cold_cotton_0_2.csv",
+    "entry": [
+     8,
+     253080,
+     73026150,
+     1350242
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_cold_cotton_0_2_acc.parquet",
+    "entry": [
+     8,
+     21198677,
+     5108458362,
+     28781400
+    ]
+   }
+  },
+  {
+   "file": "wm_becken-flt_BWM5381IX_cold_cotton_0_4.csv",
+   "unit": "becken-flt_BWM5381IX",
+   "room": "cold",
+   "setting": "cotton_0_4",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_cold_cotton_0_4.csv",
+    "entry": [
+     8,
+     261890,
+     76573310,
+     1360817
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_cold_cotton_0_4_acc.parquet",
+    "entry": [
+     8,
+     21170167,
+     5129657207,
+     28682500
+    ]
+   }
+  },
+  {
+   "file": "wm_becken-flt_BWM5381IX_cold_cotton_0_6.csv",
+   "unit": "becken-flt_BWM5381IX",
+   "room": "cold",
+   "setting": "cotton_0_6",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_cold_cotton_0_6.csv",
+    "entry": [
+     8,
+     264640,
+     73279386,
+     1363836
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_cold_cotton_0_6_acc.parquet",
+    "entry": [
+     8,
+     20890957,
+     5150827542,
+     28306567
+    ]
+   }
+  },
+  {
+   "file": "wm_becken-flt_BWM5381IX_cold_cotton_0_8.csv",
+   "unit": "becken-flt_BWM5381IX",
+   "room": "cold",
+   "setting": "cotton_0_8",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_cold_cotton_0_8.csv",
+    "entry": [
+     8,
+     268514,
+     62042405,
+     1397164
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_cold_cotton_0_8_acc.parquet",
+    "entry": [
+     8,
+     22360824,
+     5171718667,
+     29883164
+    ]
+   }
+  },
+  {
+   "file": "wm_becken-flt_BWM5381IX_cold_cotton_30_0.csv",
+   "unit": "becken-flt_BWM5381IX",
+   "room": "cold",
+   "setting": "cotton_30_0",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_cold_cotton_30_0.csv",
+    "entry": [
+     8,
+     253465,
+     64023379,
+     1329684
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_cold_cotton_30_0_acc.parquet",
+    "entry": [
+     8,
+     20067950,
+     5328923743,
+     27510485
+    ]
+   }
+  },
+  {
+   "file": "wm_becken-flt_BWM5381IX_cold_cotton_30_10.csv",
+   "unit": "becken-flt_BWM5381IX",
+   "room": "cold",
+   "setting": "cotton_30_10",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_cold_cotton_30_10.csv",
+    "entry": [
+     8,
+     280551,
+     74388179,
+     1425455
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_cold_cotton_30_10_acc.parquet",
+    "entry": [
+     8,
+     22368823,
+     5422465353,
+     30179310
+    ]
+   }
+  },
+  {
+   "file": "wm_becken-flt_BWM5381IX_cold_cotton_30_11.csv",
+   "unit": "becken-flt_BWM5381IX",
+   "room": "cold",
+   "setting": "cotton_30_11",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_cold_cotton_30_11.csv",
+    "entry": [
+     8,
+     270673,
+     74117348,
+     1405103
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_cold_cotton_30_11_acc.parquet",
+    "entry": [
+     8,
+     19176068,
+     5444834346,
+     25843300
+    ]
+   }
+  },
+  {
+   "file": "wm_becken-flt_BWM5381IX_cold_cotton_30_2.csv",
+   "unit": "becken-flt_BWM5381IX",
+   "room": "cold",
+   "setting": "cotton_30_2",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_cold_cotton_30_2.csv",
+    "entry": [
+     8,
+     263066,
+     64570523,
+     1357887
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_cold_cotton_30_2_acc.parquet",
+    "entry": [
+     8,
+     20722783,
+     5348991862,
+     28280049
+    ]
+   }
+  },
+  {
+   "file": "wm_becken-flt_BWM5381IX_cold_cotton_30_4.csv",
+   "unit": "becken-flt_BWM5381IX",
+   "room": "cold",
+   "setting": "cotton_30_4",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_cold_cotton_30_4.csv",
+    "entry": [
+     8,
+     250540,
+     62918908,
+     1356087
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_cold_cotton_30_4_acc.parquet",
+    "entry": [
+     8,
+     8606184,
+     5369714814,
+     11775478
+    ]
+   }
+  },
+  {
+   "file": "wm_becken-flt_BWM5381IX_cold_cotton_30_6.csv",
+   "unit": "becken-flt_BWM5381IX",
+   "room": "cold",
+   "setting": "cotton_30_6",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_cold_cotton_30_6.csv",
+    "entry": [
+     8,
+     268263,
+     61773985,
+     1384907
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_cold_cotton_30_6_acc.parquet",
+    "entry": [
+     8,
+     21852119,
+     5378321167,
+     29430854
+    ]
+   }
+  },
+  {
+   "file": "wm_becken-flt_BWM5381IX_cold_cotton_30_8.csv",
+   "unit": "becken-flt_BWM5381IX",
+   "room": "cold",
+   "setting": "cotton_30_8",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_cold_cotton_30_8.csv",
+    "entry": [
+     8,
+     269064,
+     73848127,
+     1405928
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_cold_cotton_30_8_acc.parquet",
+    "entry": [
+     8,
+     22291729,
+     5400173455,
+     29986732
+    ]
+   }
+  },
+  {
+   "file": "wm_becken-flt_BWM5381IX_cold_cotton_40_0.csv",
+   "unit": "becken-flt_BWM5381IX",
+   "room": "cold",
+   "setting": "cotton_40_0",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_cold_cotton_40_0.csv",
+    "entry": [
+     8,
+     247615,
+     74668888,
+     1338383
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_cold_cotton_40_0_acc.parquet",
+    "entry": [
+     8,
+     20111971,
+     5612774017,
+     27562776
+    ]
+   }
+  },
+  {
+   "file": "wm_becken-flt_BWM5381IX_cold_cotton_40_10.csv",
+   "unit": "becken-flt_BWM5381IX",
+   "room": "cold",
+   "setting": "cotton_40_10",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_cold_cotton_40_10.csv",
+    "entry": [
+     8,
+     275379,
+     67653432,
+     1426341
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_cold_cotton_40_10_acc.parquet",
+    "entry": [
+     8,
+     22161382,
+     5718720548,
+     29844205
+    ]
+   }
+  },
+  {
+   "file": "wm_becken-flt_BWM5381IX_cold_cotton_40_11.csv",
+   "unit": "becken-flt_BWM5381IX",
+   "room": "cold",
+   "setting": "cotton_40_11",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_cold_cotton_40_11.csv",
+    "entry": [
+     8,
+     301292,
+     68464212,
+     1547123
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_cold_cotton_40_11_acc.parquet",
+    "entry": [
+     8,
+     24402111,
+     5740882100,
+     32846220
+    ]
+   }
+  },
+  {
+   "file": "wm_becken-flt_BWM5381IX_cold_cotton_40_2.csv",
+   "unit": "becken-flt_BWM5381IX",
+   "room": "cold",
+   "setting": "cotton_40_2",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_cold_cotton_40_2.csv",
+    "entry": [
+     8,
+     263740,
+     75433061,
+     1374167
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_cold_cotton_40_2_acc.parquet",
+    "entry": [
+     8,
+     21475287,
+     5632886157,
+     29197202
+    ]
+   }
+  },
+  {
+   "file": "wm_becken-flt_BWM5381IX_cold_cotton_40_4.csv",
+   "unit": "becken-flt_BWM5381IX",
+   "room": "cold",
+   "setting": "cotton_40_4",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_cold_cotton_40_4.csv",
+    "entry": [
+     8,
+     259557,
+     72493108,
+     1385968
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_cold_cotton_40_4_acc.parquet",
+    "entry": [
+     8,
+     21702667,
+     5654361613,
+     29477157
+    ]
+   }
+  },
+  {
+   "file": "wm_becken-flt_BWM5381IX_cold_cotton_40_6.csv",
+   "unit": "becken-flt_BWM5381IX",
+   "room": "cold",
+   "setting": "cotton_40_6",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_cold_cotton_40_6.csv",
+    "entry": [
+     8,
+     262479,
+     71735552,
+     1350622
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_cold_cotton_40_6_acc.parquet",
+    "entry": [
+     8,
+     20937043,
+     5676064449,
+     28359859
+    ]
+   }
+  },
+  {
+   "file": "wm_becken-flt_BWM5381IX_cold_cotton_40_8.csv",
+   "unit": "becken-flt_BWM5381IX",
+   "room": "cold",
+   "setting": "cotton_40_8",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_cold_cotton_40_8.csv",
+    "entry": [
+     8,
+     264252,
+     63758970,
+     1399438
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_cold_cotton_40_8_acc.parquet",
+    "entry": [
+     8,
+     21718718,
+     5697001661,
+     29227207
+    ]
+   }
+  },
+  {
+   "file": "wm_becken-flt_BWM5381IX_cold_cotton_60_0.csv",
+   "unit": "becken-flt_BWM5381IX",
+   "room": "cold",
+   "setting": "cotton_60_0",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_cold_cotton_60_0.csv",
+    "entry": [
+     8,
+     273171,
+     72752822,
+     1455063
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_cold_cotton_60_0_acc.parquet",
+    "entry": [
+     8,
+     22144787,
+     5915242114,
+     30319015
+    ]
+   }
+  },
+  {
+   "file": "wm_becken-flt_BWM5381IX_cold_cotton_60_10.csv",
+   "unit": "becken-flt_BWM5381IX",
+   "room": "cold",
+   "setting": "cotton_60_10",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_cold_cotton_60_10.csv",
+    "entry": [
+     8,
+     307906,
+     62311075,
+     1513501
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_cold_cotton_60_10_acc.parquet",
+    "entry": [
+     8,
+     22840765,
+     6027444327,
+     30783131
+    ]
+   }
+  },
+  {
+   "file": "wm_becken-flt_BWM5381IX_cold_cotton_60_11.csv",
+   "unit": "becken-flt_BWM5381IX",
+   "room": "cold",
+   "setting": "cotton_60_11",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_cold_cotton_60_11.csv",
+    "entry": [
+     8,
+     297838,
+     63169605,
+     1496057
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_cold_cotton_60_11_acc.parquet",
+    "entry": [
+     8,
+     23303102,
+     6050285262,
+     31275425
+    ]
+   }
+  },
+  {
+   "file": "wm_becken-flt_BWM5381IX_cold_cotton_60_2.csv",
+   "unit": "becken-flt_BWM5381IX",
+   "room": "cold",
+   "setting": "cotton_60_2",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_cold_cotton_60_2.csv",
+    "entry": [
+     8,
+     276490,
+     71458905,
+     1498632
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_cold_cotton_60_2_acc.parquet",
+    "entry": [
+     8,
+     22982602,
+     5937387070,
+     31331275
+    ]
+   }
+  },
+  {
+   "file": "wm_becken-flt_BWM5381IX_cold_cotton_60_4.csv",
+   "unit": "becken-flt_BWM5381IX",
+   "room": "cold",
+   "setting": "cotton_60_4",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_cold_cotton_60_4.csv",
+    "entry": [
+     8,
+     303788,
+     73544182,
+     1496091
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_cold_cotton_60_4_acc.parquet",
+    "entry": [
+     8,
+     21836968,
+     5960369841,
+     29560981
+    ]
+   }
+  },
+  {
+   "file": "wm_becken-flt_BWM5381IX_cold_cotton_60_6.csv",
+   "unit": "becken-flt_BWM5381IX",
+   "room": "cold",
+   "setting": "cotton_60_6",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_cold_cotton_60_6.csv",
+    "entry": [
+     8,
+     307035,
+     76266118,
+     1496278
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_cold_cotton_60_6_acc.parquet",
+    "entry": [
+     8,
+     23180379,
+     5982206978,
+     31436137
+    ]
+   }
+  },
+  {
+   "file": "wm_becken-flt_BWM5381IX_cold_cotton_60_8.csv",
+   "unit": "becken-flt_BWM5381IX",
+   "room": "cold",
+   "setting": "cotton_60_8",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_cold_cotton_60_8.csv",
+    "entry": [
+     8,
+     299612,
+     62619139,
+     1514549
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_cold_cotton_60_8_acc.parquet",
+    "entry": [
+     8,
+     22056632,
+     6005387526,
+     29492087
+    ]
+   }
+  },
+  {
+   "file": "wm_becken-flt_BWM5381IX_hot_cotton_0_0.csv",
+   "unit": "becken-flt_BWM5381IX",
+   "room": "hot",
+   "setting": "cotton_0_0",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_hot_cotton_0_0.csv",
+    "entry": [
+     8,
+     237222,
+     71998188,
+     1341190
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_hot_cotton_0_0_acc.parquet",
+    "entry": [
+     8,
+     21512642,
+     5240877956,
+     28942938
+    ]
+   }
+  },
+  {
+   "file": "wm_becken-flt_BWM5381IX_hot_cotton_0_10.csv",
+   "unit": "becken-flt_BWM5381IX",
+   "room": "hot",
+   "setting": "cotton_0_10",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_hot_cotton_0_10.csv",
+    "entry": [
+     8,
+     265157,
+     67388119,
+     1387349
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_hot_cotton_0_10_acc.parquet",
+    "entry": [
+     8,
+     21933810,
+     5285283445,
+     29571050
+    ]
+   }
+  },
+  {
+   "file": "wm_becken-flt_BWM5381IX_hot_cotton_0_11.csv",
+   "unit": "becken-flt_BWM5381IX",
+   "room": "hot",
+   "setting": "cotton_0_11",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_hot_cotton_0_11.csv",
+    "entry": [
+     8,
+     274361,
+     66862818,
+     1395070
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_hot_cotton_0_11_acc.parquet",
+    "entry": [
+     8,
+     21706152,
+     5307217423,
+     28942128
+    ]
+   }
+  },
+  {
+   "file": "wm_becken-flt_BWM5381IX_hot_cotton_0_2.csv",
+   "unit": "becken-flt_BWM5381IX",
+   "room": "hot",
+   "setting": "cotton_0_2",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_hot_cotton_0_2.csv",
+    "entry": [
+     8,
+     257388,
+     72235565,
+     1343082
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_hot_cotton_0_2_acc.parquet",
+    "entry": [
+     8,
+     21555933,
+     5026644533,
+     29120956
+    ]
+   }
+  },
+  {
+   "file": "wm_becken-flt_BWM5381IX_hot_cotton_0_4.csv",
+   "unit": "becken-flt_BWM5381IX",
+   "room": "hot",
+   "setting": "cotton_0_4",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_hot_cotton_0_4.csv",
+    "entry": [
+     8,
+     263573,
+     75169333,
+     1409426
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_hot_cotton_0_4_acc.parquet",
+    "entry": [
+     8,
+     23567492,
+     5048200633,
+     31705458
+    ]
+   }
+  },
+  {
+   "file": "wm_becken-flt_BWM5381IX_hot_cotton_0_6.csv",
+   "unit": "becken-flt_BWM5381IX",
+   "room": "hot",
+   "setting": "cotton_0_6",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_hot_cotton_0_6.csv",
+    "entry": [
+     8,
+     252518,
+     74916660,
+     1378821
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_hot_cotton_0_6_acc.parquet",
+    "entry": [
+     8,
+     18178734,
+     5071768292,
+     24404503
+    ]
+   }
+  },
+  {
+   "file": "wm_becken-flt_BWM5381IX_hot_cotton_0_8.csv",
+   "unit": "becken-flt_BWM5381IX",
+   "room": "hot",
+   "setting": "cotton_0_8",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_hot_cotton_0_8.csv",
+    "entry": [
+     8,
+     271060,
+     61502770,
+     1384501
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_hot_cotton_0_8_acc.parquet",
+    "entry": [
+     8,
+     22892513,
+     5262390765,
+     30684405
+    ]
+   }
+  },
+  {
+   "file": "wm_becken-flt_BWM5381IX_hot_cotton_30_0.csv",
+   "unit": "becken-flt_BWM5381IX",
+   "room": "hot",
+   "setting": "cotton_30_0",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_hot_cotton_30_0.csv",
+    "entry": [
+     8,
+     244678,
+     70426985,
+     1340137
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_hot_cotton_30_0_acc.parquet",
+    "entry": [
+     8,
+     20710717,
+     5464010584,
+     28263370
+    ]
+   }
+  },
+  {
+   "file": "wm_becken-flt_BWM5381IX_hot_cotton_30_10.csv",
+   "unit": "becken-flt_BWM5381IX",
+   "room": "hot",
+   "setting": "cotton_30_10",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_hot_cotton_30_10.csv",
+    "entry": [
+     8,
+     267836,
+     70158992,
+     1410806
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_hot_cotton_30_10_acc.parquet",
+    "entry": [
+     8,
+     20786643,
+     5568894866,
+     28006622
+    ]
+   }
+  },
+  {
+   "file": "wm_becken-flt_BWM5381IX_hot_cotton_30_11.csv",
+   "unit": "becken-flt_BWM5381IX",
+   "room": "hot",
+   "setting": "cotton_30_11",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_hot_cotton_30_11.csv",
+    "entry": [
+     8,
+     275399,
+     70945225,
+     1396041
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_hot_cotton_30_11_acc.parquet",
+    "entry": [
+     8,
+     23092170,
+     5589681678,
+     30854000
+    ]
+   }
+  },
+  {
+   "file": "wm_becken-flt_BWM5381IX_hot_cotton_30_2.csv",
+   "unit": "becken-flt_BWM5381IX",
+   "room": "hot",
+   "setting": "cotton_30_2",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_hot_cotton_30_2.csv",
+    "entry": [
+     8,
+     260994,
+     69897842,
+     1357290
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_hot_cotton_30_2_acc.parquet",
+    "entry": [
+     8,
+     22158262,
+     5484721469,
+     29823170
+    ]
+   }
+  },
+  {
+   "file": "wm_becken-flt_BWM5381IX_hot_cotton_30_4.csv",
+   "unit": "becken-flt_BWM5381IX",
+   "room": "hot",
+   "setting": "cotton_30_4",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_hot_cotton_30_4.csv",
+    "entry": [
+     8,
+     266191,
+     69055883,
+     1373955
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_hot_cotton_30_4_acc.parquet",
+    "entry": [
+     8,
+     19642048,
+     5506879899,
+     26573916
+    ]
+   }
+  },
+  {
+   "file": "wm_becken-flt_BWM5381IX_hot_cotton_30_6.csv",
+   "unit": "becken-flt_BWM5381IX",
+   "room": "hot",
+   "setting": "cotton_30_6",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_hot_cotton_30_6.csv",
+    "entry": [
+     8,
+     271598,
+     69626088,
+     1372023
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_hot_cotton_30_6_acc.parquet",
+    "entry": [
+     8,
+     22413290,
+     5526522115,
+     30278740
+    ]
+   }
+  },
+  {
+   "file": "wm_becken-flt_BWM5381IX_hot_cotton_30_8.csv",
+   "unit": "becken-flt_BWM5381IX",
+   "room": "hot",
+   "setting": "cotton_30_8",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_hot_cotton_30_8.csv",
+    "entry": [
+     8,
+     278684,
+     68185372,
+     1412125
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_hot_cotton_30_8_acc.parquet",
+    "entry": [
+     8,
+     19959125,
+     5548935573,
+     27025224
+    ]
+   }
+  },
+  {
+   "file": "wm_becken-flt_BWM5381IX_hot_cotton_40_0.csv",
+   "unit": "becken-flt_BWM5381IX",
+   "room": "hot",
+   "setting": "cotton_40_0",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_hot_cotton_40_0.csv",
+    "entry": [
+     8,
+     256247,
+     67928969,
+     1336653
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_hot_cotton_40_0_acc.parquet",
+    "entry": [
+     8,
+     20946024,
+     5765284381,
+     28239755
+    ]
+   }
+  },
+  {
+   "file": "wm_becken-flt_BWM5381IX_hot_cotton_40_10.csv",
+   "unit": "becken-flt_BWM5381IX",
+   "room": "hot",
+   "setting": "cotton_40_10",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_hot_cotton_40_10.csv",
+    "entry": [
+     8,
+     293365,
+     64277001,
+     1546226
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_hot_cotton_40_10_acc.parquet",
+    "entry": [
+     8,
+     24423136,
+     5866942773,
+     33038607
+    ]
+   }
+  },
+  {
+   "file": "wm_becken-flt_BWM5381IX_hot_cotton_40_11.csv",
+   "unit": "becken-flt_BWM5381IX",
+   "room": "hot",
+   "setting": "cotton_40_11",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_hot_cotton_40_11.csv",
+    "entry": [
+     8,
+     291212,
+     63467601,
+     1475044
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_hot_cotton_40_11_acc.parquet",
+    "entry": [
+     8,
+     23875867,
+     5891366078,
+     32415757
+    ]
+   }
+  },
+  {
+   "file": "wm_becken-flt_BWM5381IX_hot_cotton_40_2.csv",
+   "unit": "becken-flt_BWM5381IX",
+   "room": "hot",
+   "setting": "cotton_40_2",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_hot_cotton_40_2.csv",
+    "entry": [
+     8,
+     250628,
+     67137335,
+     1355920
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_hot_cotton_40_2_acc.parquet",
+    "entry": [
+     8,
+     17255129,
+     5786230573,
+     23399439
+    ]
+   }
+  },
+  {
+   "file": "wm_becken-flt_BWM5381IX_hot_cotton_40_4.csv",
+   "unit": "becken-flt_BWM5381IX",
+   "room": "hot",
+   "setting": "cotton_40_4",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_hot_cotton_40_4.csv",
+    "entry": [
+     8,
+     266643,
+     65735222,
+     1380485
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_hot_cotton_40_4_acc.parquet",
+    "entry": [
+     8,
+     19152458,
+     5803485870,
+     26162797
+    ]
+   }
+  },
+  {
+   "file": "wm_becken-flt_BWM5381IX_hot_cotton_40_6.csv",
+   "unit": "becken-flt_BWM5381IX",
+   "room": "hot",
+   "setting": "cotton_40_6",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_hot_cotton_40_6.csv",
+    "entry": [
+     8,
+     272741,
+     66002021,
+     1385583
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_hot_cotton_40_6_acc.parquet",
+    "entry": [
+     8,
+     22097702,
+     5822638496,
+     29902891
+    ]
+   }
+  },
+  {
+   "file": "wm_becken-flt_BWM5381IX_hot_cotton_40_8.csv",
+   "unit": "becken-flt_BWM5381IX",
+   "room": "hot",
+   "setting": "cotton_40_8",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_hot_cotton_40_8.csv",
+    "entry": [
+     8,
+     273250,
+     70671819,
+     1397058
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_hot_cotton_40_8_acc.parquet",
+    "entry": [
+     8,
+     22206239,
+     5844736366,
+     30000540
+    ]
+   }
+  },
+  {
+   "file": "wm_becken-flt_BWM5381IX_hot_cotton_60_0.csv",
+   "unit": "becken-flt_BWM5381IX",
+   "room": "hot",
+   "setting": "cotton_60_0",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_hot_cotton_60_0.csv",
+    "entry": [
+     8,
+     278909,
+     64833746,
+     1443385
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_hot_cotton_60_0_acc.parquet",
+    "entry": [
+     8,
+     20614012,
+     6073588534,
+     27877117
+    ]
+   }
+  },
+  {
+   "file": "wm_becken-flt_BWM5381IX_hot_cotton_60_10.csv",
+   "unit": "becken-flt_BWM5381IX",
+   "room": "hot",
+   "setting": "cotton_60_10",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_hot_cotton_60_10.csv",
+    "entry": [
+     8,
+     325010,
+     65410055,
+     1675033
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_hot_cotton_60_10_acc.parquet",
+    "entry": [
+     8,
+     26258843,
+     6186494210,
+     35543343
+    ]
+   }
+  },
+  {
+   "file": "wm_becken-flt_BWM5381IX_hot_cotton_60_11.csv",
+   "unit": "becken-flt_BWM5381IX",
+   "room": "hot",
+   "setting": "cotton_60_11",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_hot_cotton_60_11.csv",
+    "entry": [
+     8,
+     297087,
+     65112811,
+     1542633
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_hot_cotton_60_11_acc.parquet",
+    "entry": [
+     8,
+     23745259,
+     6212753222,
+     32035063
+    ]
+   }
+  },
+  {
+   "file": "wm_becken-flt_BWM5381IX_hot_cotton_60_2.csv",
+   "unit": "becken-flt_BWM5381IX",
+   "room": "hot",
+   "setting": "cotton_60_2",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_hot_cotton_60_2.csv",
+    "entry": [
+     8,
+     291053,
+     66274918,
+     1513577
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_hot_cotton_60_2_acc.parquet",
+    "entry": [
+     8,
+     22366057,
+     6094202714,
+     30364365
+    ]
+   }
+  },
+  {
+   "file": "wm_becken-flt_BWM5381IX_hot_cotton_60_4.csv",
+   "unit": "becken-flt_BWM5381IX",
+   "room": "hot",
+   "setting": "cotton_60_4",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_hot_cotton_60_4.csv",
+    "entry": [
+     8,
+     290065,
+     68765662,
+     1476536
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_hot_cotton_60_4_acc.parquet",
+    "entry": [
+     8,
+     23350307,
+     6116568939,
+     31569095
+    ]
+   }
+  },
+  {
+   "file": "wm_becken-flt_BWM5381IX_hot_cotton_60_6.csv",
+   "unit": "becken-flt_BWM5381IX",
+   "room": "hot",
+   "setting": "cotton_60_6",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_hot_cotton_60_6.csv",
+    "entry": [
+     8,
+     296535,
+     66566127,
+     1501883
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_hot_cotton_60_6_acc.parquet",
+    "entry": [
+     8,
+     22294964,
+     6139919414,
+     30169988
+    ]
+   }
+  },
+  {
+   "file": "wm_becken-flt_BWM5381IX_hot_cotton_60_8.csv",
+   "unit": "becken-flt_BWM5381IX",
+   "room": "hot",
+   "setting": "cotton_60_8",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_hot_cotton_60_8.csv",
+    "entry": [
+     8,
+     303702,
+     69322230,
+     1531286
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken-flt_BWM5381IX/cotton/wm_becken-flt_BWM5381IX_hot_cotton_60_8_acc.parquet",
+    "entry": [
+     8,
+     24279496,
+     6162214546,
+     32781481
+    ]
+   }
+  },
+  {
+   "file": "wm_becken-flt_BWM5381IX_cold_eco_40-60_0.csv",
+   "unit": "becken-flt_BWM5381IX",
+   "room": "cold",
+   "setting": "eco_40-60_0",
+   "program": "eco",
+   "labels": {
+    "member": "laboratory/washing_machine/becken-flt_BWM5381IX/eco/wm_becken-flt_BWM5381IX_cold_eco_40-60_0.csv",
+    "entry": [
+     8,
+     224087,
+     82916983,
+     1305788
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken-flt_BWM5381IX/eco/wm_becken-flt_BWM5381IX_cold_eco_40-60_0_acc.parquet",
+    "entry": [
+     8,
+     19584789,
+     6236498764,
+     26949313
+    ]
+   }
+  },
+  {
+   "file": "wm_becken-flt_BWM5381IX_cold_eco_40-60_10.csv",
+   "unit": "becken-flt_BWM5381IX",
+   "room": "cold",
+   "setting": "eco_40-60_10",
+   "program": "eco",
+   "labels": {
+    "member": "laboratory/washing_machine/becken-flt_BWM5381IX/eco/wm_becken-flt_BWM5381IX_cold_eco_40-60_10.csv",
+    "entry": [
+     8,
+     275267,
+     83141224,
+     1372704
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken-flt_BWM5381IX/eco/wm_becken-flt_BWM5381IX_cold_eco_40-60_10_acc.parquet",
+    "entry": [
+     8,
+     21175503,
+     6338359869,
+     28614256
+    ]
+   }
+  },
+  {
+   "file": "wm_becken-flt_BWM5381IX_cold_eco_40-60_11.csv",
+   "unit": "becken-flt_BWM5381IX",
+   "room": "cold",
+   "setting": "eco_40-60_11",
+   "program": "eco",
+   "labels": {
+    "member": "laboratory/washing_machine/becken-flt_BWM5381IX/eco/wm_becken-flt_BWM5381IX_cold_eco_40-60_11.csv",
+    "entry": [
+     8,
+     289459,
+     82627369,
+     1429136
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken-flt_BWM5381IX/eco/wm_becken-flt_BWM5381IX_cold_eco_40-60_11_acc.parquet",
+    "entry": [
+     8,
+     22176248,
+     6359535539,
+     29932696
+    ]
+   }
+  },
+  {
+   "file": "wm_becken-flt_BWM5381IX_cold_eco_40-60_2.csv",
+   "unit": "becken-flt_BWM5381IX",
+   "room": "cold",
+   "setting": "eco_40-60_2",
+   "program": "eco",
+   "labels": {
+    "member": "laboratory/washing_machine/becken-flt_BWM5381IX/eco/wm_becken-flt_BWM5381IX_cold_eco_40-60_2.csv",
+    "entry": [
+     8,
+     253669,
+     83416646,
+     1357753
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken-flt_BWM5381IX/eco/wm_becken-flt_BWM5381IX_cold_eco_40-60_2_acc.parquet",
+    "entry": [
+     8,
+     20345717,
+     6256083719,
+     27724384
+    ]
+   }
+  },
+  {
+   "file": "wm_becken-flt_BWM5381IX_cold_eco_40-60_4.csv",
+   "unit": "becken-flt_BWM5381IX",
+   "room": "cold",
+   "setting": "eco_40-60_4",
+   "program": "eco",
+   "labels": {
+    "member": "laboratory/washing_machine/becken-flt_BWM5381IX/eco/wm_becken-flt_BWM5381IX_cold_eco_40-60_4.csv",
+    "entry": [
+     8,
+     271646,
+     82355569,
+     1369122
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken-flt_BWM5381IX/eco/wm_becken-flt_BWM5381IX_cold_eco_40-60_4_acc.parquet",
+    "entry": [
+     8,
+     20550950,
+     6276429602,
+     27876673
+    ]
+   }
+  },
+  {
+   "file": "wm_becken-flt_BWM5381IX_cold_eco_40-60_6.csv",
+   "unit": "becken-flt_BWM5381IX",
+   "room": "cold",
+   "setting": "eco_40-60_6",
+   "program": "eco",
+   "labels": {
+    "member": "laboratory/washing_machine/becken-flt_BWM5381IX/eco/wm_becken-flt_BWM5381IX_cold_eco_40-60_6.csv",
+    "entry": [
+     8,
+     258147,
+     82097268,
+     1358146
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken-flt_BWM5381IX/eco/wm_becken-flt_BWM5381IX_cold_eco_40-60_6_acc.parquet",
+    "entry": [
+     8,
+     20290526,
+     6296980718,
+     27500017
+    ]
+   }
+  },
+  {
+   "file": "wm_becken-flt_BWM5381IX_cold_eco_40-60_8.csv",
+   "unit": "becken-flt_BWM5381IX",
+   "room": "cold",
+   "setting": "eco_40-60_8",
+   "program": "eco",
+   "labels": {
+    "member": "laboratory/washing_machine/becken-flt_BWM5381IX/eco/wm_becken-flt_BWM5381IX_cold_eco_40-60_8.csv",
+    "entry": [
+     8,
+     277165,
+     81819949,
+     1370644
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken-flt_BWM5381IX/eco/wm_becken-flt_BWM5381IX_cold_eco_40-60_8_acc.parquet",
+    "entry": [
+     8,
+     21088293,
+     6317271410,
+     28536297
+    ]
+   }
+  },
+  {
+   "file": "wm_becken-flt_BWM5381IX_hot_eco_40-60_0.csv",
+   "unit": "becken-flt_BWM5381IX",
+   "room": "hot",
+   "setting": "eco_40-60_0",
+   "program": "eco",
+   "labels": {
+    "member": "laboratory/washing_machine/becken-flt_BWM5381IX/eco/wm_becken-flt_BWM5381IX_hot_eco_40-60_0.csv",
+    "entry": [
+     8,
+     256871,
+     81562925,
+     1341297
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken-flt_BWM5381IX/eco/wm_becken-flt_BWM5381IX_hot_eco_40-60_0_acc.parquet",
+    "entry": [
+     8,
+     20004264,
+     6381711954,
+     27416470
+    ]
+   }
+  },
+  {
+   "file": "wm_becken-flt_BWM5381IX_hot_eco_40-60_10.csv",
+   "unit": "becken-flt_BWM5381IX",
+   "room": "hot",
+   "setting": "eco_40-60_10",
+   "program": "eco",
+   "labels": {
+    "member": "laboratory/washing_machine/becken-flt_BWM5381IX/eco/wm_becken-flt_BWM5381IX_hot_eco_40-60_10.csv",
+    "entry": [
+     8,
+     264435,
+     83945729,
+     1378961
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken-flt_BWM5381IX/eco/wm_becken-flt_BWM5381IX_hot_eco_40-60_10_acc.parquet",
+    "entry": [
+     8,
+     21543748,
+     6484361036,
+     28875741
+    ]
+   }
+  },
+  {
+   "file": "wm_becken-flt_BWM5381IX_hot_eco_40-60_11.csv",
+   "unit": "becken-flt_BWM5381IX",
+   "room": "hot",
+   "setting": "eco_40-60_11",
+   "program": "eco",
+   "labels": {
+    "member": "laboratory/washing_machine/becken-flt_BWM5381IX/eco/wm_becken-flt_BWM5381IX_hot_eco_40-60_11.csv",
+    "entry": [
+     8,
+     337974,
+     84210318,
+     1761952
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken-flt_BWM5381IX/eco/wm_becken-flt_BWM5381IX_hot_eco_40-60_11_acc.parquet",
+    "entry": [
+     8,
+     27881452,
+     6505904950,
+     37765904
+    ]
+   }
+  },
+  {
+   "file": "wm_becken-flt_BWM5381IX_hot_eco_40-60_2.csv",
+   "unit": "becken-flt_BWM5381IX",
+   "room": "hot",
+   "setting": "eco_40-60_2",
+   "program": "eco",
+   "labels": {
+    "member": "laboratory/washing_machine/becken-flt_BWM5381IX/eco/wm_becken-flt_BWM5381IX_hot_eco_40-60_2.csv",
+    "entry": [
+     8,
+     262173,
+     81300599,
+     1334429
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken-flt_BWM5381IX/eco/wm_becken-flt_BWM5381IX_hot_eco_40-60_2_acc.parquet",
+    "entry": [
+     8,
+     20054314,
+     6401716383,
+     27373084
+    ]
+   }
+  },
+  {
+   "file": "wm_becken-flt_BWM5381IX_hot_eco_40-60_4.csv",
+   "unit": "becken-flt_BWM5381IX",
+   "room": "hot",
+   "setting": "eco_40-60_4",
+   "program": "eco",
+   "labels": {
+    "member": "laboratory/washing_machine/becken-flt_BWM5381IX/eco/wm_becken-flt_BWM5381IX_hot_eco_40-60_4.csv",
+    "entry": [
+     8,
+     263823,
+     80765111,
+     1341041
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken-flt_BWM5381IX/eco/wm_becken-flt_BWM5381IX_hot_eco_40-60_4_acc.parquet",
+    "entry": [
+     8,
+     19954486,
+     6421770862,
+     27160192
+    ]
+   }
+  },
+  {
+   "file": "wm_becken-flt_BWM5381IX_hot_eco_40-60_6.csv",
+   "unit": "becken-flt_BWM5381IX",
+   "room": "hot",
+   "setting": "eco_40-60_6",
+   "program": "eco",
+   "labels": {
+    "member": "laboratory/washing_machine/becken-flt_BWM5381IX/eco/wm_becken-flt_BWM5381IX_hot_eco_40-60_6.csv",
+    "entry": [
+     8,
+     271359,
+     81029087,
+     1361292
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken-flt_BWM5381IX/eco/wm_becken-flt_BWM5381IX_hot_eco_40-60_6_acc.parquet",
+    "entry": [
+     8,
+     21053674,
+     6441725513,
+     28713312
+    ]
+   }
+  },
+  {
+   "file": "wm_becken-flt_BWM5381IX_hot_eco_40-60_8.csv",
+   "unit": "becken-flt_BWM5381IX",
+   "room": "hot",
+   "setting": "eco_40-60_8",
+   "program": "eco",
+   "labels": {
+    "member": "laboratory/washing_machine/becken-flt_BWM5381IX/eco/wm_becken-flt_BWM5381IX_hot_eco_40-60_8.csv",
+    "entry": [
+     8,
+     275107,
+     83670469,
+     1377034
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken-flt_BWM5381IX/eco/wm_becken-flt_BWM5381IX_hot_eco_40-60_8_acc.parquet",
+    "entry": [
+     8,
+     21581519,
+     6462779352,
+     29318285
+    ]
+   }
+  },
+  {
+   "file": "wm_becken-flt_BWM5381IX_warm_20-deg_20_0.csv",
+   "unit": "becken-flt_BWM5381IX",
+   "room": "warm",
+   "setting": "20-deg_20_0",
+   "program": "20-deg",
+   "labels": {
+    "member": "laboratory/washing_machine/becken-flt_BWM5381IX/others/wm_becken-flt_BWM5381IX_warm_20-deg_20_0.csv",
+    "entry": [
+     8,
+     85054,
+     77342190,
+     439342
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken-flt_BWM5381IX/others/wm_becken-flt_BWM5381IX_warm_20-deg_20_0_acc.parquet",
+    "entry": [
+     8,
+     6748912,
+     6590261730,
+     9217774
+    ]
+   }
+  },
+  {
+   "file": "wm_becken-flt_BWM5381IX_warm_20-deg_20_11.csv",
+   "unit": "becken-flt_BWM5381IX",
+   "room": "warm",
+   "setting": "20-deg_20_11",
+   "program": "20-deg",
+   "labels": {
+    "member": "laboratory/washing_machine/becken-flt_BWM5381IX/others/wm_becken-flt_BWM5381IX_warm_20-deg_20_11.csv",
+    "entry": [
+     8,
+     99187,
+     80194119,
+     489441
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken-flt_BWM5381IX/others/wm_becken-flt_BWM5381IX_warm_20-deg_20_11_acc.parquet",
+    "entry": [
+     8,
+     8090000,
+     6612730214,
+     10989661
+    ]
+   }
+  },
+  {
+   "file": "wm_becken-flt_BWM5381IX_warm_20-deg_20_2.csv",
+   "unit": "becken-flt_BWM5381IX",
+   "room": "warm",
+   "setting": "20-deg_20_2",
+   "program": "20-deg",
+   "labels": {
+    "member": "laboratory/washing_machine/becken-flt_BWM5381IX/others/wm_becken-flt_BWM5381IX_warm_20-deg_20_2.csv",
+    "entry": [
+     8,
+     92885,
+     76835469,
+     456143
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken-flt_BWM5381IX/others/wm_becken-flt_BWM5381IX_warm_20-deg_20_2_acc.parquet",
+    "entry": [
+     8,
+     7506076,
+     6597010811,
+     10248491
+    ]
+   }
+  },
+  {
+   "file": "wm_becken-flt_BWM5381IX_warm_20-deg_20_6.csv",
+   "unit": "becken-flt_BWM5381IX",
+   "room": "warm",
+   "setting": "20-deg_20_6",
+   "program": "20-deg",
+   "labels": {
+    "member": "laboratory/washing_machine/becken-flt_BWM5381IX/others/wm_becken-flt_BWM5381IX_warm_20-deg_20_6.csv",
+    "entry": [
+     8,
+     98024,
+     77753082,
+     476505
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken-flt_BWM5381IX/others/wm_becken-flt_BWM5381IX_warm_20-deg_20_6_acc.parquet",
+    "entry": [
+     8,
+     8212989,
+     6604517056,
+     11020968
+    ]
+   }
+  },
+  {
+   "file": "wm_becken-flt_BWM5381IX_warm_delicate_30_0.csv",
+   "unit": "becken-flt_BWM5381IX",
+   "room": "warm",
+   "setting": "delicate_30_0",
+   "program": "delicate",
+   "labels": {
+    "member": "laboratory/washing_machine/becken-flt_BWM5381IX/others/wm_becken-flt_BWM5381IX_warm_delicate_30_0.csv",
+    "entry": [
+     8,
+     74035,
+     80293464,
+     379975
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken-flt_BWM5381IX/others/wm_becken-flt_BWM5381IX_warm_delicate_30_0_acc.parquet",
+    "entry": [
+     8,
+     5635853,
+     6653661129,
+     7824097
+    ]
+   }
+  },
+  {
+   "file": "wm_becken-flt_BWM5381IX_warm_delicate_30_11.csv",
+   "unit": "becken-flt_BWM5381IX",
+   "room": "warm",
+   "setting": "delicate_30_11",
+   "program": "delicate",
+   "labels": {
+    "member": "laboratory/washing_machine/becken-flt_BWM5381IX/others/wm_becken-flt_BWM5381IX_warm_delicate_30_11.csv",
+    "entry": [
+     8,
+     116481,
+     76928511,
+     581775
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken-flt_BWM5381IX/others/wm_becken-flt_BWM5381IX_warm_delicate_30_11_acc.parquet",
+    "entry": [
+     8,
+     9478188,
+     6669918717,
+     12775956
+    ]
+   }
+  },
+  {
+   "file": "wm_becken-flt_BWM5381IX_warm_delicate_30_2.csv",
+   "unit": "becken-flt_BWM5381IX",
+   "room": "warm",
+   "setting": "delicate_30_2",
+   "program": "delicate",
+   "labels": {
+    "member": "laboratory/washing_machine/becken-flt_BWM5381IX/others/wm_becken-flt_BWM5381IX_warm_delicate_30_2.csv",
+    "entry": [
+     8,
+     70189,
+     79332516,
+     359292
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken-flt_BWM5381IX/others/wm_becken-flt_BWM5381IX_warm_delicate_30_2_acc.parquet",
+    "entry": [
+     8,
+     5409859,
+     6659297153,
+     7317218
+    ]
+   }
+  },
+  {
+   "file": "wm_becken-flt_BWM5381IX_warm_delicate_30_6.csv",
+   "unit": "becken-flt_BWM5381IX",
+   "room": "warm",
+   "setting": "delicate_30_6",
+   "program": "delicate",
+   "labels": {
+    "member": "laboratory/washing_machine/becken-flt_BWM5381IX/others/wm_becken-flt_BWM5381IX_warm_delicate_30_6.csv",
+    "entry": [
+     8,
+     65749,
+     79266608,
+     344920
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken-flt_BWM5381IX/others/wm_becken-flt_BWM5381IX_warm_delicate_30_6_acc.parquet",
+    "entry": [
+     8,
+     5211363,
+     6664707183,
+     7093362
+    ]
+   }
+  },
+  {
+   "file": "wm_becken-flt_BWM5381IX_warm_fast-15_0.csv",
+   "unit": "becken-flt_BWM5381IX",
+   "room": "warm",
+   "setting": "fast-15_0",
+   "program": "fast-15",
+   "labels": {
+    "member": "laboratory/washing_machine/becken-flt_BWM5381IX/others/wm_becken-flt_BWM5381IX_warm_fast-15_0.csv",
+    "entry": [
+     8,
+     27475,
+     79929413,
+     138842
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken-flt_BWM5381IX/others/wm_becken-flt_BWM5381IX_warm_fast-15_0_acc.parquet",
+    "entry": [
+     8,
+     2235825,
+     6580515038,
+     3031108
+    ]
+   }
+  },
+  {
+   "file": "wm_becken-flt_BWM5381IX_warm_fast-15_11.csv",
+   "unit": "becken-flt_BWM5381IX",
+   "room": "warm",
+   "setting": "fast-15_11",
+   "program": "fast-15",
+   "labels": {
+    "member": "laboratory/washing_machine/becken-flt_BWM5381IX/others/wm_becken-flt_BWM5381IX_warm_fast-15_11.csv",
+    "entry": [
+     8,
+     33143,
+     80367658,
+     164402
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken-flt_BWM5381IX/others/wm_becken-flt_BWM5381IX_warm_fast-15_11_acc.parquet",
+    "entry": [
+     8,
+     2783339,
+     6587478223,
+     3719277
+    ]
+   }
+  },
+  {
+   "file": "wm_becken-flt_BWM5381IX_warm_fast-15_2.csv",
+   "unit": "becken-flt_BWM5381IX",
+   "room": "warm",
+   "setting": "fast-15_2",
+   "program": "fast-15",
+   "labels": {
+    "member": "laboratory/washing_machine/becken-flt_BWM5381IX/others/wm_becken-flt_BWM5381IX_warm_fast-15_2.csv",
+    "entry": [
+     8,
+     25827,
+     79903431,
+     126516
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken-flt_BWM5381IX/others/wm_becken-flt_BWM5381IX_warm_fast-15_2_acc.parquet",
+    "entry": [
+     8,
+     2190993,
+     6582751030,
+     2925270
+    ]
+   }
+  },
+  {
+   "file": "wm_becken-flt_BWM5381IX_warm_fast-15_6.csv",
+   "unit": "becken-flt_BWM5381IX",
+   "room": "warm",
+   "setting": "fast-15_6",
+   "program": "fast-15",
+   "labels": {
+    "member": "laboratory/washing_machine/becken-flt_BWM5381IX/others/wm_becken-flt_BWM5381IX_warm_fast-15_6.csv",
+    "entry": [
+     8,
+     29677,
+     78847210,
+     141153
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken-flt_BWM5381IX/others/wm_becken-flt_BWM5381IX_warm_fast-15_6_acc.parquet",
+    "entry": [
+     8,
+     2535866,
+     6584942190,
+     3356872
+    ]
+   }
+  },
+  {
+   "file": "wm_becken-flt_BWM5381IX_warm_fast-45_40_0.csv",
+   "unit": "becken-flt_BWM5381IX",
+   "room": "warm",
+   "setting": "fast-45_40_0",
+   "program": "fast-45",
+   "labels": {
+    "member": "laboratory/washing_machine/becken-flt_BWM5381IX/others/wm_becken-flt_BWM5381IX_warm_fast-45_40_0.csv",
+    "entry": [
+     8,
+     70023,
+     78777029,
+     346088
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken-flt_BWM5381IX/others/wm_becken-flt_BWM5381IX_warm_fast-45_40_0_acc.parquet",
+    "entry": [
+     8,
+     5278119,
+     6558182410,
+     7305590
+    ]
+   }
+  },
+  {
+   "file": "wm_becken-flt_BWM5381IX_warm_fast-45_40_11.csv",
+   "unit": "becken-flt_BWM5381IX",
+   "room": "warm",
+   "setting": "fast-45_40_11",
+   "program": "fast-45",
+   "labels": {
+    "member": "laboratory/washing_machine/becken-flt_BWM5381IX/others/wm_becken-flt_BWM5381IX_warm_fast-45_40_11.csv",
+    "entry": [
+     8,
+     79409,
+     79187040,
+     379533
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken-flt_BWM5381IX/others/wm_becken-flt_BWM5381IX_warm_fast-45_40_11_acc.parquet",
+    "entry": [
+     8,
+     6195539,
+     6574319328,
+     8240583
+    ]
+   }
+  },
+  {
+   "file": "wm_becken-flt_BWM5381IX_warm_fast-45_40_2.csv",
+   "unit": "becken-flt_BWM5381IX",
+   "room": "warm",
+   "setting": "fast-45_40_2",
+   "program": "fast-45",
+   "labels": {
+    "member": "laboratory/washing_machine/becken-flt_BWM5381IX/others/wm_becken-flt_BWM5381IX_warm_fast-45_40_2.csv",
+    "entry": [
+     8,
+     67851,
+     78877042,
+     325222
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken-flt_BWM5381IX/others/wm_becken-flt_BWM5381IX_warm_fast-45_40_2_acc.parquet",
+    "entry": [
+     8,
+     5288333,
+     6563460699,
+     7074757
+    ]
+   }
+  },
+  {
+   "file": "wm_becken-flt_BWM5381IX_warm_fast-45_40_6.csv",
+   "unit": "becken-flt_BWM5381IX",
+   "room": "warm",
+   "setting": "fast-45_40_6",
+   "program": "fast-45",
+   "labels": {
+    "member": "laboratory/washing_machine/becken-flt_BWM5381IX/others/wm_becken-flt_BWM5381IX_warm_fast-45_40_6.csv",
+    "entry": [
+     8,
+     73155,
+     79830118,
+     353993
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken-flt_BWM5381IX/others/wm_becken-flt_BWM5381IX_warm_fast-45_40_6_acc.parquet",
+    "entry": [
+     8,
+     5569956,
+     6568749202,
+     7478578
+    ]
+   }
+  },
+  {
+   "file": "wm_becken-flt_BWM5381IX_warm_jeans_60_0.csv",
+   "unit": "becken-flt_BWM5381IX",
+   "room": "warm",
+   "setting": "jeans_60_0",
+   "program": "jeans",
+   "labels": {
+    "member": "laboratory/washing_machine/becken-flt_BWM5381IX/others/wm_becken-flt_BWM5381IX_warm_jeans_60_0.csv",
+    "entry": [
+     8,
+     169134,
+     78607739,
+     868334
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken-flt_BWM5381IX/others/wm_becken-flt_BWM5381IX_warm_jeans_60_0_acc.parquet",
+    "entry": [
+     8,
+     12977357,
+     6679397077,
+     18005652
+    ]
+   }
+  },
+  {
+   "file": "wm_becken-flt_BWM5381IX_warm_jeans_60_11.csv",
+   "unit": "becken-flt_BWM5381IX",
+   "room": "warm",
+   "setting": "jeans_60_11",
+   "program": "jeans",
+   "labels": {
+    "member": "laboratory/washing_machine/becken-flt_BWM5381IX/others/wm_becken-flt_BWM5381IX_warm_jeans_60_11.csv",
+    "entry": [
+     8,
+     187798,
+     79402864,
+     968269
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken-flt_BWM5381IX/others/wm_becken-flt_BWM5381IX_warm_jeans_60_11_acc.parquet",
+    "entry": [
+     8,
+     15229639,
+     6720248753,
+     20588224
+    ]
+   }
+  },
+  {
+   "file": "wm_becken-flt_BWM5381IX_warm_jeans_60_2.csv",
+   "unit": "becken-flt_BWM5381IX",
+   "room": "warm",
+   "setting": "jeans_60_2",
+   "program": "jeans",
+   "labels": {
+    "member": "laboratory/washing_machine/becken-flt_BWM5381IX/others/wm_becken-flt_BWM5381IX_warm_jeans_60_2.csv",
+    "entry": [
+     8,
+     174979,
+     78241201,
+     879449
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken-flt_BWM5381IX/others/wm_becken-flt_BWM5381IX_warm_jeans_60_2_acc.parquet",
+    "entry": [
+     8,
+     13509330,
+     6692374602,
+     18384277
+    ]
+   }
+  },
+  {
+   "file": "wm_becken-flt_BWM5381IX_warm_jeans_60_6.csv",
+   "unit": "becken-flt_BWM5381IX",
+   "room": "warm",
+   "setting": "jeans_60_6",
+   "program": "jeans",
+   "labels": {
+    "member": "laboratory/washing_machine/becken-flt_BWM5381IX/others/wm_becken-flt_BWM5381IX_warm_jeans_60_6.csv",
+    "entry": [
+     8,
+     177830,
+     78063215,
+     905142
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken-flt_BWM5381IX/others/wm_becken-flt_BWM5381IX_warm_jeans_60_6_acc.parquet",
+    "entry": [
+     8,
+     14364485,
+     6705884100,
+     19289460
+    ]
+   }
+  },
+  {
+   "file": "wm_becken-flt_BWM5381IX_warm_mix_40_0.csv",
+   "unit": "becken-flt_BWM5381IX",
+   "room": "warm",
+   "setting": "mix_40_0",
+   "program": "mix",
+   "labels": {
+    "member": "laboratory/washing_machine/becken-flt_BWM5381IX/others/wm_becken-flt_BWM5381IX_warm_mix_40_0.csv",
+    "entry": [
+     8,
+     95485,
+     78512100,
+     484354
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken-flt_BWM5381IX/others/wm_becken-flt_BWM5381IX_warm_mix_40_0_acc.parquet",
+    "entry": [
+     8,
+     7262021,
+     6735478561,
+     10025536
+    ]
+   }
+  },
+  {
+   "file": "wm_becken-flt_BWM5381IX_warm_mix_40_11.csv",
+   "unit": "becken-flt_BWM5381IX",
+   "room": "warm",
+   "setting": "mix_40_11",
+   "program": "mix",
+   "labels": {
+    "member": "laboratory/washing_machine/becken-flt_BWM5381IX/others/wm_becken-flt_BWM5381IX_warm_mix_40_11.csv",
+    "entry": [
+     8,
+     107370,
+     77851263,
+     534832
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken-flt_BWM5381IX/others/wm_becken-flt_BWM5381IX_warm_mix_40_11_acc.parquet",
+    "entry": [
+     8,
+     8502744,
+     6758334601,
+     11549339
+    ]
+   }
+  },
+  {
+   "file": "wm_becken-flt_BWM5381IX_warm_mix_40_2.csv",
+   "unit": "becken-flt_BWM5381IX",
+   "room": "warm",
+   "setting": "mix_40_2",
+   "program": "mix",
+   "labels": {
+    "member": "laboratory/washing_machine/becken-flt_BWM5381IX/others/wm_becken-flt_BWM5381IX_warm_mix_40_2.csv",
+    "entry": [
+     8,
+     95610,
+     78416336,
+     474975
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken-flt_BWM5381IX/others/wm_becken-flt_BWM5381IX_warm_mix_40_2_acc.parquet",
+    "entry": [
+     8,
+     7227664,
+     6742740748,
+     9907552
+    ]
+   }
+  },
+  {
+   "file": "wm_becken-flt_BWM5381IX_warm_mix_40_6.csv",
+   "unit": "becken-flt_BWM5381IX",
+   "room": "warm",
+   "setting": "mix_40_6",
+   "program": "mix",
+   "labels": {
+    "member": "laboratory/washing_machine/becken-flt_BWM5381IX/others/wm_becken-flt_BWM5381IX_warm_mix_40_6.csv",
+    "entry": [
+     8,
+     104273,
+     77958788,
+     514656
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken-flt_BWM5381IX/others/wm_becken-flt_BWM5381IX_warm_mix_40_6_acc.parquet",
+    "entry": [
+     8,
+     8365857,
+     6749968578,
+     11260778
+    ]
+   }
+  },
+  {
+   "file": "wm_becken-flt_BWM5381IX_warm_sport_40_0.csv",
+   "unit": "becken-flt_BWM5381IX",
+   "room": "warm",
+   "setting": "sport_40_0",
+   "program": "sport",
+   "labels": {
+    "member": "laboratory/washing_machine/becken-flt_BWM5381IX/others/wm_becken-flt_BWM5381IX_warm_sport_40_0.csv",
+    "entry": [
+     8,
+     65519,
+     77687407,
+     344013
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken-flt_BWM5381IX/others/wm_becken-flt_BWM5381IX_warm_sport_40_0_acc.parquet",
+    "entry": [
+     8,
+     5366032,
+     6533786685,
+     7308595
+    ]
+   }
+  },
+  {
+   "file": "wm_becken-flt_BWM5381IX_warm_sport_40_11.csv",
+   "unit": "becken-flt_BWM5381IX",
+   "room": "warm",
+   "setting": "sport_40_11",
+   "program": "sport",
+   "labels": {
+    "member": "laboratory/washing_machine/becken-flt_BWM5381IX/others/wm_becken-flt_BWM5381IX_warm_sport_40_11.csv",
+    "entry": [
+     8,
+     105955,
+     80658889,
+     536709
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken-flt_BWM5381IX/others/wm_becken-flt_BWM5381IX_warm_sport_40_11_acc.parquet",
+    "entry": [
+     8,
+     8625507,
+     6549556734,
+     11751483
+    ]
+   }
+  },
+  {
+   "file": "wm_becken-flt_BWM5381IX_warm_sport_40_2.csv",
+   "unit": "becken-flt_BWM5381IX",
+   "room": "warm",
+   "setting": "sport_40_2",
+   "program": "sport",
+   "labels": {
+    "member": "laboratory/washing_machine/becken-flt_BWM5381IX/others/wm_becken-flt_BWM5381IX_warm_sport_40_2.csv",
+    "entry": [
+     8,
+     62379,
+     77427401,
+     326750
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken-flt_BWM5381IX/others/wm_becken-flt_BWM5381IX_warm_sport_40_2_acc.parquet",
+    "entry": [
+     8,
+     5076892,
+     6539152885,
+     6890695
+    ]
+   }
+  },
+  {
+   "file": "wm_becken-flt_BWM5381IX_warm_sport_40_6.csv",
+   "unit": "becken-flt_BWM5381IX",
+   "room": "warm",
+   "setting": "sport_40_6",
+   "program": "sport",
+   "labels": {
+    "member": "laboratory/washing_machine/becken-flt_BWM5381IX/others/wm_becken-flt_BWM5381IX_warm_sport_40_6.csv",
+    "entry": [
+     8,
+     68653,
+     77273381,
+     333383
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken-flt_BWM5381IX/others/wm_becken-flt_BWM5381IX_warm_sport_40_6_acc.parquet",
+    "entry": [
+     8,
+     5326621,
+     6544229945,
+     7231917
+    ]
+   }
+  },
+  {
+   "file": "wm_becken-flt_BWM5381IX_warm_synthetic_0.csv",
+   "unit": "becken-flt_BWM5381IX",
+   "room": "warm",
+   "setting": "synthetic_0",
+   "program": "synthetic",
+   "labels": {
+    "member": "laboratory/washing_machine/becken-flt_BWM5381IX/others/wm_becken-flt_BWM5381IX_warm_synthetic_0.csv",
+    "entry": [
+     8,
+     236919,
+     79957043,
+     1231120
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken-flt_BWM5381IX/others/wm_becken-flt_BWM5381IX_warm_synthetic_0_acc.parquet",
+    "entry": [
+     8,
+     17928957,
+     6766837512,
+     24798800
+    ]
+   }
+  },
+  {
+   "file": "wm_becken-flt_BWM5381IX_warm_synthetic_11.csv",
+   "unit": "becken-flt_BWM5381IX",
+   "room": "warm",
+   "setting": "synthetic_11",
+   "program": "synthetic",
+   "labels": {
+    "member": "laboratory/washing_machine/becken-flt_BWM5381IX/others/wm_becken-flt_BWM5381IX_warm_synthetic_11.csv",
+    "entry": [
+     8,
+     257774,
+     80400957,
+     1278504
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken-flt_BWM5381IX/others/wm_becken-flt_BWM5381IX_warm_synthetic_11_acc.parquet",
+    "entry": [
+     8,
+     19708467,
+     6817183461,
+     26555995
+    ]
+   }
+  },
+  {
+   "file": "wm_becken-flt_BWM5381IX_warm_synthetic_2.csv",
+   "unit": "becken-flt_BWM5381IX",
+   "room": "warm",
+   "setting": "synthetic_2",
+   "program": "synthetic",
+   "labels": {
+    "member": "laboratory/washing_machine/becken-flt_BWM5381IX/others/wm_becken-flt_BWM5381IX_warm_synthetic_2.csv",
+    "entry": [
+     8,
+     239142,
+     79590819,
+     1239256
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken-flt_BWM5381IX/others/wm_becken-flt_BWM5381IX_warm_synthetic_2_acc.parquet",
+    "entry": [
+     8,
+     18980102,
+     6784766638,
+     25876699
+    ]
+   }
+  },
+  {
+   "file": "wm_becken-flt_BWM5381IX_warm_synthetic_6.csv",
+   "unit": "becken-flt_BWM5381IX",
+   "room": "warm",
+   "setting": "synthetic_6",
+   "program": "synthetic",
+   "labels": {
+    "member": "laboratory/washing_machine/becken-flt_BWM5381IX/others/wm_becken-flt_BWM5381IX_warm_synthetic_6.csv",
+    "entry": [
+     8,
+     241832,
+     78945051,
+     1241428
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken-flt_BWM5381IX/others/wm_becken-flt_BWM5381IX_warm_synthetic_6_acc.parquet",
+    "entry": [
+     8,
+     13436383,
+     6803746909,
+     18120763
+    ]
+   }
+  },
+  {
+   "file": "wm_becken-flt_BWM5381IX_warm_wool_0.csv",
+   "unit": "becken-flt_BWM5381IX",
+   "room": "warm",
+   "setting": "wool_0",
+   "program": "wool",
+   "labels": {
+    "member": "laboratory/washing_machine/becken-flt_BWM5381IX/others/wm_becken-flt_BWM5381IX_warm_wool_0.csv",
+    "entry": [
+     8,
+     95909,
+     77489936,
+     524085
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken-flt_BWM5381IX/others/wm_becken-flt_BWM5381IX_warm_wool_0_acc.parquet",
+    "entry": [
+     8,
+     7652629,
+     6620820384,
+     10592242
+    ]
+   }
+  },
+  {
+   "file": "wm_becken-flt_BWM5381IX_warm_wool_11.csv",
+   "unit": "becken-flt_BWM5381IX",
+   "room": "warm",
+   "setting": "wool_11",
+   "program": "wool",
+   "labels": {
+    "member": "laboratory/washing_machine/becken-flt_BWM5381IX/others/wm_becken-flt_BWM5381IX_warm_wool_11.csv",
+    "entry": [
+     8,
+     128984,
+     77045152,
+     663085
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken-flt_BWM5381IX/others/wm_becken-flt_BWM5381IX_warm_wool_11_acc.parquet",
+    "entry": [
+     8,
+     10085132,
+     6643575832,
+     13777361
+    ]
+   }
+  },
+  {
+   "file": "wm_becken-flt_BWM5381IX_warm_wool_2.csv",
+   "unit": "becken-flt_BWM5381IX",
+   "room": "warm",
+   "setting": "wool_2",
+   "program": "wool",
+   "labels": {
+    "member": "laboratory/washing_machine/becken-flt_BWM5381IX/others/wm_becken-flt_BWM5381IX_warm_wool_2.csv",
+    "entry": [
+     8,
+     101258,
+     77585997,
+     508604
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken-flt_BWM5381IX/others/wm_becken-flt_BWM5381IX_warm_wool_2_acc.parquet",
+    "entry": [
+     8,
+     7549393,
+     6628473177,
+     10278727
+    ]
+   }
+  },
+  {
+   "file": "wm_becken-flt_BWM5381IX_warm_wool_6.csv",
+   "unit": "becken-flt_BWM5381IX",
+   "room": "warm",
+   "setting": "wool_6",
+   "program": "wool",
+   "labels": {
+    "member": "laboratory/washing_machine/becken-flt_BWM5381IX/others/wm_becken-flt_BWM5381IX_warm_wool_6.csv",
+    "entry": [
+     8,
+     98940,
+     77174289,
+     510676
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken-flt_BWM5381IX/others/wm_becken-flt_BWM5381IX_warm_wool_6_acc.parquet",
+    "entry": [
+     8,
+     7552934,
+     6636022734,
+     10251983
+    ]
+   }
+  },
+  {
+   "file": "wm_becken_BWM5381IX_cold_cotton_0_0.csv",
+   "unit": "becken_BWM5381IX",
+   "room": "cold",
+   "setting": "cotton_0_0",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_cold_cotton_0_0.csv",
+    "entry": [
+     8,
+     232688,
+     30284730,
+     1303998
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_cold_cotton_0_0_acc.parquet",
+    "entry": [
+     8,
+     19583986,
+     3294883876,
+     27100996
+    ]
+   }
+  },
+  {
+   "file": "wm_becken_BWM5381IX_cold_cotton_0_10.csv",
+   "unit": "becken_BWM5381IX",
+   "room": "cold",
+   "setting": "cotton_0_10",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_cold_cotton_0_10.csv",
+    "entry": [
+     8,
+     256714,
+     28663785,
+     1331482
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_cold_cotton_0_10_acc.parquet",
+    "entry": [
+     8,
+     21495338,
+     3401633228,
+     29323050
+    ]
+   }
+  },
+  {
+   "file": "wm_becken_BWM5381IX_cold_cotton_0_11.csv",
+   "unit": "becken_BWM5381IX",
+   "room": "cold",
+   "setting": "cotton_0_11",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_cold_cotton_0_11.csv",
+    "entry": [
+     8,
+     106565,
+     29019778,
+     940254
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_cold_cotton_0_11_acc.parquet",
+    "entry": [
+     8,
+     24979244,
+     3423128727,
+     33708228
+    ]
+   }
+  },
+  {
+   "file": "wm_becken_BWM5381IX_cold_cotton_0_2.csv",
+   "unit": "becken_BWM5381IX",
+   "room": "cold",
+   "setting": "cotton_0_2",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_cold_cotton_0_2.csv",
+    "entry": [
+     8,
+     243751,
+     29748391,
+     1296423
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_cold_cotton_0_2_acc.parquet",
+    "entry": [
+     8,
+     20227925,
+     3314468022,
+     27349306
+    ]
+   }
+  },
+  {
+   "file": "wm_becken_BWM5381IX_cold_cotton_0_4.csv",
+   "unit": "becken_BWM5381IX",
+   "room": "cold",
+   "setting": "cotton_0_4",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_cold_cotton_0_4.csv",
+    "entry": [
+     8,
+     249083,
+     31590763,
+     1333359
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_cold_cotton_0_4_acc.parquet",
+    "entry": [
+     8,
+     20018889,
+     3334696107,
+     27401974
+    ]
+   }
+  },
+  {
+   "file": "wm_becken_BWM5381IX_cold_cotton_0_6.csv",
+   "unit": "becken_BWM5381IX",
+   "room": "cold",
+   "setting": "cotton_0_6",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_cold_cotton_0_6.csv",
+    "entry": [
+     8,
+     277925,
+     32107915,
+     1493502
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_cold_cotton_0_6_acc.parquet",
+    "entry": [
+     8,
+     22612332,
+     3354715156,
+     30781367
+    ]
+   }
+  },
+  {
+   "file": "wm_becken_BWM5381IX_cold_cotton_0_8.csv",
+   "unit": "becken_BWM5381IX",
+   "room": "cold",
+   "setting": "cotton_0_8",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_cold_cotton_0_8.csv",
+    "entry": [
+     8,
+     307141,
+     27327844,
+     1589270
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_cold_cotton_0_8_acc.parquet",
+    "entry": [
+     8,
+     24305420,
+     3377327648,
+     32871262
+    ]
+   }
+  },
+  {
+   "file": "wm_becken_BWM5381IX_cold_cotton_30_0.csv",
+   "unit": "becken_BWM5381IX",
+   "room": "cold",
+   "setting": "cotton_30_0",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_cold_cotton_30_0.csv",
+    "entry": [
+     8,
+     235272,
+     31355342,
+     1340756
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_cold_cotton_30_0_acc.parquet",
+    "entry": [
+     8,
+     19754681,
+     3593150526,
+     27177744
+    ]
+   }
+  },
+  {
+   "file": "wm_becken_BWM5381IX_cold_cotton_30_10.csv",
+   "unit": "becken_BWM5381IX",
+   "room": "cold",
+   "setting": "cotton_30_10",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_cold_cotton_30_10.csv",
+    "entry": [
+     8,
+     254122,
+     34082093,
+     1366765
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_cold_cotton_30_10_acc.parquet",
+    "entry": [
+     8,
+     22454711,
+     3703080809,
+     30388311
+    ]
+   }
+  },
+  {
+   "file": "wm_becken_BWM5381IX_cold_cotton_30_11.csv",
+   "unit": "becken_BWM5381IX",
+   "room": "cold",
+   "setting": "cotton_30_11",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_cold_cotton_30_11.csv",
+    "entry": [
+     8,
+     267459,
+     32632420,
+     1391371
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_cold_cotton_30_11_acc.parquet",
+    "entry": [
+     8,
+     22350538,
+     3725535682,
+     30446435
+    ]
+   }
+  },
+  {
+   "file": "wm_becken_BWM5381IX_cold_cotton_30_2.csv",
+   "unit": "becken_BWM5381IX",
+   "room": "cold",
+   "setting": "cotton_30_2",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_cold_cotton_30_2.csv",
+    "entry": [
+     8,
+     246283,
+     32385988,
+     1356467
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_cold_cotton_30_2_acc.parquet",
+    "entry": [
+     8,
+     21166226,
+     3612905368,
+     28531876
+    ]
+   }
+  },
+  {
+   "file": "wm_becken_BWM5381IX_cold_cotton_30_4.csv",
+   "unit": "becken_BWM5381IX",
+   "room": "cold",
+   "setting": "cotton_30_4",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_cold_cotton_30_4.csv",
+    "entry": [
+     8,
+     266644,
+     30517566,
+     1492485
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_cold_cotton_30_4_acc.parquet",
+    "entry": [
+     8,
+     21721265,
+     3634071755,
+     29522949
+    ]
+   }
+  },
+  {
+   "file": "wm_becken_BWM5381IX_cold_cotton_30_6.csv",
+   "unit": "becken_BWM5381IX",
+   "room": "cold",
+   "setting": "cotton_30_6",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_cold_cotton_30_6.csv",
+    "entry": [
+     8,
+     312965,
+     29435277,
+     1652608
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_cold_cotton_30_6_acc.parquet",
+    "entry": [
+     8,
+     26176780,
+     3655793181,
+     35392381
+    ]
+   }
+  },
+  {
+   "file": "wm_becken_BWM5381IX_cold_cotton_30_8.csv",
+   "unit": "becken_BWM5381IX",
+   "room": "cold",
+   "setting": "cotton_30_8",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_cold_cotton_30_8.csv",
+    "entry": [
+     8,
+     248808,
+     28182384,
+     1377084
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_cold_cotton_30_8_acc.parquet",
+    "entry": [
+     8,
+     21110526,
+     3681970122,
+     28786733
+    ]
+   }
+  },
+  {
+   "file": "wm_becken_BWM5381IX_cold_cotton_40_0.csv",
+   "unit": "becken_BWM5381IX",
+   "room": "cold",
+   "setting": "cotton_40_0",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_cold_cotton_40_0.csv",
+    "entry": [
+     8,
+     232295,
+     28431341,
+     1344641
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_cold_cotton_40_0_acc.parquet",
+    "entry": [
+     8,
+     19686820,
+     3893835010,
+     27107419
+    ]
+   }
+  },
+  {
+   "file": "wm_becken_BWM5381IX_cold_cotton_40_10.csv",
+   "unit": "becken_BWM5381IX",
+   "room": "cold",
+   "setting": "cotton_40_10",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_cold_cotton_40_10.csv",
+    "entry": [
+     8,
+     259128,
+     26465020,
+     1340159
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_cold_cotton_40_10_acc.parquet",
+    "entry": [
+     8,
+     21802673,
+     3983496198,
+     29573304
+    ]
+   }
+  },
+  {
+   "file": "wm_becken_BWM5381IX_cold_cotton_40_11.csv",
+   "unit": "becken_BWM5381IX",
+   "room": "cold",
+   "setting": "cotton_40_11",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_cold_cotton_40_11.csv",
+    "entry": [
+     8,
+     306911,
+     27020783,
+     1621772
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_cold_cotton_40_11_acc.parquet",
+    "entry": [
+     8,
+     26486844,
+     4005299033,
+     35854413
+    ]
+   }
+  },
+  {
+   "file": "wm_becken_BWM5381IX_cold_cotton_40_2.csv",
+   "unit": "becken_BWM5381IX",
+   "room": "cold",
+   "setting": "cotton_40_2",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_cold_cotton_40_2.csv",
+    "entry": [
+     8,
+     98981,
+     28920648,
+     855470
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_cold_cotton_40_2_acc.parquet",
+    "entry": [
+     8,
+     20870101,
+     3913521991,
+     28232654
+    ]
+   }
+  },
+  {
+   "file": "wm_becken_BWM5381IX_cold_cotton_40_4.csv",
+   "unit": "becken_BWM5381IX",
+   "room": "cold",
+   "setting": "cotton_40_4",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_cold_cotton_40_4.csv",
+    "entry": [
+     8,
+     296336,
+     26724298,
+     1545582
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_cold_cotton_40_4_acc.parquet",
+    "entry": [
+     8,
+     25874864,
+     3934392253,
+     34899225
+    ]
+   }
+  },
+  {
+   "file": "wm_becken_BWM5381IX_cold_cotton_40_6.csv",
+   "unit": "becken_BWM5381IX",
+   "room": "cold",
+   "setting": "cotton_40_6",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_cold_cotton_40_6.csv",
+    "entry": [
+     8,
+     266513,
+     26198358,
+     1375064
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_cold_cotton_40_6_acc.parquet",
+    "entry": [
+     8,
+     21575603,
+     3273308112,
+     29184501
+    ]
+   }
+  },
+  {
+   "file": "wm_becken_BWM5381IX_cold_cotton_40_8.csv",
+   "unit": "becken_BWM5381IX",
+   "room": "cold",
+   "setting": "cotton_40_8",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_cold_cotton_40_8.csv",
+    "entry": [
+     8,
+     275589,
+     31079604,
+     1519739
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_cold_cotton_40_8_acc.parquet",
+    "entry": [
+     8,
+     23228759,
+     3960267278,
+     31597168
+    ]
+   }
+  },
+  {
+   "file": "wm_becken_BWM5381IX_cold_cotton_60_0.csv",
+   "unit": "becken_BWM5381IX",
+   "room": "cold",
+   "setting": "cotton_60_0",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_cold_cotton_60_0.csv",
+    "entry": [
+     8,
+     256403,
+     27635133,
+     1455389
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_cold_cotton_60_0_acc.parquet",
+    "entry": [
+     8,
+     21664702,
+     4180270779,
+     29863310
+    ]
+   }
+  },
+  {
+   "file": "wm_becken_BWM5381IX_cold_cotton_60_10.csv",
+   "unit": "becken_BWM5381IX",
+   "room": "cold",
+   "setting": "cotton_60_10",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_cold_cotton_60_10.csv",
+    "entry": [
+     8,
+     279507,
+     24448910,
+     1489688
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_cold_cotton_60_10_acc.parquet",
+    "entry": [
+     8,
+     24384685,
+     4296889195,
+     32852469
+    ]
+   }
+  },
+  {
+   "file": "wm_becken_BWM5381IX_cold_cotton_60_11.csv",
+   "unit": "becken_BWM5381IX",
+   "room": "cold",
+   "setting": "cotton_60_11",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_cold_cotton_60_11.csv",
+    "entry": [
+     8,
+     362009,
+     24728567,
+     1839203
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_cold_cotton_60_11_acc.parquet",
+    "entry": [
+     8,
+     30460226,
+     4321274042,
+     41551243
+    ]
+   }
+  },
+  {
+   "file": "wm_becken_BWM5381IX_cold_cotton_60_2.csv",
+   "unit": "becken_BWM5381IX",
+   "room": "cold",
+   "setting": "cotton_60_2",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_cold_cotton_60_2.csv",
+    "entry": [
+     8,
+     289568,
+     25908641,
+     1487823
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_cold_cotton_60_2_acc.parquet",
+    "entry": [
+     8,
+     22944728,
+     4201935642,
+     31186941
+    ]
+   }
+  },
+  {
+   "file": "wm_becken_BWM5381IX_cold_cotton_60_4.csv",
+   "unit": "becken_BWM5381IX",
+   "room": "cold",
+   "setting": "cotton_60_4",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_cold_cotton_60_4.csv",
+    "entry": [
+     8,
+     290550,
+     27891685,
+     1483902
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_cold_cotton_60_4_acc.parquet",
+    "entry": [
+     8,
+     22992901,
+     4224880531,
+     31129323
+    ]
+   }
+  },
+  {
+   "file": "wm_becken_BWM5381IX_cold_cotton_60_6.csv",
+   "unit": "becken_BWM5381IX",
+   "room": "cold",
+   "setting": "cotton_60_6",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_cold_cotton_60_6.csv",
+    "entry": [
+     8,
+     308636,
+     29126492,
+     1699447
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_cold_cotton_60_6_acc.parquet",
+    "entry": [
+     8,
+     26560300,
+     4247873593,
+     35869973
+    ]
+   }
+  },
+  {
+   "file": "wm_becken_BWM5381IX_cold_cotton_60_8.csv",
+   "unit": "becken_BWM5381IX",
+   "room": "cold",
+   "setting": "cotton_60_8",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_cold_cotton_60_8.csv",
+    "entry": [
+     8,
+     292291,
+     29992290,
+     1507386
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_cold_cotton_60_8_acc.parquet",
+    "entry": [
+     8,
+     22454980,
+     4274434054,
+     30585764
+    ]
+   }
+  },
+  {
+   "file": "wm_becken_BWM5381IX_hot_cotton_0_0.csv",
+   "unit": "becken_BWM5381IX",
+   "room": "hot",
+   "setting": "cotton_0_0",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_hot_cotton_0_0.csv",
+    "entry": [
+     8,
+     176821,
+     34336365,
+     1101871
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_hot_cotton_0_0_acc.parquet",
+    "entry": [
+     8,
+     18872079,
+     3448108132,
+     25922096
+    ]
+   }
+  },
+  {
+   "file": "wm_becken_BWM5381IX_hot_cotton_0_10.csv",
+   "unit": "becken_BWM5381IX",
+   "room": "hot",
+   "setting": "cotton_0_10",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_hot_cotton_0_10.csv",
+    "entry": [
+     8,
+     272404,
+     25364349,
+     1369425
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_hot_cotton_0_10_acc.parquet",
+    "entry": [
+     8,
+     20515400,
+     3548385679,
+     28117672
+    ]
+   }
+  },
+  {
+   "file": "wm_becken_BWM5381IX_hot_cotton_0_11.csv",
+   "unit": "becken_BWM5381IX",
+   "room": "hot",
+   "setting": "cotton_0_11",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_hot_cotton_0_11.csv",
+    "entry": [
+     8,
+     308111,
+     24140651,
+     1586637
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_hot_cotton_0_11_acc.parquet",
+    "entry": [
+     8,
+     24249127,
+     3568901239,
+     33021911
+    ]
+   }
+  },
+  {
+   "file": "wm_becken_BWM5381IX_hot_cotton_0_2.csv",
+   "unit": "becken_BWM5381IX",
+   "room": "hot",
+   "setting": "cotton_0_2",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_hot_cotton_0_2.csv",
+    "entry": [
+     8,
+     254947,
+     33530347,
+     1285584
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_hot_cotton_0_2_acc.parquet",
+    "entry": [
+     8,
+     19794280,
+     3466980370,
+     27158593
+    ]
+   }
+  },
+  {
+   "file": "wm_becken_BWM5381IX_hot_cotton_0_4.csv",
+   "unit": "becken_BWM5381IX",
+   "room": "hot",
+   "setting": "cotton_0_4",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_hot_cotton_0_4.csv",
+    "entry": [
+     8,
+     254417,
+     35310508,
+     1313412
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_hot_cotton_0_4_acc.parquet",
+    "entry": [
+     8,
+     19957849,
+     3486774809,
+     27109325
+    ]
+   }
+  },
+  {
+   "file": "wm_becken_BWM5381IX_hot_cotton_0_6.csv",
+   "unit": "becken_BWM5381IX",
+   "room": "hot",
+   "setting": "cotton_0_6",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_hot_cotton_0_6.csv",
+    "entry": [
+     8,
+     259917,
+     35864598,
+     1385322
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_hot_cotton_0_6_acc.parquet",
+    "entry": [
+     8,
+     21461880,
+     3506732817,
+     29115180
+    ]
+   }
+  },
+  {
+   "file": "wm_becken_BWM5381IX_hot_cotton_0_8.csv",
+   "unit": "becken_BWM5381IX",
+   "room": "hot",
+   "setting": "cotton_0_8",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_hot_cotton_0_8.csv",
+    "entry": [
+     8,
+     247452,
+     22240962,
+     1356042
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_hot_cotton_0_8_acc.parquet",
+    "entry": [
+     8,
+     20190664,
+     3528194856,
+     27936018
+    ]
+   }
+  },
+  {
+   "file": "wm_becken_BWM5381IX_hot_cotton_30_0.csv",
+   "unit": "becken_BWM5381IX",
+   "room": "hot",
+   "setting": "cotton_30_0",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_hot_cotton_30_0.csv",
+    "entry": [
+     8,
+     231413,
+     35078947,
+     1257514
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_hot_cotton_30_0_acc.parquet",
+    "entry": [
+     8,
+     18799465,
+     3747886382,
+     26078715
+    ]
+   }
+  },
+  {
+   "file": "wm_becken_BWM5381IX_hot_cotton_30_10.csv",
+   "unit": "becken_BWM5381IX",
+   "room": "hot",
+   "setting": "cotton_30_10",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_hot_cotton_30_10.csv",
+    "entry": [
+     8,
+     299577,
+     23544325,
+     1597502
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_hot_cotton_30_10_acc.parquet",
+    "entry": [
+     8,
+     23313028,
+     3848835615,
+     31495782
+    ]
+   }
+  },
+  {
+   "file": "wm_becken_BWM5381IX_hot_cotton_30_11.csv",
+   "unit": "becken_BWM5381IX",
+   "room": "hot",
+   "setting": "cotton_30_11",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_hot_cotton_30_11.csv",
+    "entry": [
+     8,
+     271591,
+     25636901,
+     1403852
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_hot_cotton_30_11_acc.parquet",
+    "entry": [
+     8,
+     21686045,
+     3872148804,
+     29470215
+    ]
+   }
+  },
+  {
+   "file": "wm_becken_BWM5381IX_hot_cotton_30_2.csv",
+   "unit": "becken_BWM5381IX",
+   "room": "hot",
+   "setting": "cotton_30_2",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_hot_cotton_30_2.csv",
+    "entry": [
+     8,
+     257697,
+     36124662,
+     1302661
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_hot_cotton_30_2_acc.parquet",
+    "entry": [
+     8,
+     20865031,
+     3766686007,
+     28396802
+    ]
+   }
+  },
+  {
+   "file": "wm_becken_BWM5381IX_hot_cotton_30_4.csv",
+   "unit": "becken_BWM5381IX",
+   "room": "hot",
+   "setting": "cotton_30_4",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_hot_cotton_30_4.csv",
+    "entry": [
+     8,
+     265289,
+     34513333,
+     1363386
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_hot_cotton_30_4_acc.parquet",
+    "entry": [
+     8,
+     20142498,
+     3787551198,
+     27334046
+    ]
+   }
+  },
+  {
+   "file": "wm_becken_BWM5381IX_hot_cotton_30_6.csv",
+   "unit": "becken_BWM5381IX",
+   "room": "hot",
+   "setting": "cotton_30_6",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_hot_cotton_30_6.csv",
+    "entry": [
+     8,
+     274891,
+     33255308,
+     1383950
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_hot_cotton_30_6_acc.parquet",
+    "entry": [
+     8,
+     20547559,
+     3807693856,
+     27683085
+    ]
+   }
+  },
+  {
+   "file": "wm_becken_BWM5381IX_hot_cotton_30_8.csv",
+   "unit": "becken_BWM5381IX",
+   "room": "hot",
+   "setting": "cotton_30_8",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_hot_cotton_30_8.csv",
+    "entry": [
+     8,
+     267060,
+     22988041,
+     1369100
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_hot_cotton_30_8_acc.parquet",
+    "entry": [
+     8,
+     20593880,
+     3828241575,
+     28247467
+    ]
+   }
+  },
+  {
+   "file": "wm_becken_BWM5381IX_hot_cotton_40_0.csv",
+   "unit": "becken_BWM5381IX",
+   "room": "hot",
+   "setting": "cotton_40_0",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_hot_cotton_40_0.csv",
+    "entry": [
+     8,
+     240454,
+     22747439,
+     1265587
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_hot_cotton_40_0_acc.parquet",
+    "entry": [
+     8,
+     19203823,
+     4031786039,
+     26525186
+    ]
+   }
+  },
+  {
+   "file": "wm_becken_BWM5381IX_hot_cotton_40_10.csv",
+   "unit": "becken_BWM5381IX",
+   "room": "hot",
+   "setting": "cotton_40_10",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_hot_cotton_40_10.csv",
+    "entry": [
+     8,
+     267772,
+     31839994,
+     1382259
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_hot_cotton_40_10_acc.parquet",
+    "entry": [
+     8,
+     20760489,
+     4135833391,
+     28348186
+    ]
+   }
+  },
+  {
+   "file": "wm_becken_BWM5381IX_hot_cotton_40_11.csv",
+   "unit": "becken_BWM5381IX",
+   "room": "hot",
+   "setting": "cotton_40_11",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_hot_cotton_40_11.csv",
+    "entry": [
+     8,
+     295096,
+     30784359,
+     1562458
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_hot_cotton_40_11_acc.parquet",
+    "entry": [
+     8,
+     23676577,
+     4156594041,
+     32282858
+    ]
+   }
+  },
+  {
+   "file": "wm_becken_BWM5381IX_hot_cotton_40_2.csv",
+   "unit": "becken_BWM5381IX",
+   "room": "hot",
+   "setting": "cotton_40_2",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_hot_cotton_40_2.csv",
+    "entry": [
+     8,
+     273475,
+     25090726,
+     1381787
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_hot_cotton_40_2_acc.parquet",
+    "entry": [
+     8,
+     20733403,
+     4050990022,
+     28456271
+    ]
+   }
+  },
+  {
+   "file": "wm_becken_BWM5381IX_hot_cotton_40_4.csv",
+   "unit": "becken_BWM5381IX",
+   "room": "hot",
+   "setting": "cotton_40_4",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_hot_cotton_40_4.csv",
+    "entry": [
+     8,
+     258730,
+     22488561,
+     1355538
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_hot_cotton_40_4_acc.parquet",
+    "entry": [
+     8,
+     20042914,
+     4071723585,
+     27180705
+    ]
+   }
+  },
+  {
+   "file": "wm_becken_BWM5381IX_hot_cotton_40_6.csv",
+   "unit": "becken_BWM5381IX",
+   "room": "hot",
+   "setting": "cotton_40_6",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_hot_cotton_40_6.csv",
+    "entry": [
+     8,
+     262311,
+     21441649,
+     1366954
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_hot_cotton_40_6_acc.parquet",
+    "entry": [
+     8,
+     19670400,
+     4091766659,
+     26696777
+    ]
+   }
+  },
+  {
+   "file": "wm_becken_BWM5381IX_hot_cotton_40_8.csv",
+   "unit": "becken_BWM5381IX",
+   "room": "hot",
+   "setting": "cotton_40_8",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_hot_cotton_40_8.csv",
+    "entry": [
+     8,
+     299378,
+     35565072,
+     1621535
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_hot_cotton_40_8_acc.parquet",
+    "entry": [
+     8,
+     24396012,
+     4111437219,
+     33447555
+    ]
+   }
+  },
+  {
+   "file": "wm_becken_BWM5381IX_hot_cotton_60_0.csv",
+   "unit": "becken_BWM5381IX",
+   "room": "hot",
+   "setting": "cotton_60_0",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_hot_cotton_60_0.csv",
+    "entry": [
+     8,
+     256256,
+     21984558,
+     1370504
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_hot_cotton_60_0_acc.parquet",
+    "entry": [
+     8,
+     19367796,
+     4351734430,
+     26656054
+    ]
+   }
+  },
+  {
+   "file": "wm_becken_BWM5381IX_hot_cotton_60_10.csv",
+   "unit": "becken_BWM5381IX",
+   "room": "hot",
+   "setting": "cotton_60_10",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_hot_cotton_60_10.csv",
+    "entry": [
+     8,
+     296503,
+     33785441,
+     1484783
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_hot_cotton_60_10_acc.parquet",
+    "entry": [
+     8,
+     22300440,
+     4458759479,
+     30301281
+    ]
+   }
+  },
+  {
+   "file": "wm_becken_BWM5381IX_hot_cotton_60_11.csv",
+   "unit": "becken_BWM5381IX",
+   "room": "hot",
+   "setting": "cotton_60_11",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_hot_cotton_60_11.csv",
+    "entry": [
+     8,
+     355130,
+     32900029,
+     1858193
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_hot_cotton_60_11_acc.parquet",
+    "entry": [
+     8,
+     28042125,
+     4481060080,
+     38120203
+    ]
+   }
+  },
+  {
+   "file": "wm_becken_BWM5381IX_hot_cotton_60_2.csv",
+   "unit": "becken_BWM5381IX",
+   "room": "hot",
+   "setting": "cotton_60_2",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_hot_cotton_60_2.csv",
+    "entry": [
+     8,
+     280302,
+     21704108,
+     1458253
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_hot_cotton_60_2_acc.parquet",
+    "entry": [
+     8,
+     21440324,
+     4371102386,
+     29017549
+    ]
+   }
+  },
+  {
+   "file": "wm_becken_BWM5381IX_hot_cotton_60_4.csv",
+   "unit": "becken_BWM5381IX",
+   "room": "hot",
+   "setting": "cotton_60_4",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_hot_cotton_60_4.csv",
+    "entry": [
+     8,
+     288928,
+     23255249,
+     1487536
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_hot_cotton_60_4_acc.parquet",
+    "entry": [
+     8,
+     21931523,
+     4392542870,
+     29823409
+    ]
+   }
+  },
+  {
+   "file": "wm_becken_BWM5381IX_hot_cotton_60_6.csv",
+   "unit": "becken_BWM5381IX",
+   "room": "hot",
+   "setting": "cotton_60_6",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_hot_cotton_60_6.csv",
+    "entry": [
+     8,
+     296452,
+     23844051,
+     1483544
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_hot_cotton_60_6_acc.parquet",
+    "entry": [
+     8,
+     21881634,
+     4414474553,
+     29786189
+    ]
+   }
+  },
+  {
+   "file": "wm_becken_BWM5381IX_hot_cotton_60_8.csv",
+   "unit": "becken_BWM5381IX",
+   "room": "hot",
+   "setting": "cotton_60_8",
+   "program": "cotton",
+   "labels": {
+    "member": "laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_hot_cotton_60_8.csv",
+    "entry": [
+     8,
+     300029,
+     34778770,
+     1498620
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken_BWM5381IX/cotton/wm_becken_BWM5381IX_hot_cotton_60_8_acc.parquet",
+    "entry": [
+     8,
+     22402972,
+     4436356347,
+     30805444
+    ]
+   }
+  },
+  {
+   "file": "wm_becken_BWM5381IX_cold_eco_40-60_0.csv",
+   "unit": "becken_BWM5381IX",
+   "room": "cold",
+   "setting": "eco_40-60_0",
+   "program": "eco",
+   "labels": {
+    "member": "laboratory/washing_machine/becken_BWM5381IX/eco/wm_becken_BWM5381IX_cold_eco_40-60_0.csv",
+    "entry": [
+     8,
+     243704,
+     39650535,
+     1315344
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken_BWM5381IX/eco/wm_becken_BWM5381IX_cold_eco_40-60_0_acc.parquet",
+    "entry": [
+     8,
+     19587808,
+     4509102476,
+     26985239
+    ]
+   }
+  },
+  {
+   "file": "wm_becken_BWM5381IX_cold_eco_40-60_10.csv",
+   "unit": "becken_BWM5381IX",
+   "room": "cold",
+   "setting": "eco_40-60_10",
+   "program": "eco",
+   "labels": {
+    "member": "laboratory/washing_machine/becken_BWM5381IX/eco/wm_becken_BWM5381IX_cold_eco_40-60_10.csv",
+    "entry": [
+     8,
+     346835,
+     42075835,
+     1781847
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken_BWM5381IX/eco/wm_becken_BWM5381IX_cold_eco_40-60_10_acc.parquet",
+    "entry": [
+     8,
+     28189541,
+     4610722348,
+     38843041
+    ]
+   }
+  },
+  {
+   "file": "wm_becken_BWM5381IX_cold_eco_40-60_11.csv",
+   "unit": "becken_BWM5381IX",
+   "room": "cold",
+   "setting": "eco_40-60_11",
+   "program": "eco",
+   "labels": {
+    "member": "laboratory/washing_machine/becken_BWM5381IX/eco/wm_becken_BWM5381IX_cold_eco_40-60_11.csv",
+    "entry": [
+     8,
+     289443,
+     41786245,
+     1497639
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken_BWM5381IX/eco/wm_becken_BWM5381IX_cold_eco_40-60_11_acc.parquet",
+    "entry": [
+     8,
+     23985473,
+     4638912048,
+     32418196
+    ]
+   }
+  },
+  {
+   "file": "wm_becken_BWM5381IX_cold_eco_40-60_2.csv",
+   "unit": "becken_BWM5381IX",
+   "room": "cold",
+   "setting": "eco_40-60_2",
+   "program": "eco",
+   "labels": {
+    "member": "laboratory/washing_machine/becken_BWM5381IX/eco/wm_becken_BWM5381IX_cold_eco_40-60_2.csv",
+    "entry": [
+     8,
+     271055,
+     39894385,
+     1420833
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken_BWM5381IX/eco/wm_becken_BWM5381IX_cold_eco_40-60_2_acc.parquet",
+    "entry": [
+     8,
+     20598893,
+     4528690442,
+     28435792
+    ]
+   }
+  },
+  {
+   "file": "wm_becken_BWM5381IX_cold_eco_40-60_4.csv",
+   "unit": "becken_BWM5381IX",
+   "room": "cold",
+   "setting": "eco_40-60_4",
+   "program": "eco",
+   "labels": {
+    "member": "laboratory/washing_machine/becken_BWM5381IX/eco/wm_becken_BWM5381IX_cold_eco_40-60_4.csv",
+    "entry": [
+     8,
+     259548,
+     39390841,
+     1370562
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken_BWM5381IX/eco/wm_becken_BWM5381IX_cold_eco_40-60_4_acc.parquet",
+    "entry": [
+     8,
+     20559099,
+     4549289493,
+     27934374
+    ]
+   }
+  },
+  {
+   "file": "wm_becken_BWM5381IX_cold_eco_40-60_6.csv",
+   "unit": "becken_BWM5381IX",
+   "room": "cold",
+   "setting": "eco_40-60_6",
+   "program": "eco",
+   "labels": {
+    "member": "laboratory/washing_machine/becken_BWM5381IX/eco/wm_becken_BWM5381IX_cold_eco_40-60_6.csv",
+    "entry": [
+     8,
+     260255,
+     39130440,
+     1321193
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken_BWM5381IX/eco/wm_becken_BWM5381IX_cold_eco_40-60_6_acc.parquet",
+    "entry": [
+     8,
+     20610719,
+     4569848750,
+     28115099
+    ]
+   }
+  },
+  {
+   "file": "wm_becken_BWM5381IX_cold_eco_40-60_8.csv",
+   "unit": "becken_BWM5381IX",
+   "room": "cold",
+   "setting": "eco_40-60_8",
+   "program": "eco",
+   "labels": {
+    "member": "laboratory/washing_machine/becken_BWM5381IX/eco/wm_becken_BWM5381IX_cold_eco_40-60_8.csv",
+    "entry": [
+     8,
+     263114,
+     42700301,
+     1367356
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken_BWM5381IX/eco/wm_becken_BWM5381IX_cold_eco_40-60_8_acc.parquet",
+    "entry": [
+     8,
+     20262563,
+     4590459627,
+     27601504
+    ]
+   }
+  },
+  {
+   "file": "wm_becken_BWM5381IX_hot_eco_40-60_0.csv",
+   "unit": "becken_BWM5381IX",
+   "room": "hot",
+   "setting": "eco_40-60_0",
+   "program": "eco",
+   "labels": {
+    "member": "laboratory/washing_machine/becken_BWM5381IX/eco/wm_becken_BWM5381IX_hot_eco_40-60_0.csv",
+    "entry": [
+     8,
+     230350,
+     40697186,
+     1238686
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken_BWM5381IX/eco/wm_becken_BWM5381IX_hot_eco_40-60_0_acc.parquet",
+    "entry": [
+     8,
+     19211229,
+     4662897680,
+     26861665
+    ]
+   }
+  },
+  {
+   "file": "wm_becken_BWM5381IX_hot_eco_40-60_10.csv",
+   "unit": "becken_BWM5381IX",
+   "room": "hot",
+   "setting": "eco_40-60_10",
+   "program": "eco",
+   "labels": {
+    "member": "laboratory/washing_machine/becken_BWM5381IX/eco/wm_becken_BWM5381IX_hot_eco_40-60_10.csv",
+    "entry": [
+     8,
+     260801,
+     41177089,
+     1359096
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken_BWM5381IX/eco/wm_becken_BWM5381IX_hot_eco_40-60_10_acc.parquet",
+    "entry": [
+     8,
+     20880003,
+     4761235477,
+     28003164
+    ]
+   }
+  },
+  {
+   "file": "wm_becken_BWM5381IX_hot_eco_40-60_11.csv",
+   "unit": "becken_BWM5381IX",
+   "room": "hot",
+   "setting": "eco_40-60_11",
+   "program": "eco",
+   "labels": {
+    "member": "laboratory/washing_machine/becken_BWM5381IX/eco/wm_becken_BWM5381IX_hot_eco_40-60_11.csv",
+    "entry": [
+     8,
+     348063,
+     41438036,
+     1768788
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken_BWM5381IX/eco/wm_becken_BWM5381IX_hot_eco_40-60_11_acc.parquet",
+    "entry": [
+     8,
+     26531488,
+     4782115638,
+     36617338
+    ]
+   }
+  },
+  {
+   "file": "wm_becken_BWM5381IX_hot_eco_40-60_2.csv",
+   "unit": "becken_BWM5381IX",
+   "room": "hot",
+   "setting": "eco_40-60_2",
+   "program": "eco",
+   "labels": {
+    "member": "laboratory/washing_machine/becken_BWM5381IX/eco/wm_becken_BWM5381IX_hot_eco_40-60_2.csv",
+    "entry": [
+     8,
+     249263,
+     40927681,
+     1332974
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken_BWM5381IX/eco/wm_becken_BWM5381IX_hot_eco_40-60_2_acc.parquet",
+    "entry": [
+     8,
+     18554182,
+     4682109066,
+     25131006
+    ]
+   }
+  },
+  {
+   "file": "wm_becken_BWM5381IX_hot_eco_40-60_4.csv",
+   "unit": "becken_BWM5381IX",
+   "room": "hot",
+   "setting": "eco_40-60_4",
+   "program": "eco",
+   "labels": {
+    "member": "laboratory/washing_machine/becken_BWM5381IX/eco/wm_becken_BWM5381IX_hot_eco_40-60_4.csv",
+    "entry": [
+     8,
+     266311,
+     40430730,
+     1349844
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken_BWM5381IX/eco/wm_becken_BWM5381IX_hot_eco_40-60_4_acc.parquet",
+    "entry": [
+     8,
+     19299199,
+     4700663405,
+     26210680
+    ]
+   }
+  },
+  {
+   "file": "wm_becken_BWM5381IX_hot_eco_40-60_6.csv",
+   "unit": "becken_BWM5381IX",
+   "room": "hot",
+   "setting": "eco_40-60_6",
+   "program": "eco",
+   "labels": {
+    "member": "laboratory/washing_machine/becken_BWM5381IX/eco/wm_becken_BWM5381IX_hot_eco_40-60_6.csv",
+    "entry": [
+     8,
+     264999,
+     40165586,
+     1353140
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken_BWM5381IX/eco/wm_becken_BWM5381IX_hot_eco_40-60_6_acc.parquet",
+    "entry": [
+     8,
+     20168391,
+     4719962761,
+     27425224
+    ]
+   }
+  },
+  {
+   "file": "wm_becken_BWM5381IX_hot_eco_40-60_8.csv",
+   "unit": "becken_BWM5381IX",
+   "room": "hot",
+   "setting": "eco_40-60_8",
+   "program": "eco",
+   "labels": {
+    "member": "laboratory/washing_machine/becken_BWM5381IX/eco/wm_becken_BWM5381IX_hot_eco_40-60_8.csv",
+    "entry": [
+     8,
+     277339,
+     42422817,
+     1387566
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken_BWM5381IX/eco/wm_becken_BWM5381IX_hot_eco_40-60_8_acc.parquet",
+    "entry": [
+     8,
+     21104011,
+     4740131309,
+     28639521
+    ]
+   }
+  },
+  {
+   "file": "wm_becken_BWM5381IX_warm_15-min_40_0.csv",
+   "unit": "becken_BWM5381IX",
+   "room": "warm",
+   "setting": "15-min_40_0",
+   "program": "15-min",
+   "labels": {
+    "member": "laboratory/washing_machine/becken_BWM5381IX/others/wm_becken_BWM5381IX_warm_15-min_40_0.csv",
+    "entry": [
+     8,
+     24464,
+     37723003,
+     127472
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken_BWM5381IX/others/wm_becken_BWM5381IX_warm_15-min_40_0_acc.parquet",
+    "entry": [
+     8,
+     2113382,
+     5011625779,
+     2866444
+    ]
+   }
+  },
+  {
+   "file": "wm_becken_BWM5381IX_warm_15-min_40_2.csv",
+   "unit": "becken_BWM5381IX",
+   "room": "warm",
+   "setting": "15-min_40_2",
+   "program": "15-min",
+   "labels": {
+    "member": "laboratory/washing_machine/becken_BWM5381IX/others/wm_becken_BWM5381IX_warm_15-min_40_2.csv",
+    "entry": [
+     8,
+     24274,
+     37997760,
+     123079
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken_BWM5381IX/others/wm_becken_BWM5381IX_warm_15-min_40_2_acc.parquet",
+    "entry": [
+     8,
+     2205992,
+     5013739322,
+     2925233
+    ]
+   }
+  },
+  {
+   "file": "wm_becken_BWM5381IX_warm_20-deg_20_0.csv",
+   "unit": "becken_BWM5381IX",
+   "room": "warm",
+   "setting": "20-deg_20_0",
+   "program": "20-deg",
+   "labels": {
+    "member": "laboratory/washing_machine/becken_BWM5381IX/others/wm_becken_BWM5381IX_warm_20-deg_20_0.csv",
+    "entry": [
+     8,
+     81019,
+     38398416,
+     437163
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken_BWM5381IX/others/wm_becken_BWM5381IX_warm_20-deg_20_0_acc.parquet",
+    "entry": [
+     8,
+     6770640,
+     4969671154,
+     9256131
+    ]
+   }
+  },
+  {
+   "file": "wm_becken_BWM5381IX_warm_20-deg_20_2.csv",
+   "unit": "becken_BWM5381IX",
+   "room": "warm",
+   "setting": "20-deg_20_2",
+   "program": "20-deg",
+   "labels": {
+    "member": "laboratory/washing_machine/becken_BWM5381IX/others/wm_becken_BWM5381IX_warm_20-deg_20_2.csv",
+    "entry": [
+     8,
+     87566,
+     38310701,
+     460947
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken_BWM5381IX/others/wm_becken_BWM5381IX_warm_20-deg_20_2_acc.parquet",
+    "entry": [
+     8,
+     7491266,
+     4976441955,
+     10274585
+    ]
+   }
+  },
+  {
+   "file": "wm_becken_BWM5381IX_warm_delicate_30_0.csv",
+   "unit": "becken_BWM5381IX",
+   "room": "warm",
+   "setting": "delicate_30_0",
+   "program": "delicate",
+   "labels": {
+    "member": "laboratory/washing_machine/becken_BWM5381IX/others/wm_becken_BWM5381IX_warm_delicate_30_0.csv",
+    "entry": [
+     8,
+     69413,
+     38909129,
+     370177
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken_BWM5381IX/others/wm_becken_BWM5381IX_warm_delicate_30_0_acc.parquet",
+    "entry": [
+     8,
+     5492514,
+     4873894514,
+     7617711
+    ]
+   }
+  },
+  {
+   "file": "wm_becken_BWM5381IX_warm_delicate_30_2.csv",
+   "unit": "becken_BWM5381IX",
+   "room": "warm",
+   "setting": "delicate_30_2",
+   "program": "delicate",
+   "labels": {
+    "member": "laboratory/washing_machine/becken_BWM5381IX/others/wm_becken_BWM5381IX_warm_delicate_30_2.csv",
+    "entry": [
+     8,
+     62279,
+     38978693,
+     341983
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken_BWM5381IX/others/wm_becken_BWM5381IX_warm_delicate_30_2_acc.parquet",
+    "entry": [
+     8,
+     5200782,
+     4879387191,
+     7065540
+    ]
+   }
+  },
+  {
+   "file": "wm_becken_BWM5381IX_warm_delicate_30_6.csv",
+   "unit": "becken_BWM5381IX",
+   "room": "warm",
+   "setting": "delicate_30_6",
+   "program": "delicate",
+   "labels": {
+    "member": "laboratory/washing_machine/becken_BWM5381IX/others/wm_becken_BWM5381IX_warm_delicate_30_6.csv",
+    "entry": [
+     8,
+     89060,
+     39041123,
+     498943
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken_BWM5381IX/others/wm_becken_BWM5381IX_warm_delicate_30_6_acc.parquet",
+    "entry": [
+     8,
+     7703161,
+     4884588136,
+     10531775
+    ]
+   }
+  },
+  {
+   "file": "wm_becken_BWM5381IX_warm_fast-45_40_0.csv",
+   "unit": "becken_BWM5381IX",
+   "room": "warm",
+   "setting": "fast-45_40_0",
+   "program": "fast-45",
+   "labels": {
+    "member": "laboratory/washing_machine/becken_BWM5381IX/others/wm_becken_BWM5381IX_warm_fast-45_40_0.csv",
+    "entry": [
+     8,
+     66090,
+     38778800,
+     341641
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken_BWM5381IX/others/wm_becken_BWM5381IX_warm_fast-45_40_0_acc.parquet",
+    "entry": [
+     8,
+     5346798,
+     5015945475,
+     7336602
+    ]
+   }
+  },
+  {
+   "file": "wm_becken_BWM5381IX_warm_fast-45_40_2.csv",
+   "unit": "becken_BWM5381IX",
+   "room": "warm",
+   "setting": "fast-45_40_2",
+   "program": "fast-45",
+   "labels": {
+    "member": "laboratory/washing_machine/becken_BWM5381IX/others/wm_becken_BWM5381IX_warm_fast-45_40_2.csv",
+    "entry": [
+     8,
+     63939,
+     38845040,
+     318429
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken_BWM5381IX/others/wm_becken_BWM5381IX_warm_fast-45_40_2_acc.parquet",
+    "entry": [
+     8,
+     5300882,
+     5021292435,
+     7134781
+    ]
+   }
+  },
+  {
+   "file": "wm_becken_BWM5381IX_warm_intensive_40_0.csv",
+   "unit": "becken_BWM5381IX",
+   "room": "warm",
+   "setting": "intensive_40_0",
+   "program": "intensive",
+   "labels": {
+    "member": "laboratory/washing_machine/becken_BWM5381IX/others/wm_becken_BWM5381IX_warm_intensive_40_0.csv",
+    "entry": [
+     8,
+     299064,
+     38479584,
+     1644812
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken_BWM5381IX/others/wm_becken_BWM5381IX_warm_intensive_40_0_acc.parquet",
+    "entry": [
+     8,
+     22118033,
+     4923481537,
+     30805460
+    ]
+   }
+  },
+  {
+   "file": "wm_becken_BWM5381IX_warm_intensive_40_2.csv",
+   "unit": "becken_BWM5381IX",
+   "room": "warm",
+   "setting": "intensive_40_2",
+   "program": "intensive",
+   "labels": {
+    "member": "laboratory/washing_machine/becken_BWM5381IX/others/wm_becken_BWM5381IX_warm_intensive_40_2.csv",
+    "entry": [
+     8,
+     288366,
+     38022183,
+     1635410
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken_BWM5381IX/others/wm_becken_BWM5381IX_warm_intensive_40_2_acc.parquet",
+    "entry": [
+     8,
+     24071256,
+     4945599734,
+     33241040
+    ]
+   }
+  },
+  {
+   "file": "wm_becken_BWM5381IX_warm_mix_40_0.csv",
+   "unit": "becken_BWM5381IX",
+   "room": "warm",
+   "setting": "mix_40_0",
+   "program": "mix",
+   "labels": {
+    "member": "laboratory/washing_machine/becken_BWM5381IX/others/wm_becken_BWM5381IX_warm_mix_40_0.csv",
+    "entry": [
+     8,
+     89550,
+     36925895,
+     484147
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken_BWM5381IX/others/wm_becken_BWM5381IX_warm_mix_40_0_acc.parquet",
+    "entry": [
+     8,
+     7189149,
+     4892291460,
+     9979976
+    ]
+   }
+  },
+  {
+   "file": "wm_becken_BWM5381IX_warm_mix_40_2.csv",
+   "unit": "becken_BWM5381IX",
+   "room": "warm",
+   "setting": "mix_40_2",
+   "program": "mix",
+   "labels": {
+    "member": "laboratory/washing_machine/becken_BWM5381IX/others/wm_becken_BWM5381IX_warm_mix_40_2.csv",
+    "entry": [
+     8,
+     93616,
+     36382616,
+     474457
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken_BWM5381IX/others/wm_becken_BWM5381IX_warm_mix_40_2_acc.parquet",
+    "entry": [
+     8,
+     7117000,
+     4899480767,
+     9798544
+    ]
+   }
+  },
+  {
+   "file": "wm_becken_BWM5381IX_warm_sport_40_0.csv",
+   "unit": "becken_BWM5381IX",
+   "room": "warm",
+   "setting": "sport_40_0",
+   "program": "sport",
+   "labels": {
+    "member": "laboratory/washing_machine/becken_BWM5381IX/others/wm_becken_BWM5381IX_warm_sport_40_0.csv",
+    "entry": [
+     8,
+     65224,
+     37747616,
+     345329
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken_BWM5381IX/others/wm_becken_BWM5381IX_warm_sport_40_0_acc.parquet",
+    "entry": [
+     8,
+     5227702,
+     4906597925,
+     7200804
+    ]
+   }
+  },
+  {
+   "file": "wm_becken_BWM5381IX_warm_sport_40_2.csv",
+   "unit": "becken_BWM5381IX",
+   "room": "warm",
+   "setting": "sport_40_2",
+   "program": "sport",
+   "labels": {
+    "member": "laboratory/washing_machine/becken_BWM5381IX/others/wm_becken_BWM5381IX_warm_sport_40_2.csv",
+    "entry": [
+     8,
+     71785,
+     37925827,
+     357829
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken_BWM5381IX/others/wm_becken_BWM5381IX_warm_sport_40_2_acc.parquet",
+    "entry": [
+     8,
+     5766931,
+     4911825787,
+     7911894
+    ]
+   }
+  },
+  {
+   "file": "wm_becken_BWM5381IX_warm_sport_40_6.csv",
+   "unit": "becken_BWM5381IX",
+   "room": "warm",
+   "setting": "sport_40_6",
+   "program": "sport",
+   "labels": {
+    "member": "laboratory/washing_machine/becken_BWM5381IX/others/wm_becken_BWM5381IX_warm_sport_40_6.csv",
+    "entry": [
+     8,
+     70180,
+     37015591,
+     370906
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken_BWM5381IX/others/wm_becken_BWM5381IX_warm_sport_40_6_acc.parquet",
+    "entry": [
+     8,
+     5888499,
+     4917592878,
+     8058538
+    ]
+   }
+  },
+  {
+   "file": "wm_becken_BWM5381IX_warm_sterilization_0.csv",
+   "unit": "becken_BWM5381IX",
+   "room": "warm",
+   "setting": "sterilization_0",
+   "program": "sterilization",
+   "labels": {
+    "member": "laboratory/washing_machine/becken_BWM5381IX/others/wm_becken_BWM5381IX_warm_sterilization_0.csv",
+    "entry": [
+     8,
+     204839,
+     37194318,
+     1060320
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken_BWM5381IX/others/wm_becken_BWM5381IX_warm_sterilization_0_acc.parquet",
+    "entry": [
+     8,
+     15534424,
+     4983933382,
+     21489154
+    ]
+   }
+  },
+  {
+   "file": "wm_becken_BWM5381IX_warm_sterilization_2.csv",
+   "unit": "becken_BWM5381IX",
+   "room": "warm",
+   "setting": "sterilization_2",
+   "program": "sterilization",
+   "labels": {
+    "member": "laboratory/washing_machine/becken_BWM5381IX/others/wm_becken_BWM5381IX_warm_sterilization_2.csv",
+    "entry": [
+     8,
+     211311,
+     37399310,
+     1076905
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken_BWM5381IX/others/wm_becken_BWM5381IX_warm_sterilization_2_acc.parquet",
+    "entry": [
+     8,
+     12157643,
+     4999467971,
+     16491775
+    ]
+   }
+  },
+  {
+   "file": "wm_becken_BWM5381IX_warm_synthetic_40_0.csv",
+   "unit": "becken_BWM5381IX",
+   "room": "warm",
+   "setting": "synthetic_40_0",
+   "program": "synthetic",
+   "labels": {
+    "member": "laboratory/washing_machine/becken_BWM5381IX/others/wm_becken_BWM5381IX_warm_synthetic_40_0.csv",
+    "entry": [
+     8,
+     212382,
+     36713361,
+     1184284
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken_BWM5381IX/others/wm_becken_BWM5381IX_warm_synthetic_40_0_acc.parquet",
+    "entry": [
+     8,
+     17833338,
+     4836845494,
+     24784723
+    ]
+   }
+  },
+  {
+   "file": "wm_becken_BWM5381IX_warm_synthetic_40_2.csv",
+   "unit": "becken_BWM5381IX",
+   "room": "warm",
+   "setting": "synthetic_40_2",
+   "program": "synthetic",
+   "labels": {
+    "member": "laboratory/washing_machine/becken_BWM5381IX/others/wm_becken_BWM5381IX_warm_synthetic_40_2.csv",
+    "entry": [
+     8,
+     236831,
+     36476378,
+     1240387
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken_BWM5381IX/others/wm_becken_BWM5381IX_warm_synthetic_40_2_acc.parquet",
+    "entry": [
+     8,
+     19215354,
+     4854678996,
+     26423867
+    ]
+   }
+  },
+  {
+   "file": "wm_becken_BWM5381IX_warm_wool_40_0.csv",
+   "unit": "becken_BWM5381IX",
+   "room": "warm",
+   "setting": "wool_40_0",
+   "program": "wool",
+   "labels": {
+    "member": "laboratory/washing_machine/becken_BWM5381IX/others/wm_becken_BWM5381IX_warm_wool_40_0.csv",
+    "entry": [
+     8,
+     112082,
+     37610774,
+     633173
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken_BWM5381IX/others/wm_becken_BWM5381IX_warm_wool_40_0_acc.parquet",
+    "entry": [
+     8,
+     9523925,
+     4808647397,
+     13002984
+    ]
+   }
+  },
+  {
+   "file": "wm_becken_BWM5381IX_warm_wool_40_2.csv",
+   "unit": "becken_BWM5381IX",
+   "room": "warm",
+   "setting": "wool_40_2",
+   "program": "wool",
+   "labels": {
+    "member": "laboratory/washing_machine/becken_BWM5381IX/others/wm_becken_BWM5381IX_warm_wool_40_2.csv",
+    "entry": [
+     8,
+     108252,
+     37085919,
+     595298
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken_BWM5381IX/others/wm_becken_BWM5381IX_warm_wool_40_2_acc.parquet",
+    "entry": [
+     8,
+     8979540,
+     4818171481,
+     12332835
+    ]
+   }
+  },
+  {
+   "file": "wm_becken_BWM5381IX_warm_wool_40_6.csv",
+   "unit": "becken_BWM5381IX",
+   "room": "warm",
+   "setting": "wool_40_6",
+   "program": "wool",
+   "labels": {
+    "member": "laboratory/washing_machine/becken_BWM5381IX/others/wm_becken_BWM5381IX_warm_wool_40_6.csv",
+    "entry": [
+     8,
+     112692,
+     37812988,
+     630344
+    ]
+   },
+   "vibration": {
+    "member": "acc/laboratory/washing_machine/becken_BWM5381IX/others/wm_becken_BWM5381IX_warm_wool_40_6_acc.parquet",
+    "entry": [
+     8,
+     9694155,
+     4827151180,
+     13294684
+    ]
+   }
+  }
+ ],
+ "extras": {
+  "aggregated_data.csv": {
+   "member": "aggregated_data.csv",
+   "entry": [
+    8,
+    486578,
+    152919928,
+    1312274
+   ]
+  },
+  "metadata.xlsx": {
+   "member": "metadata.xlsx",
+   "entry": [
+    8,
+    86206,
+    153406583,
+    90071
+   ]
+  }
+ }
+}

@@ -1,0 +1,2 @@
+# data/roles/ packed for colleagues (prep/archive_roles.py): tar.xz parts in Git LFS
+data/archives/*.part-* filter=lfs diff=lfs merge=lfs -text

@@ -1,0 +1,685 @@
+{
+ "cycles": [
+  {
+   "file": "library/fill__library.csv",
+   "role": "library",
+   "cycle": "",
+   "checks": {
+    "header": [
+     "PASS",
+     ""
+    ],
+    "timeline": [
+     "PASS",
+     "102,400 rows, 5 ms steps within 100 pieces, forward jumps only between them"
+    ],
+    "values": [
+     "PASS",
+     ""
+    ],
+    "windows": [
+     "PASS",
+     "100 window(s)"
+    ],
+    "one state": [
+     "PASS",
+     "fill, 100 pieces from 8 cycles"
+    ],
+    "scaling": [
+     "PASS",
+     "max error 4.9e-05"
+    ]
+   },
+   "cycles": [
+    "wm_becken_BWM5381IX_warm_15-min_40_2.csv",
+    "wm_becken_BWM5381IX_warm_20-deg_20_0.csv",
+    "wm_becken_BWM5381IX_warm_delicate_30_0.csv",
+    "wm_becken_BWM5381IX_warm_delicate_30_6.csv",
+    "wm_becken_BWM5381IX_warm_mix_40_2.csv",
+    "wm_becken_BWM5381IX_warm_sport_40_2.csv",
+    "wm_becken_BWM5381IX_warm_sport_40_6.csv",
+    "wm_becken_BWM5381IX_warm_wool_40_0.csv"
+   ],
+   "windows": 100
+  },
+  {
+   "file": "library/wash__library.csv",
+   "role": "library",
+   "cycle": "",
+   "checks": {
+    "header": [
+     "PASS",
+     ""
+    ],
+    "timeline": [
+     "PASS",
+     "102,400 rows, 5 ms steps within 100 pieces, forward jumps only between them"
+    ],
+    "values": [
+     "PASS",
+     ""
+    ],
+    "windows": [
+     "PASS",
+     "100 window(s)"
+    ],
+    "one state": [
+     "PASS",
+     "wash, 100 pieces from 8 cycles"
+    ],
+    "scaling": [
+     "PASS",
+     "max error 5.0e-05"
+    ]
+   },
+   "cycles": [
+    "wm_becken_BWM5381IX_warm_15-min_40_2.csv",
+    "wm_becken_BWM5381IX_warm_20-deg_20_0.csv",
+    "wm_becken_BWM5381IX_warm_delicate_30_0.csv",
+    "wm_becken_BWM5381IX_warm_delicate_30_6.csv",
+    "wm_becken_BWM5381IX_warm_mix_40_2.csv",
+    "wm_becken_BWM5381IX_warm_sport_40_2.csv",
+    "wm_becken_BWM5381IX_warm_sport_40_6.csv",
+    "wm_becken_BWM5381IX_warm_wool_40_0.csv"
+   ],
+   "windows": 100
+  },
+  {
+   "file": "library/spin__library.csv",
+   "role": "library",
+   "cycle": "",
+   "checks": {
+    "header": [
+     "PASS",
+     ""
+    ],
+    "timeline": [
+     "PASS",
+     "102,400 rows, 5 ms steps within 96 pieces, forward jumps only between them"
+    ],
+    "values": [
+     "PASS",
+     ""
+    ],
+    "windows": [
+     "PASS",
+     "100 window(s)"
+    ],
+    "one state": [
+     "PASS",
+     "spin, 96 pieces from 8 cycles"
+    ],
+    "scaling": [
+     "PASS",
+     "max error 5.0e-05"
+    ]
+   },
+   "cycles": [
+    "wm_becken_BWM5381IX_warm_15-min_40_2.csv",
+    "wm_becken_BWM5381IX_warm_20-deg_20_0.csv",
+    "wm_becken_BWM5381IX_warm_delicate_30_0.csv",
+    "wm_becken_BWM5381IX_warm_delicate_30_6.csv",
+    "wm_becken_BWM5381IX_warm_mix_40_2.csv",
+    "wm_becken_BWM5381IX_warm_sport_40_2.csv",
+    "wm_becken_BWM5381IX_warm_sport_40_6.csv",
+    "wm_becken_BWM5381IX_warm_wool_40_0.csv"
+   ],
+   "windows": 100
+  },
+  {
+   "file": "library/drain__library.csv",
+   "role": "library",
+   "cycle": "",
+   "checks": {
+    "header": [
+     "PASS",
+     ""
+    ],
+    "timeline": [
+     "PASS",
+     "102,400 rows, 5 ms steps within 100 pieces, forward jumps only between them"
+    ],
+    "values": [
+     "PASS",
+     ""
+    ],
+    "windows": [
+     "PASS",
+     "100 window(s)"
+    ],
+    "one state": [
+     "PASS",
+     "drain, 100 pieces from 8 cycles"
+    ],
+    "scaling": [
+     "PASS",
+     "max error 5.0e-05"
+    ]
+   },
+   "cycles": [
+    "wm_becken_BWM5381IX_warm_15-min_40_2.csv",
+    "wm_becken_BWM5381IX_warm_20-deg_20_0.csv",
+    "wm_becken_BWM5381IX_warm_delicate_30_0.csv",
+    "wm_becken_BWM5381IX_warm_delicate_30_6.csv",
+    "wm_becken_BWM5381IX_warm_mix_40_2.csv",
+    "wm_becken_BWM5381IX_warm_sport_40_2.csv",
+    "wm_becken_BWM5381IX_warm_sport_40_6.csv",
+    "wm_becken_BWM5381IX_warm_wool_40_0.csv"
+   ],
+   "windows": 100
+  },
+  {
+   "file": "delivery/becken-flt_BWM5381IX_warm_fast-15_0__seg0.csv",
+   "role": "delivery",
+   "cycle": "wm_becken-flt_BWM5381IX_warm_fast-15_0.csv",
+   "checks": {
+    "header": [
+     "PASS",
+     ""
+    ],
+    "timeline": [
+     "PASS",
+     "208,220 rows, every step 5 ms"
+    ],
+    "values": [
+     "PASS",
+     ""
+    ],
+    "windows": [
+     "PASS",
+     "203 window(s)"
+    ],
+    "held-back labels": [
+     "PASS",
+     ""
+    ],
+    "scaling": [
+     "PASS",
+     "max error 4.9e-05"
+    ]
+   },
+   "cycles": null,
+   "windows": 203,
+   "seconds": {
+    "fill": 333.0,
+    "wash": 283.0,
+    "spin": 204.0,
+    "drain": 221.0
+   }
+  },
+  {
+   "file": "delivery/becken-flt_BWM5381IX_warm_fast-15_2__seg0.csv",
+   "role": "delivery",
+   "cycle": "wm_becken-flt_BWM5381IX_warm_fast-15_2.csv",
+   "checks": {
+    "header": [
+     "PASS",
+     ""
+    ],
+    "timeline": [
+     "PASS",
+     "188,148 rows, every step 5 ms"
+    ],
+    "values": [
+     "PASS",
+     ""
+    ],
+    "windows": [
+     "PASS",
+     "183 window(s)"
+    ],
+    "held-back labels": [
+     "PASS",
+     ""
+    ],
+    "scaling": [
+     "PASS",
+     "max error 5.0e-05"
+    ]
+   },
+   "cycles": null,
+   "windows": 183,
+   "seconds": {
+    "fill": 323.0,
+    "wash": 192.7,
+    "spin": 198.0,
+    "drain": 227.0
+   }
+  },
+  {
+   "file": "delivery/becken-flt_BWM5381IX_warm_fast-15_6__seg0.csv",
+   "role": "delivery",
+   "cycle": "wm_becken-flt_BWM5381IX_warm_fast-15_6.csv",
+   "checks": {
+    "header": [
+     "PASS",
+     ""
+    ],
+    "timeline": [
+     "PASS",
+     "210,464 rows, every step 5 ms"
+    ],
+    "values": [
+     "PASS",
+     ""
+    ],
+    "windows": [
+     "PASS",
+     "205 window(s)"
+    ],
+    "held-back labels": [
+     "PASS",
+     ""
+    ],
+    "scaling": [
+     "PASS",
+     "max error 5.0e-05"
+    ]
+   },
+   "cycles": null,
+   "windows": 205,
+   "seconds": {
+    "fill": 327.0,
+    "wash": 317.3,
+    "spin": 106.0,
+    "drain": 302.0
+   }
+  },
+  {
+   "file": "delivery/becken-flt_BWM5381IX_warm_fast-45_40_2__seg0.csv",
+   "role": "delivery",
+   "cycle": "wm_becken-flt_BWM5381IX_warm_fast-45_40_2.csv",
+   "checks": {
+    "header": [
+     "PASS",
+     ""
+    ],
+    "timeline": [
+     "PASS",
+     "510,784 rows, every step 5 ms"
+    ],
+    "values": [
+     "PASS",
+     ""
+    ],
+    "windows": [
+     "PASS",
+     "498 window(s)"
+    ],
+    "held-back labels": [
+     "PASS",
+     ""
+    ],
+    "scaling": [
+     "PASS",
+     "max error 4.9e-05"
+    ]
+   },
+   "cycles": null,
+   "windows": 498,
+   "seconds": {
+    "fill": 202.0,
+    "wash": 1774.8,
+    "spin": 400.0,
+    "drain": 177.0
+   }
+  },
+  {
+   "file": "delivery/becken-flt_BWM5381IX_warm_sport_40_2__seg0.csv",
+   "role": "delivery",
+   "cycle": "wm_becken-flt_BWM5381IX_warm_sport_40_2.csv",
+   "checks": {
+    "header": [
+     "PASS",
+     ""
+    ],
+    "timeline": [
+     "PASS",
+     "510,844 rows, every step 5 ms"
+    ],
+    "values": [
+     "PASS",
+     ""
+    ],
+    "windows": [
+     "PASS",
+     "498 window(s)"
+    ],
+    "held-back labels": [
+     "PASS",
+     ""
+    ],
+    "scaling": [
+     "PASS",
+     "max error 5.0e-05"
+    ]
+   },
+   "cycles": null,
+   "windows": 498,
+   "seconds": {
+    "fill": 290.0,
+    "wash": 1510.1,
+    "spin": 536.0,
+    "drain": 218.0
+   }
+  },
+  {
+   "file": "validation/becken_BWM5381IX_warm_15-min_40_0__seg0.csv",
+   "role": "validation",
+   "cycle": "wm_becken_BWM5381IX_warm_15-min_40_0.csv",
+   "checks": {
+    "header": [
+     "PASS",
+     ""
+    ],
+    "timeline": [
+     "PASS",
+     "198,028 rows, every step 5 ms"
+    ],
+    "values": [
+     "PASS",
+     ""
+    ],
+    "windows": [
+     "PASS",
+     "193 window(s)"
+    ],
+    "labels": [
+     "PASS",
+     ""
+    ],
+    "scaling": [
+     "PASS",
+     "max error 5.0e-05"
+    ]
+   },
+   "cycles": null,
+   "windows": 193,
+   "seconds": {
+    "fill": 305.0,
+    "wash": 276.1,
+    "spin": 217.0,
+    "drain": 192.0
+   }
+  },
+  {
+   "file": "test/becken_BWM5381IX_warm_20-deg_20_2__seg0.csv",
+   "role": "test",
+   "cycle": "wm_becken_BWM5381IX_warm_20-deg_20_2.csv",
+   "checks": {
+    "header": [
+     "PASS",
+     ""
+    ],
+    "timeline": [
+     "PASS",
+     "717,963 rows, every step 5 ms"
+    ],
+    "values": [
+     "PASS",
+     ""
+    ],
+    "windows": [
+     "PASS",
+     "701 window(s)"
+    ],
+    "labels": [
+     "PASS",
+     ""
+    ],
+    "scaling": [
+     "PASS",
+     "max error 5.0e-05"
+    ]
+   },
+   "cycles": null,
+   "windows": 701,
+   "seconds": {
+    "fill": 358.0,
+    "wash": 1992.7,
+    "spin": 910.1,
+    "drain": 329.0
+   }
+  },
+  {
+   "file": "test/becken_BWM5381IX_warm_delicate_30_2__seg0.csv",
+   "role": "test",
+   "cycle": "wm_becken_BWM5381IX_warm_delicate_30_2.csv",
+   "checks": {
+    "header": [
+     "PASS",
+     ""
+    ],
+    "timeline": [
+     "PASS",
+     "534,011 rows, every step 5 ms"
+    ],
+    "values": [
+     "PASS",
+     ""
+    ],
+    "windows": [
+     "PASS",
+     "521 window(s)"
+    ],
+    "labels": [
+     "PASS",
+     ""
+    ],
+    "scaling": [
+     "PASS",
+     "max error 4.9e-05"
+    ]
+   },
+   "cycles": null,
+   "windows": 521,
+   "seconds": {
+    "fill": 437.0,
+    "wash": 1732.0,
+    "spin": 195.0,
+    "drain": 306.0
+   }
+  },
+  {
+   "file": "test/becken_BWM5381IX_warm_fast-45_40_0__seg0.csv",
+   "role": "test",
+   "cycle": "wm_becken_BWM5381IX_warm_fast-45_40_0.csv",
+   "checks": {
+    "header": [
+     "PASS",
+     ""
+    ],
+    "timeline": [
+     "PASS",
+     "550,992 rows, every step 5 ms"
+    ],
+    "values": [
+     "PASS",
+     ""
+    ],
+    "windows": [
+     "PASS",
+     "538 window(s)"
+    ],
+    "labels": [
+     "PASS",
+     ""
+    ],
+    "scaling": [
+     "PASS",
+     "max error 5.0e-05"
+    ]
+   },
+   "cycles": null,
+   "windows": 538,
+   "seconds": {
+    "fill": 290.0,
+    "wash": 1957.9,
+    "spin": 317.0,
+    "drain": 190.0
+   }
+  },
+  {
+   "file": "validation/becken_BWM5381IX_warm_fast-45_40_2__seg0.csv",
+   "role": "validation",
+   "cycle": "wm_becken_BWM5381IX_warm_fast-45_40_2.csv",
+   "checks": {
+    "header": [
+     "PASS",
+     ""
+    ],
+    "timeline": [
+     "PASS",
+     "516,525 rows, every step 5 ms"
+    ],
+    "values": [
+     "PASS",
+     ""
+    ],
+    "windows": [
+     "PASS",
+     "504 window(s)"
+    ],
+    "labels": [
+     "PASS",
+     ""
+    ],
+    "scaling": [
+     "PASS",
+     "max error 4.9e-05"
+    ]
+   },
+   "cycles": null,
+   "windows": 504,
+   "seconds": {
+    "fill": 200.0,
+    "wash": 1937.6,
+    "spin": 264.0,
+    "drain": 181.0
+   }
+  },
+  {
+   "file": "validation/becken_BWM5381IX_warm_sport_40_0__seg0.csv",
+   "role": "validation",
+   "cycle": "wm_becken_BWM5381IX_warm_sport_40_0.csv",
+   "checks": {
+    "header": [
+     "PASS",
+     ""
+    ],
+    "timeline": [
+     "PASS",
+     "540,004 rows, every step 5 ms"
+    ],
+    "values": [
+     "PASS",
+     ""
+    ],
+    "windows": [
+     "PASS",
+     "527 window(s)"
+    ],
+    "labels": [
+     "PASS",
+     ""
+    ],
+    "scaling": [
+     "PASS",
+     "max error 5.0e-05"
+    ]
+   },
+   "cycles": null,
+   "windows": 527,
+   "seconds": {
+    "fill": 326.0,
+    "wash": 1556.9,
+    "spin": 593.0,
+    "drain": 224.0
+   }
+  },
+  {
+   "file": "manifest.json",
+   "role": "roles",
+   "scope": "role",
+   "checks": {
+    "manifest": [
+     "PASS",
+     "15 files listed and on disk"
+    ]
+   }
+  },
+  {
+   "file": "(all roles)",
+   "role": "roles",
+   "scope": "role",
+   "checks": {
+    "separation": [
+     "PASS",
+     "no cycle or setting group in two roles"
+    ]
+   }
+  },
+  {
+   "file": "zscore_stats.json",
+   "role": "roles",
+   "scope": "role",
+   "checks": {
+    "normalisation": [
+     "PASS",
+     "from the 8 library cycles only"
+    ]
+   }
+  },
+  {
+   "file": "library/",
+   "role": "library",
+   "scope": "role",
+   "checks": {
+    "balance": [
+     "PASS",
+     {
+      "fill": 100,
+      "wash": 100,
+      "spin": 100,
+      "drain": 100
+     }
+    ]
+   }
+  },
+  {
+   "file": "validation",
+   "role": "validation",
+   "scope": "role",
+   "checks": {
+    "all four states": [
+     "PASS",
+     "hours {'fill': 0.23, 'wash': 1.05, 'spin': 0.3, 'drain': 0.17}"
+    ]
+   }
+  },
+  {
+   "file": "test",
+   "role": "test",
+   "scope": "role",
+   "checks": {
+    "all four states": [
+     "PASS",
+     "hours {'fill': 0.3, 'wash': 1.58, 'spin': 0.4, 'drain': 0.23}"
+    ]
+   }
+  },
+  {
+   "file": "delivery",
+   "role": "delivery",
+   "scope": "role",
+   "checks": {
+    "all four states": [
+     "PASS",
+     "hours {'fill': 0.41, 'wash': 1.13, 'spin': 0.4, 'drain': 0.32}"
+    ]
+   }
+  }
+ ],
+ "failures": 0,
+ "acknowledged": []
+}

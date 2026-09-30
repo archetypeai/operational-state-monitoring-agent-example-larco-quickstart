@@ -1,0 +1,22 @@
+# local environment / OS noise
+# `.env` alone does NOT cover `.env.bak` / `.env.local` etc, and those hold the
+# same live API keys — match the whole family, then re-admit a committed sample.
+.env
+.env.*
+!.env.example
+.DS_Store
+._*
+__pycache__/
+.venv/
+
+# never commit model weights/checkpoints
+*.safetensors
+*.pt
+*.ckpt
+
+# downloaded LARCO cycles and stage outputs (regenerable from Zenodo)
+data/raw/
+data/prepared/
+data/roles/
+fit/out/
+data/*.log
