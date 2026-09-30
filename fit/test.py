@@ -36,8 +36,9 @@ STATE = os.path.join(OUT, "test_state.json")
 
 
 def blueprint_key(trial):
+    """Unique per trial: a rerun of Stage 4 with the same setting gets its own blueprint."""
     w, st, k, metric, weights = trial_setting(trial)
-    return f"osm-larco-quickstart-w{w}-s{st}-{metric}-k{k}-{weights}"
+    return f"osm-larco-quickstart-w{w}-s{st}-{metric}-k{k}-{weights}-{trial['id'][-6:]}"
 
 
 def chosen_trial(trial_id=None):

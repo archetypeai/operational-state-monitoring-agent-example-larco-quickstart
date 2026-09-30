@@ -115,6 +115,11 @@ Then go to [Stage 4](#stage-4-optimize).
 
 ## The stages
 
+**To run again from scratch,** move the previous outputs aside first:
+`data/raw`, `data/prepared`, `data/roles` and `fit/out`. `fit/out/` matters most:
+it holds `test_state.json` and `delivery/runs.json`, and with them `test.py` and
+`deliver.py` resume the earlier run instead of starting a new one.
+
 Everything runs from the repo root. Each stage is safe to rerun. The four long ones
 (0, 4, 5, 6) take `--background`, which relaunches the command under `nohup` and,
 on macOS, `caffeinate`, and logs to a file (`tail -f` it).
@@ -250,8 +255,8 @@ python fit/test.py --background                  # log fit/out/test.log
 ```
 
 1. **Promote** the best trial from Stage 4 to a blueprint,
-   `osm-larco-quickstart-w512-s512-…`: its setting and fitted kNN become a
-   reusable model. `--trial otr_…` picks another trial.
+   `osm-larco-quickstart-w512-s512-…-<trial>` (the trial's id makes it unique
+   per run): its setting and fitted kNN become a reusable model. `--trial otr_…` picks another trial.
 2. **Upload** the 3 test cycles.
 3. **Evaluate** them **once** with the Evals API, which scores the blueprint
    on files it has never seen. Ours took 3 minutes (the full example's evals
