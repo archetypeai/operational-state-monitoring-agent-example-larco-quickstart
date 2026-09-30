@@ -1,4 +1,4 @@
-# OSM quickstart: washing machines (LARCO)
+# Operational State Monitoring on washing machines (LARCO): quickstart
 
 The whole lifecycle of an Operational State Monitoring (OSM) agent, from raw data to a
 delivered agent and its score, in about **1.5 hours**. Most of that is platform waiting.
