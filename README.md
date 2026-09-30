@@ -15,15 +15,19 @@
     their labels held back.
 - **The lifecycle:**
 
-| stage | what happens | time |
+| stage | what happens | time (measured 2026-09-30) |
 |---|---|---|
 | 0 | pick the cycles and download them (142 MB) | ~2 min |
 | 1a–1c | check the raw data, resample it to an exact 200 Hz grid, check again | ~10 s |
 | 2–3 | build the files the platform receives, and check them against its rules | ~15 s |
-| 4 | **Optimize:** train on the library, score 2 settings on validation | ~25 min |
-| 5 | **promote** the best setting to a blueprint, **test** it once with the Evals API | ~45 min |
-| 6 | **deliver:** a bundle from that blueprint, run over the faulty unit's cycles | ~10 min |
+| 4 | **Optimize:** train on the library, score 2 settings on validation | 4 min |
+| 5 | **promote** the best setting to a blueprint, **test** it once with the Evals API | 3 min |
+| 6 | **deliver:** a bundle from that blueprint, run over the faulty unit's cycles | 3 min |
 | 7 | **score** the delivery against the held-back labels | seconds |
+
+  About **15 minutes** end to end, 10 of them on the platform. Platform times vary
+  with load: the full example's much larger jobs took ~12 minutes per trial and
+  ~40 per eval.
 
 - **Skip Stages 0–3:** the role files are in the repo, packed in Git LFS
   (~96 MB). See [Shortcut](#shortcut-skip-stages-03).
@@ -222,13 +226,21 @@ python fit/optimize.py --background              # log fit/out/optimize.log
    **k = 5** and **k = 31**. The platform embeds every window with Omega 1.5,
    fits a kNN on the library and reports macro-F1 on validation for each.
 
-The platform runs trials one after another, about 12 minutes each. The
+The platform runs trials one after another. Ours took 4 minutes for both; on busier days or bigger jobs it can take much longer (the full example's trials took ~12 minutes each). The
 full example searched 16 settings and found 512 / 512, k 31, cosine, uniform best.
 Try others with `--k`, `--windows`, `--steps`, `--metrics`, `--weights`.
 
 **Expect:** `window 512, step 512: library 4 files / 800 windows kept; validation 3
 files / 2,448 windows`, `2 trial(s) of a 2-point space`, then one line per
-finished trial and a ranking by macro-F1.
+finished trial and a ranking by macro-F1. Ours:
+
+```
+  #1   w=512  step=512  k=5   cosine uniform  completed macro-F1 0.8305  fill 0.99  wash 0.90  spin 0.65  drain 0.78  windows 2,448
+  #2   w=512  step=512  k=31  cosine uniform  completed macro-F1 0.7980  fill 0.99  wash 0.89  spin 0.59  drain 0.72  windows 2,448
+```
+
+Here k = 5 wins, unlike the full example (k 31). This library has 200 windows per
+state at 512 / 512, not 800, so a smaller neighbourhood fits it better.
 **Writes:** `fit/out/optimize_<optimization id>.json`.
 
 ### Stage 5: promote, then test once
@@ -242,8 +254,14 @@ python fit/test.py --background                  # log fit/out/test.log
    reusable model. `--trial otr_…` picks another trial.
 2. **Upload** the 3 test cycles.
 3. **Evaluate** them **once** with the Evals API, which scores the blueprint
-   on files it has never seen. The eval takes about 40 minutes, even for small
-   files.
+   on files it has never seen. Ours took 3 minutes (the full example's evals
+   took ~40).
+
+**Expect** (ours):
+
+```
+  all 3 test cycles  macro-F1 0.8617  fill 0.99  wash 0.93  spin 0.75  drain 0.78  windows 3,520
+```
 
 This is the one-shot test. Once you've seen its number, the setting is
 frozen: going back to tune it would make the test number optimistic.
@@ -264,6 +282,10 @@ python fit/deliver.py --background               # log fit/out/deliver.log
    `invalid` flag and a probability per state.
 4. **Download** the outputs and match them to files by timestamp.
 
+**Expect:** the upload (5 files, 134 MB), `bundle bnd_… from osm-larco-quickstart-…`,
+one run, then `5 of 5 files have predictions: 3,178 windows (0 invalid); 0 rows
+matched no file; failed runs: none`.
+
 **Writes:** `fit/out/delivery/<file>.csv` and `fit/out/delivery/runs.json`
 (`--resume` collects the runs without starting new ones).
 
@@ -280,6 +302,19 @@ python fit/score_delivery.py
   Stage 5's test number. The test is new settings of the same machine; the
   delivery is a second, faulty unit. Comparing the two shows how well the
   agent carries over to another machine.
+
+**Expect** (ours):
+
+```
+Stage 7: 5 becken-flt cycles, 5 files, 3,178 windows scored; left out {'invalid': 0, 'no label at finish time': 0}
+  all 5 cycles                             macro-F1 0.7707  fill 0.84  wash 0.86  spin 0.67  drain 0.71  windows 3,178
+  ...
+next to Stage 5's test (becken, new settings): macro-F1 0.8617  fill 0.99  wash 0.93  spin 0.75  drain 0.78
+```
+
+The second machine scores 0.09 lower than the test, with every state lower. Its
+weakest cycles are the 15-minute programs (0.65–0.75). The full example saw the
+same drop from test to delivery, mainly on spin and fill.
 
 **Writes:** `fit/out/delivery/scores.json`.
 

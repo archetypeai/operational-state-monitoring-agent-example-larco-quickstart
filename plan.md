@@ -1,6 +1,21 @@
-# Plan: LARCO quickstart, Stages 0–7 in about 1.5 hours
+# Plan: LARCO quickstart, Stages 0–7 in about 15 minutes
 
-Status (2026-09-30): **built. Stages 0–3 verified; Stages 4–7 not yet run.**
+Status (2026-09-30): **built and run end to end (Stages 0–7).**
+
+**First full run (2026-09-30, the user's):** about 15 minutes, 10 on the platform.
+- **Stage 4:** `opt_60e62b89wv85hamk093yxhm954`, 4 min for both trials. k 5
+  scored 0.8305, k 31 0.7980. (The full example's winner was k 31, with 4× the
+  library.)
+- **Stage 5:** blueprint `osm-larco-quickstart-w512-s512-cosine-k5-uniform`,
+  eval `evl_0jhz24w1ph9x9813ez0cva9pq2`, 3 min. Test macro-F1 **0.8617** (fill
+  0.99, wash 0.93, spin 0.75, drain 0.78) on 3,520 windows.
+- **Stage 6:** bundle `bnd_6m70p2bmjy8knrw6sjy6ws27wh`, one run, 3 min: 5 of 5
+  files, 3,178 windows, 0 invalid.
+- **Stage 7:** delivery macro-F1 **0.7707** (fill 0.84, wash 0.86, spin 0.67,
+  drain 0.71), 0.09 below the test, with the 15-minute programs weakest.
+- **The platform was far quicker than on the full example** (~12 min per trial,
+  ~40 per eval there). That comes down to load or job size, not a fixed cost.
+  The README gives the measured times and says they vary.
 
 **Decisions since this plan was written (user, 2026-09-30):**
 - **A separate project,** named `osm-agent-example-larco-quickstart`, so a clone
