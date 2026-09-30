@@ -56,6 +56,14 @@ def prepared(cycle):
     return p.timestamp.astype("int64").to_numpy(), p.state.astype(str).to_numpy(), p[CHANNELS].to_numpy(np.float64)
 
 
+def have_prepared(cycle):
+    """False when data/prepared/ isn't there, e.g. after unpacking data/archives/ (the shortcut)."""
+    return os.path.exists(os.path.join(PREPARED, cycle[:-4] + ".parquet"))
+
+
+NO_PREPARED = ("WARN", "not checked: no data/prepared/ (Stages 0-1 skipped); the other checks still ran")
+
+
 def spot_check(d, cycle, mean, std):
     """Largest |z - (prepared - mean) / std| over a few rows spread through the file."""
     pms, _, px = prepared(cycle)
@@ -136,6 +144,8 @@ def check_file(role, rel, cycle, expect_state, mean, std, pieces=None):
             chk["held-back labels"] = ("PASS", "") if ok else (
                 "FAIL", f"sidecar rows match: {same}; unknown or blank labels: {unknown or s.label.isna().sum()}")
             out["seconds"] = {st: round(float((s.label == st).sum()) * STEP_MS / 1000, 1) for st in STATES}
+    elif not all(have_prepared(p["cycle"]) for p in pieces):
+        chk["one state"] = NO_PREPARED
     else:  # library: every row of every piece must be the file's state in its cycle's prepared data
         wrong = []
         for p in pieces:
@@ -150,6 +160,9 @@ def check_file(role, rel, cycle, expect_state, mean, std, pieces=None):
         chk["one state"] = ("PASS", f"{expect_state}, {len(pieces)} pieces from {len({p['cycle'] for p in pieces})} cycles") \
             if not wrong else ("FAIL", f"{len(wrong)} piece(s) not all {expect_state} or not matching: {wrong[:3]}")
 
+    if not all(have_prepared(c) for c in ({p["cycle"] for p in pieces} if role == "library" else {cycle})):
+        chk["scaling"] = NO_PREPARED
+        return out
     if role == "library":
         errs = [spot_check(d.iloc[p["row"]:p["row"] + p["rows"]], p["cycle"], mean, std) for p in pieces[::25]]
         err = None if any(e is None for e in errs) else max(errs)

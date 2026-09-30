@@ -52,6 +52,10 @@ python prep/archive_roles.py --unpack      # checks SHA256SUMS, rebuilds data/ro
 python prep/preflight_roles.py             # Stage 3, to confirm: RESULT: PASS
 ```
 
+Stage 3 then warns on two checks, `one state` and `scaling`: they compare the role
+files with `data/prepared/`, which only Stage 1 makes. The other checks run as
+usual, and the result is still `PASS`.
+
 Then go to [Stage 4](#stage-4-optimize).
 
 ## The stages
