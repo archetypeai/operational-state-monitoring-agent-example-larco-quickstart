@@ -103,7 +103,7 @@ cp .env.example .env               # then set ATAI_API_KEY (needed from Stage 4 
 
 ```sh
 git lfs pull                               # data/archives/ (skip if the clone already fetched it)
-python prep/archive_roles.py --unpack      # checks SHA256SUMS, rebuilds data/roles/ (0.45 GB)
+python prep/archive_roles.py --unpack      # checks SHA256SUMS, rebuilds data/roles/ (0.47 GB)
 python prep/preflight_roles.py             # Stage 3, to confirm: RESULT: PASS
 ```
 
@@ -174,7 +174,7 @@ while one fails.
 ### Stage 2: build the role files
 
 ```sh
-python prep/build_roles.py           # → data/roles/ (0.45 GB)
+python prep/build_roles.py           # → data/roles/ (0.47 GB)
 ```
 
 - **Normalisation:** every channel is z-scored with the mean and standard

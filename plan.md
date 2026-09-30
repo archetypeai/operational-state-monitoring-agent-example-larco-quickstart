@@ -32,7 +32,7 @@ Status (2026-09-30): **built and run end to end (Stages 0–7).**
 - **Stage 1b:** 9,826,559 rows, 0.13 GB.
 - **Stage 1c:** PASS.
 - **Stage 2:** library 4 files (396 pieces, 100 windows per state); validation
-  1,224 windows, test 1,760, delivery 1,587 (at 1,024 rows); 0.45 GB. The
+  1,224 windows, test 1,760, delivery 1,587 (at 1,024 rows); 0.47 GB. The
   compute for Stages 1–3 was about 30 s.
 - **Stage 3:** PASS on 15 files, all four states in every role.
 - **Packed:** `data/archives/roles_all.tar.xz.part-aa`, 96 MB.
