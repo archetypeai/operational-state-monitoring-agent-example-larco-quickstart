@@ -1,13 +1,7 @@
 # Operational State Monitoring on washing machines (LARCO): quickstart
 
-The whole lifecycle of an Operational State Monitoring (OSM) agent, from raw data to a
-delivered agent and its score, in about **1.5 hours**. Most of that is platform waiting.
-
-It's the short version of [`osm-agent-example-larco`](https://github.com/archetypeai/osm-agent-example-larco),
-which runs the same stages on all 199 cycles over several days. This one uses 19 short
-cycles, about 3% of the data. Every stage and every platform API is still here:
-Optimize, promote, Evals, bundles, runs. For the reasons behind each choice, follow
-the links to the full example.
+> This is the quickstart version. For the full version, see
+> [archetypeai/osm-agent-example-larco](https://github.com/archetypeai/osm-agent-example-larco).
 
 ## TL;DR
 
