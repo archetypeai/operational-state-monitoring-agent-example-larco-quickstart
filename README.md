@@ -328,12 +328,14 @@ same drop from test to delivery, mainly on spin and fill.
 We ran the quickstart twice from Stage 0: the second time with a fresh download
 from Zenodo and `fit/out/` moved aside. Every number came out the same:
 
-| stage | first run | fresh run |
-|---|---|---|
-| 1–3 | 9,826,559 rows; 1,224 / 1,760 / 1,587 windows | same |
-| 4 (k 5 / k 31) | 0.8305 / 0.7980 | same |
-| 5 test | 0.8617 | same, with the same confusion matrix, from its own blueprint `…-7ddzrn` |
-| 7 delivery | 0.7707 | same, per cycle too |
+| stage | measure | first run | fresh run |
+|---|---|---|---|
+| 1–3 | prepared rows; validation / test / delivery windows (1,024 rows) | 9,826,559; 1,224 / 1,760 / 1,587 | same |
+| 4 | validation macro-F1, k 5 / k 31 | 0.8305 / 0.7980 | same |
+| 5 | test macro-F1 | 0.8617 | same, with the same confusion matrix, from its own blueprint `…-7ddzrn` |
+| 7 | delivery macro-F1 | 0.7707 | same, per cycle too |
+
+Macro-F1 is the mean of the four states' F1 scores, so each state counts equally.
 
 So the pipeline and the platform are deterministic here. If your run gives
 different numbers, something differs in your data or setup, and the expected
