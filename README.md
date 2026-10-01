@@ -1,7 +1,8 @@
 # Operational State Monitoring on washing machines (LARCO): quickstart
 
-> This is the quickstart version. For the full version, see
-> [archetypeai/osm-agent-example-larco](https://github.com/archetypeai/osm-agent-example-larco).
+> This is the quickstart version of a fuller LARCO example (all 199 cycles, a baseline,
+> a 16-trial search), referred to below as "the full example". The full example isn't
+> published.
 
 ## TL;DR
 
@@ -34,8 +35,8 @@
 
 > **The scores here aren't the full example's.** The quickstart uses only short
 > `warm_*` programs. It has no cotton or eco cycles, and its state mix is
-> different (wash is ~60% of the time, not 83%). It shows how the lifecycle works;
-> for results, see the full example.
+> different (wash is ~60% of the time, not 83%). It shows how the lifecycle works,
+> not what the method scores on the whole dataset.
 
 ## The scenario
 
@@ -115,12 +116,12 @@ Then go to [Stage 4](#stage-4-optimize).
 
 ## The stages
 
-**Switching deployment** (dev, staging, prod, Tokyo: set `ATAI_API_KEY` and `ATAI_API_ENDPOINT` in
-`.env`) needs nothing else. The `osm` blueprint is resolved by its key on each deployment, the
+**Switching deployment** (set `ATAI_API_KEY` and `ATAI_API_ENDPOINT` in `.env`) needs
+nothing else. The `osm` blueprint is resolved by its key on each deployment, the
 upload cache is kept per deployment, and every result and state file in `fit/out/` records its
 endpoint: `test.py` only picks this deployment's trials, and `test.py` and `deliver.py` refuse to
-resume another deployment's run. Results reproduce across deployments: dev, prod and Tokyo
-(`api.u2`) gave the same numbers at every stage (0.8305 / 0.8617 / 3,178 windows / 0.7707).
+resume another deployment's run. Results reproduce across deployments: every deployment we
+ran it on gave the same numbers at every stage (0.8305 / 0.8617 / 3,178 windows / 0.7707).
 
 **To run again from scratch,** move the previous outputs aside first:
 `data/raw`, `data/prepared`, `data/roles` and `fit/out`. `fit/out/` matters most:
@@ -146,8 +147,9 @@ python prep/download.py --vibration           # 40 files, 142 MB, from Zenodo
 - **What you should see:** `library 8 groups, 8 cycles`, `validation 3`, `test 3`,
   `delivery 5 cycles of becken-flt_BWM5381IX`; then `40 files, 142 MB`.
 - **Why a split by setting group:** so near-identical twin cycles never end up
-  on both sides. See the
-  [full example](https://github.com/archetypeai/osm-agent-example-larco#how-beckens-cycles-are-split).
+  on both sides. Two runs of the same program, temperature and load are nearly
+  the same recording, so splitting by cycle would score the model on cycles it
+  has, in effect, already seen.
 
 ### Stage 1: check, prepare, check again
 
@@ -167,8 +169,9 @@ python prep/preflight_prepared.py    # 1c: the prepared files, read-only
   - else `fill` or `drain` from its water-flow label;
   - else `wash`.
 
-  The heater isn't a state, because vibration can't tell it from wash
-  ([why](https://github.com/archetypeai/osm-agent-example-larco#the-states)).
+  The heater isn't a state, because vibration can't tell it from wash: in the
+  full example, a classifier on held-out cycles separated them at 0.62 balanced
+  accuracy, where 0.5 is chance.
   **Expect:** `19 cycles, 9,826,559 rows, 0.13 GB`.
 - **1c** re-checks the grid, the values and every row's state against the raw
   labels, and runs a resampling tone test. **Expect:** `RESULT: PASS`. The
@@ -203,8 +206,7 @@ delivery: 5 files from 5 cycles, 1,587 windows
 
 (Windows here are 1,024 rows; the platform uses 512, so about twice as many.)
 Why one file per state and not one per piece: the platform stores each
-optimization's config in a 1 MiB object, which too many training files overflow
-([details](https://github.com/archetypeai/osm-agent-example-larco#platform-behaviour-worth-knowing)).
+optimization's config in a 1 MiB object, which too many training files overflow.
 
 ### Stage 3: check the role files against the platform's rules
 
@@ -375,7 +377,12 @@ outputs above show at which stage.
 | `fit/deliver.py` | Stage 6 |
 | `fit/score_delivery.py` | Stage 7 |
 | `data/` | the split, the Zenodo listing, the licence, metadata and preflight reports; `data/archives/` holds the packed role files |
-| `plan.md` | how the quickstart was designed |
+
+## Licence
+
+The code is under the [Apache License 2.0](LICENSE). The LARCO data, and the files
+derived from it in `data/`, stay under the dataset's own licence: see
+[Data attribution](#data-attribution).
 
 ## Data attribution
 

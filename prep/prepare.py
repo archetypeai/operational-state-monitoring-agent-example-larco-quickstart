@@ -7,7 +7,7 @@ gaps over 1.5 s (never interpolate across a gap); remove physically impossible r
 milliseconds, by cubic spline per channel, rounded to 1e-4 g; give every row the four-state label of the label second it falls
 in; drop segments shorter than one window (1,024 rows). Only the 9 vibration
 channels are kept: the 1 Hz measurements the labels are derived from stay in
-data/raw/labels/ for analysis (plan.md, Scope).
+data/raw/labels/ for analysis.
 
 Writes data/prepared/<cycle>.parquet (timestamp, 9 channels as float32,
 state, segment) and data/prepare_report.json. Refuses to run unless the
@@ -50,7 +50,7 @@ def resample(t, v, grid):
     """Cubic-spline resampling of irregular samples (t, v) at `grid` (seconds from the segment start).
 
     Chosen over linear interpolation by a tone test on the real timestamps
-    (plan.md, Stage 1b): it keeps 98-100% of a 23 Hz tone (spin) and 97-99% at
+    in the full example: it keeps 98-100% of a 23 Hz tone (spin) and 97-99% at
     46 Hz, where linear keeps 94-96% and 82-84%. Times must be relative to the
     segment start: at epoch seconds (~1.7e9) the spline is numerically unstable.
     """

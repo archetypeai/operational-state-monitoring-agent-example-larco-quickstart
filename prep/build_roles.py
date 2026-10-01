@@ -169,7 +169,7 @@ def write_library(draw, mean, std, workers):
 
     Jumps between pieces fall on whole-window boundaries, never inside a piece. One
     training example per state keeps the optimization config far under the platform's
-    1 MiB ConfigMap limit, which 1,990 separate files exceeded (plan.md, Stage 4b).
+    1 MiB config limit, which 1,990 separate files exceeded in the full example.
     Training files tolerate such jumps, even where a window crosses one
     (the full example's fit/probe_gaps.py, runs O1-O3).
     """

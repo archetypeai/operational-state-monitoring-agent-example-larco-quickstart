@@ -31,7 +31,7 @@ STEP_MS = 5
 MIN_ROWS = 1024
 CLIP_G = 2.2                # the sensor saturates at ±2.19 g; interpolation cannot exceed it
 LOST_FAIL = 0.20            # a cycle that lost more than this share of its labelled seconds
-# tone test (plan.md, Stage 1b): share of a pure tone's amplitude surviving resampling
+# tone test (see prep/prepare.py): share of a pure tone's amplitude surviving resampling
 TONES_HZ = [10, 23, 46]     # 23 Hz = spin at 1400 rpm, 46 Hz its 2nd harmonic
 TONE_FAIL = 0.80            # spin itself badly damped
 TONE_WARN_23, TONE_WARN_46 = 0.95, 0.90

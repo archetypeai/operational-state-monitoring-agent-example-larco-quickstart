@@ -9,7 +9,7 @@ roles, with seed 20260928. becken-flt is delivery only.
 The quickstart draws that same split, then keeps only the 19 short cycles in QUICKSTART:
 the shortest `warm_*` programs of each role, which still hold all four states with as
 much fill, spin and drain as a 3-hour cotton cycle. They were chosen by that rule from
-the full example's Stage 1b report (plan.md, "The data"); Stage 3 checks that every role
+the full example's Stage 1b report; Stage 3 checks that every role
 still has all four states. So no group crosses roles here either. Writes data/split.json.
 
     python3 prep/split.py
@@ -24,7 +24,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from larco import DATA, DELIVERY_UNIT, LIBRARY_UNIT, listing  # noqa: E402
 
 SEED = 20260928
-# groups per role and family: library / validation / test (plan.md)
+# groups per role and family: library / validation / test
 ALLOCATION = {"cotton": (16, 6, 6), "eco": (4, 2, 1), "other": (14, 5, 4)}
 ROLES = ("library", "validation", "test")
 QUICKSTART = {

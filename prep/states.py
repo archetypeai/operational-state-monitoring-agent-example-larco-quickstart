@@ -1,4 +1,4 @@
-"""The four states, and how each labelled second maps to one (plan.md, "Labels").
+"""The four states, and how each labelled second maps to one.
 
 Priority, first match wins: spin > fill > drain > wash. The heater label is not a
 state: heating runs while the drum washes (or fills), and vibration can't tell it

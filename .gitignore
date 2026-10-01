@@ -19,4 +19,6 @@ data/raw/
 data/prepared/
 data/roles/
 fit/out/
+# earlier runs set aside (fit/out-dev/, ...)
+fit/out-*/
 data/*.log
