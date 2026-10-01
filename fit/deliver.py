@@ -73,14 +73,17 @@ def start(files, per_run, jobs):
     test_state = os.path.join(OUT, "test_state.json")
     if not os.path.exists(test_state):
         sys.exit("no Stage 5 blueprint yet: run fit/test.py first")
-    KEY = json.load(open(test_state))["blueprint"]["key"]
+    ts = json.load(open(test_state))
+    if ts.get("endpoint") != api_base():
+        sys.exit(f"{test_state} is from {ts.get('endpoint', 'another deployment')}, not {api_base()}: run fit/test.py here first")
+    KEY = ts["blueprint"]["key"]
     bp = request("GET", f"{agents()}/blueprints/{KEY}")
     stamp = datetime.datetime.now(datetime.timezone.utc).strftime("%Y%m%dT%H%M%SZ")
     bundle = request("POST", f"{agents()}/bundles", body={
         "blueprint": KEY, "name": f"LARCO quickstart delivery to becken-flt {stamp}",
         "description": "Stage 6: the Stage 5 model run over the unlabelled becken-flt cycles"})
     log(f"bundle {bundle['id']} from {KEY} ({bp['id']})")
-    state = {"bundle": bundle["id"], "blueprint": KEY, "runs": [],
+    state = {"endpoint": api_base(), "bundle": bundle["id"], "blueprint": KEY, "runs": [],
              "files": {f["file"]: dict(zip(("first_ms", "last_ms"), time_range(p))) for f, p in zip(files, paths)}}
     os.makedirs(DELIVERY, exist_ok=True)
     for i in range(0, len(paths), per_run):
@@ -162,6 +165,9 @@ def main():
         if not args.resume:
             log(f"{STATE} exists: collecting those runs (delete it to deliver again)")
         state = json.load(open(STATE))
+        if state.get("endpoint") != api_base():
+            sys.exit(f"{STATE} is from {state.get('endpoint', 'another deployment')}, not {api_base()}: "
+                     f"move fit/out/delivery/ aside to deliver on this deployment")
     else:
         files = json.load(open(os.path.join(ROLES, "manifest.json")))["delivery"]["files"]
         if args.only:

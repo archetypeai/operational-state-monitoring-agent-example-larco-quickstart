@@ -25,7 +25,7 @@ import sys
 import time
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from atai import TERMINAL, agents, load_dotenv, request, trial_setting  # noqa: E402
+from atai import TERMINAL, agents, api_base, load_dotenv, request, trial_setting  # noqa: E402
 from optimize import OUT, ROLES, log, upload_all  # noqa: E402
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "prep"))
@@ -43,13 +43,15 @@ def blueprint_key(trial):
 
 def chosen_trial(trial_id=None):
     """(optimization id, trial) of the best completed Stage 4b trial, or of --trial."""
-    runs = [json.load(open(p)) for p in sorted(glob.glob(os.path.join(OUT, "optimize_opt_*.json")))]
+    # only this deployment's runs: a trial from another deployment can't be promoted here
+    runs = [r for r in (json.load(open(p)) for p in sorted(glob.glob(os.path.join(OUT, "optimize_opt_*.json"))))
+            if r.get("endpoint") == api_base()]
     trials = [(r["optimization"]["id"], t) for r in runs for t in r["trials"]
               if t["status"] == "completed" and t.get("objective_value") is not None]
     if trial_id:
         trials = [(o, t) for o, t in trials if t["id"] == trial_id]
     if not trials:
-        sys.exit("no completed Stage 4b trial in fit/out/: run fit/optimize.py first"
+        sys.exit(f"no completed Stage 4 trial for {api_base()} in fit/out/: run fit/optimize.py first"
                  + (f" (or check --trial {trial_id})" if trial_id else ""))
     return max(trials, key=lambda ot: ot[1]["objective_value"])
 
@@ -94,6 +96,10 @@ def main():
     maybe_detach(args)
     load_dotenv()
     state = json.load(open(STATE)) if os.path.exists(STATE) else {}
+    if state and state.get("endpoint") != api_base():
+        sys.exit(f"{STATE} is from {state.get('endpoint', 'an earlier run on another deployment')}, not {api_base()}: "
+                 f"move fit/out/ aside (or delete that file) to test on this deployment")
+    state["endpoint"] = api_base()
     save = lambda: json.dump(state, open(STATE, "w"), indent=1)  # noqa: E731
 
     if "model" in state:

@@ -115,6 +115,13 @@ Then go to [Stage 4](#stage-4-optimize).
 
 ## The stages
 
+**Switching deployment** (dev, staging, prod: set `ATAI_API_KEY` and `ATAI_API_ENDPOINT` in
+`.env`) needs nothing else. The `osm` blueprint is resolved by its key on each deployment, the
+upload cache is kept per deployment, and every result and state file in `fit/out/` records its
+endpoint: `test.py` only picks this deployment's trials, and `test.py` and `deliver.py` refuse to
+resume another deployment's run. Results reproduce across deployments: dev and prod gave the
+same numbers.
+
 **To run again from scratch,** move the previous outputs aside first:
 `data/raw`, `data/prepared`, `data/roles` and `fit/out`. `fit/out/` matters most:
 it holds `test_state.json` and `delivery/runs.json`, and with them `test.py` and

@@ -22,7 +22,8 @@ def load_dotenv(path=os.path.join(ROOT, ".env")):
         line = line.strip()
         if line and not line.startswith("#") and "=" in line:
             key, _, value = line.partition("=")
-            os.environ.setdefault(key.strip(), value.strip())
+            if not os.environ.get(key.strip()):     # unset, or exported but empty
+                os.environ[key.strip()] = value.strip()
 
 
 def api_base():
