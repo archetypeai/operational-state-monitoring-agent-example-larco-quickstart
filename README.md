@@ -92,8 +92,8 @@ roles at random, so near-identical cycles never end up on both sides.
 ## Setup
 
 ```sh
-git clone https://github.com/archetypeai/osm-agent-example-larco-quickstart.git   # needs Git LFS
-cd osm-agent-example-larco-quickstart
+git clone https://github.com/archetypeai/operational-state-monitoring-agent-example-larco-quickstart.git   # needs Git LFS
+cd operational-state-monitoring-agent-example-larco-quickstart
 python3 -m venv .venv
 source .venv/bin/activate          # every later command assumes this
 pip install -r requirements.txt    # numpy, pandas, pyarrow, scipy
