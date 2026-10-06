@@ -1,8 +1,8 @@
 # Operational State Monitoring on washing machines (LARCO): quickstart
 
-> This is the quickstart version of a fuller LARCO example (all 199 cycles, a baseline,
-> a 16-trial search), referred to below as "the full example". The full example isn't
-> published.
+> This is the quickstart version of the
+> [full LARCO example](https://github.com/archetypeai/operational-state-monitoring-agent-example-larco) (all 199 cycles, a
+> baseline, a 16-trial search), referred to below as "the full example".
 
 ## TL;DR
 
@@ -35,8 +35,8 @@
 
 > **The scores here aren't the full example's.** The quickstart uses only short
 > `warm_*` programs. It has no cotton or eco cycles, and its state mix is
-> different (wash is ~60% of the time, not 83%). It shows how the lifecycle works,
-> not what the method scores on the whole dataset.
+> different (wash is ~60% of the time, not 83%). It shows how the lifecycle works;
+> for what the method scores on the whole dataset, see the [full example](https://github.com/archetypeai/operational-state-monitoring-agent-example-larco).
 
 ## The scenario
 
@@ -149,7 +149,7 @@ python prep/download.py --vibration           # 40 files, 142 MB, from Zenodo
 - **Why a split by setting group:** so near-identical twin cycles never end up
   on both sides. Two runs of the same program, temperature and load are nearly
   the same recording, so splitting by cycle would score the model on cycles it
-  has, in effect, already seen.
+  has, in effect, already seen ([details](https://github.com/archetypeai/operational-state-monitoring-agent-example-larco#how-beckens-cycles-are-split)).
 
 ### Stage 1: check, prepare, check again
 
@@ -171,7 +171,7 @@ python prep/preflight_prepared.py    # 1c: the prepared files, read-only
 
   The heater isn't a state, because vibration can't tell it from wash: in the
   full example, a classifier on held-out cycles separated them at 0.62 balanced
-  accuracy, where 0.5 is chance.
+  accuracy, where 0.5 is chance ([why](https://github.com/archetypeai/operational-state-monitoring-agent-example-larco#the-states)).
   **Expect:** `19 cycles, 9,826,559 rows, 0.13 GB`.
 - **1c** re-checks the grid, the values and every row's state against the raw
   labels, and runs a resampling tone test. **Expect:** `RESULT: PASS`. The
@@ -206,7 +206,8 @@ delivery: 5 files from 5 cycles, 1,587 windows
 
 (Windows here are 1,024 rows; the platform uses 512, so about twice as many.)
 Why one file per state and not one per piece: the platform stores each
-optimization's config in a 1 MiB object, which too many training files overflow.
+optimization's config in a 1 MiB object, which too many training files overflow
+([details](https://github.com/archetypeai/operational-state-monitoring-agent-example-larco#platform-behaviour-worth-knowing)).
 
 ### Stage 3: check the role files against the platform's rules
 
