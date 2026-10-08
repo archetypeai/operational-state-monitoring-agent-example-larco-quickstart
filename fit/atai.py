@@ -142,5 +142,5 @@ def trial_f1(trial):
 def trial_setting(trial):
     """(window, step, k, metric, weights) of a trial."""
     tv = trial["trial_values"]
-    return (tv["values"]["window_size"], tv["values"]["step_size"], tv["fitting"]["k_neighbors"],
-            tv["fitting"]["metric"], tv["fitting"]["weights"])
+    v = {**tv.get("fitting", {}), **tv["values"]}    # newer blueprints report every setting under values
+    return v["window_size"], v["step_size"], v["k_neighbors"], v["metric"], v["weights"]

@@ -213,12 +213,15 @@ def main():
                                 "inputs": [{"type": "file", "id": ids[p], "format": "csv"}],
                                 "ground_truth": {"state": {"from": {"column": "label"}, "downsampling": "last_record"}}}
                                for p in validation]
-        blueprint_id = request("GET", f"{agents()}/blueprints/{args.blueprint}")["id"]
+        bp = request("GET", f"{agents()}/blueprints/{args.blueprint}")
         stamp = datetime.datetime.now(datetime.timezone.utc).strftime("%Y%m%dT%H%M%SZ")
-        opt = request("POST", f"{agents()}/optimizations", body={
-            "name": f"{args.name} {stamp}", "blueprint_id": blueprint_id, "objective": "macro_f1",
-            "search_space": space, "budget": {"max_trials": args.max_trials or len(grid)},
-            "training_examples": training, "validation_examples": validation_examples})
+        body = {"name": f"{args.name} {stamp}", "blueprint_id": bp["id"], "objective": "macro_f1",
+                "search_space": space, "budget": {"max_trials": args.max_trials or len(grid)},
+                "training_examples": training, "validation_examples": validation_examples}
+        # newer osm blueprints take the classes to score as a value; older ones read them from the data
+        if "states" in ((bp.get("document") or {}).get("values") or {}):
+            body["overrides"] = {"values": {"states": STATES}}
+        opt = request("POST", f"{agents()}/optimizations", body=body)
         opt_id = opt["id"]
         log(f"optimization {opt_id} created (collect later with --resume {opt_id})")
 
