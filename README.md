@@ -333,6 +333,40 @@ same drop from test to delivery, mainly on spin and fill.
 
 **Writes:** `fit/out/delivery/scores.json`.
 
+### Stage 8: serve the same bundle (optional)
+
+```sh
+python fit/serve.py                      # the bundle Stage 6 delivered
+python fit/serve.py --bundle bnd_...     # or name one
+python fit/serve.py --windows 5 --keep   # more windows, leave the agent running
+```
+
+Stage 6 runs the delivery bundle as a batch job: submit, queue, poll, download.
+This runs the **same bundle** with `mode: "serving"` and asks it questions
+directly -- one field different, and the round trip stops being a job.
+
+- **Deploy:** `POST /agents/bundles/{bundle_id}/run` with
+  `{"mode": "serving", "connectors": {"source": []}}` returns an agent id. The
+  source list is empty because a serving agent is fed over `/query`, not from
+  files; the endpoint requires the field either way. A serving run is `running`
+  straight away -- nothing is dispatched.
+- **`/query`:** one request in, one answer out, no polling.
+- **`/connect`:** one websocket, windows pushed in order, answers as they come.
+- **Cancel:** the agent is cancelled on the way out unless `--keep` is passed.
+
+The windows are real: 512 rows at a time from the delivery role files Stage 6
+runs over, the nine z-scored channels under their own names. About 40 KB of JSON
+each. `--from` reads a different CSV, `--rows` changes the window length.
+
+> **Serving is not finished.** The platform accepts the calls, keeps a real agent
+> row and enforces the real auth, but **no runtime is placed and no model runs** --
+> the answer is the request echoed back. This stage shows the shape of the path,
+> not inference.
+
+**Needs:** `ATAI_API_KEY` and `ATAI_API_ENDPOINT`, the same as every other stage;
+the role files (Stages 0-2, or the Shortcut); and either a Stage 6 run or a
+`--bundle`.
+
 ## Results, and they reproduce
 
 We ran the quickstart twice from Stage 0: the second time with a fresh download
@@ -377,6 +411,7 @@ outputs above show at which stage.
 | `fit/test.py` | Stage 5 |
 | `fit/deliver.py` | Stage 6 |
 | `fit/score_delivery.py` | Stage 7 |
+| `fit/serve.py` | Stage 8 |
 | `data/` | the split, the Zenodo listing, the licence, metadata and preflight reports; `data/archives/` holds the packed role files |
 
 ## Licence
