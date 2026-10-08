@@ -188,14 +188,15 @@ def main():
         "metric": {"kind": "fitting", "spec": one(args.metrics)},
         "weights": {"kind": "fitting", "spec": one(args.weights)},
     }}
-    for w, st in {(g[0], g[1]) for g in grid}:
-        lw = library_windows(lib_files, w, st)
-        vw = sum(windows_in(f["rows"], w, st) for f in val_files)
-        log(f"window {w}, step {st}: library {len(library):,} files / {lw:,} windows kept; "
-            f"validation {len(validation)} files / {vw:,} windows")
-    n = min(args.max_trials or len(grid), len(grid))
-    log(f"{n} trial(s) of a {len(grid)}-point space ({'random search' if n < len(grid) else 'every point'}); "
-        f"blueprint {args.blueprint}")
+    if not args.resume:          # the plan comes from this command's flags, not the optimization being collected
+        for w, st in {(g[0], g[1]) for g in grid}:
+            lw = library_windows(lib_files, w, st)
+            vw = sum(windows_in(f["rows"], w, st) for f in val_files)
+            log(f"window {w}, step {st}: library {len(library):,} files / {lw:,} windows kept; "
+                f"validation {len(validation)} files / {vw:,} windows")
+        n = min(args.max_trials or len(grid), len(grid))
+        log(f"{n} trial(s) of a {len(grid)}-point space ({'random search' if n < len(grid) else 'every point'}); "
+            f"blueprint {args.blueprint}")
     if args.dry_run:
         print(json.dumps(space, indent=1))
         return
@@ -203,6 +204,7 @@ def main():
     load_dotenv()
     if args.resume:
         opt_id = args.resume
+        log(f"collecting {opt_id} on {api_base()}")
     else:
         ids = upload_all(library + validation, args.upload_jobs)
         training = [{"name": os.path.basename(p)[:-4],
