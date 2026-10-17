@@ -384,16 +384,19 @@ served 3,178 windows of 5 file(s) in 3,178 queries, 1975 s
   -> fit/out/serving/serve_5files_wpq1.csv / .json
 ```
 
-- **Served is batch, to the bit:** every state and every probability of all 3,178
-  windows, and so the same macro-F1 as Stage 7, 0.7707, state by state. The kNN's
-  probabilities are its neighbours' votes (fifths, at k 5), and whatever float
-  differences there are between served and batch embeddings swapped no neighbour. The full example's k 31 model,
+- **Served is batch:** every state of all 3,178 windows, and so the same macro-F1
+  as Stage 7, 0.7707, state by state. The kNN's probabilities are its neighbours'
+  votes (fifths, at k 5). On 2026-10-16 every probability matched too. On a rerun
+  (Dev, 2026-10-17), 2 windows of `warm_fast-45_40_2` were one vote off (0.2:
+  wash 0.8 / spin 0.2, spin 0.8 / drain 0.2) with the state unchanged: a float
+  difference between served and batch embeddings swapped one neighbour. The full example's k 31 model,
   served on the same 5 cycles, had 8 windows a neighbour's vote off, 2 of them at a
   near-tie that changed the state: `fit/serve.py` exits 1 only if more than 0.1% of
   the states differ.
 - **About 0.6 s a window** (0.5–0.7 s median, depending on Dev's load), so the 5
   cycles take 25–35 minutes: about 4 times faster than the data, which arrives a
-  window every 2.56 s. `--windows-per-query 4` took 1.5 s a query (0.38 s a window),
+  window every 2.56 s. Dev can stall a query: the 2026-10-17 rerun had a median
+  of 491 ms but one query of 130 s, and carried on. `--windows-per-query 4` took 1.5 s a query (0.38 s a window),
   but waits for 4 windows before it asks.
 
 **Writes:** `fit/out/serving/serve_5files_wpq1.csv` (a row per window) and `.json`
@@ -430,14 +433,16 @@ picks the serving agents. `fit/serve.py`'s agent is named `LARCO serve`.
 ## Results, and they reproduce
 
 We ran the quickstart twice from Stage 0: the second time with a fresh download
-from Zenodo and `fit/out/` moved aside. Every number came out the same:
+from Zenodo and `fit/out/` moved aside. Every number came out the same. A third
+run on Dev (2026-10-17, from Stage 4, after Dev's optimizer fix) did too:
 
-| stage | measure | first run | fresh run |
-|---|---|---|---|
-| 1–3 | prepared rows; validation / test / delivery windows (1,024 rows) | 9,826,559; 1,224 / 1,760 / 1,587 | same |
-| 4 | validation macro-F1, k 5 / k 31 | 0.8305 / 0.7980 | same |
-| 5 | test macro-F1 | 0.8617 | same, with the same confusion matrix, from its own blueprint `…-7ddzrn` |
-| 7 | delivery macro-F1 | 0.7707 | same, per cycle too |
+| stage | measure | first run | fresh run | Dev, 2026-10-17 |
+|---|---|---|---|---|
+| 1–3 | prepared rows; validation / test / delivery windows (1,024 rows) | 9,826,559; 1,224 / 1,760 / 1,587 | same | (reused) |
+| 4 | validation macro-F1, k 5 / k 31 | 0.8305 / 0.7980 | same | same |
+| 5 | test macro-F1 | 0.8617 | same, with the same confusion matrix, from its own blueprint `…-7ddzrn` | same |
+| 7 | delivery macro-F1 | 0.7707 | same, per cycle too | same, per cycle too |
+| 8 | served macro-F1; states matching batch | 0.7707; 3,178/3,178 (Dev, 2026-10-16) | - | same; same (2 probabilities a vote off) |
 
 Macro-F1 is the mean of the four states' F1 scores, so each state counts equally.
 
