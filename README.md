@@ -428,8 +428,7 @@ cycle.
   `fit/out/app_serving_state.json` until then.
 
 Needs Node 20+ and mosquitto (`brew install mosquitto`). The app's README has the
-architecture, the settings and the ports. The full example's app is the same, with
-all 122 delivery files to pick from; the two share ports, so run one at a time.
+architecture, the settings and the ports.
 
 ### Cleanup
 

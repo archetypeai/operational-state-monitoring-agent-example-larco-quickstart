@@ -132,8 +132,7 @@ left running holds one of Dev's 3 workers until it is deleted, or released after
 | this app | 1892     | 9010    | 5182 |
 
 The slot after the RED and TEP serving apps (`mosquitto/mosquitto.conf` has the
-table), so they can run side by side. The full and quickstart examples' apps share
-it: run one at a time.
+table), so they can run side by side.
 
 ## Layout
 
