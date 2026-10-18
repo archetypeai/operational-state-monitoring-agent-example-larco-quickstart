@@ -1,9 +1,10 @@
 <script>
 	/**
-	 * The whole cycle, one column a window: what the served agent called, what
-	 * Stage 6 called in batch for the same window (when this file was delivered),
-	 * and, once revealed, the held-back label. Drawn as runs of one state, so a
-	 * 3-hour cycle (4,000+ windows) is a few dozen rectangles.
+	 * The whole cycle, one column a window: what the served agent called and, once
+	 * revealed, the held-back label (the two rows are labelled only then). Served
+	 * against batch is a count under the timeline, not a row: the two match. Drawn
+	 * as runs of one state, so a 3-hour cycle (4,000+ windows) is a few dozen
+	 * rectangles.
 	 */
 	import { larco } from '$lib/api/larco.svelte.js';
 	import { stateColor } from '$lib/states.js';
@@ -28,7 +29,6 @@
 	}
 	const rows = $derived([
 		{ label: 'Agent', runs: runs((w) => (w.served && !w.served.invalid ? w.served.state : null)) },
-		...(st?.batch ? [{ label: 'Batch', runs: runs((w) => w.batch?.state) }] : []),
 		...(st?.revealed ? [{ label: 'Truth', runs: runs((w) => w.label) }] : [])
 	]);
 	const x = (/** @type {number} */ i) => (i / total) * width;
@@ -36,14 +36,16 @@
 	const GAP = 6;
 </script>
 
-<div class="grid grid-cols-[3rem_minmax(0,1fr)] gap-x-3">
-	<div class="flex flex-col" style="gap: {GAP}px">
-		{#each rows as r (r.label)}
-			<span class="flex items-center text-2xs text-muted-foreground" style="height: {ROW}px"
-				>{r.label}</span
-			>
-		{/each}
-	</div>
+<div class={rows.length > 1 ? 'grid grid-cols-[3rem_minmax(0,1fr)] gap-x-3' : ''}>
+	{#if rows.length > 1}
+		<div class="flex flex-col" style="gap: {GAP}px">
+			{#each rows as r (r.label)}
+				<span class="flex items-center text-2xs text-muted-foreground" style="height: {ROW}px"
+					>{r.label}</span
+				>
+			{/each}
+		</div>
+	{/if}
 	<div bind:clientWidth={width}>
 		<svg
 			width="100%"

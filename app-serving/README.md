@@ -16,8 +16,9 @@ output for the same window, as it arrives.
   minutes. Any of the 5 delivery cycles can be picked.
 - **Output:** the machine drawn in the called state (water in, the drum rocking,
   spinning, water out), the four probabilities, a timeline of the whole cycle
-  (agent, batch and, after a reveal, the held-back labels), the embedding space,
-  and a log of state changes.
+  (the agent's calls; after a reveal, the held-back labels under them), how many
+  windows match Stage 6's batch output, the embedding space and a log of state
+  changes.
 - **The labels stay hidden** until you reveal them in Settings, or the cycle ends.
   Then the timeline gets a Truth row and the panel a macro-F1, served and batch.
 
