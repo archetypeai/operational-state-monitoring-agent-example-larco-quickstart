@@ -42,18 +42,11 @@ if (!manifest || !zscore) {
 }
 const CHANNELS = zscore.channels;
 const PREFIX = 'becken-flt_BWM5381IX_';
-const QUICKSTART = [
-	'warm_fast-15_0_',
-	'warm_fast-15_2_',
-	'warm_fast-15_6_',
-	'warm_fast-45_40_2_',
-	'warm_sport_40_2_'
-];
 const STATES = ['fill', 'wash', 'spin', 'drain'];
 const SPEEDS = [1, 2, 4, 8, 'max'];
 const TRACE_POINTS = 64;
 
-/** Every delivery file on disk, the quickstart's five first. */
+/** Stage 6's delivery files: the 5 becken-flt cycles in data/roles/delivery/. */
 const CYCLES = manifest.delivery.files
 	.filter((f) => fs.existsSync(path.join(ROLES, f.file)))
 	.map((f) => {
@@ -66,11 +59,10 @@ const CYCLES = manifest.delivery.files
 				.replace(/\.csv$/, '')
 				.replace(/__seg(\d+)$/, ' · seg $1'),
 			rows: f.rows,
-			seconds: f.seconds,
-			quickstart: QUICKSTART.some((q) => base.includes(q))
+			seconds: f.seconds
 		};
 	})
-	.sort((a, b) => Number(b.quickstart) - Number(a.quickstart) || a.name.localeCompare(b.name))
+	.sort((a, b) => a.name.localeCompare(b.name))
 	.map((c, id) => ({ ...c, id }));
 if (!CYCLES.length) {
 	console.error('replayer: no delivery files in data/roles/delivery/');
@@ -120,7 +112,7 @@ function publishStatus() {
 			windowSeconds: windowSeconds(),
 			cycleName: c.name,
 			cycleFile: c.base,
-			cycles: CYCLES.map(({ id, name, rows, quickstart }) => ({ id, name, rows, quickstart })),
+			cycles: CYCLES.map(({ id, name, rows }) => ({ id, name, rows })),
 			// what share of the cycle each state is: ground truth, so only after a reveal
 			truth: st.revealed ? c.seconds : null
 		}),

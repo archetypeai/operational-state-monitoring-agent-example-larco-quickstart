@@ -2,8 +2,7 @@
 	/**
 	 * Where the latest windows sit among the library the model compares them with.
 	 *
-	 * The field is the library's windows (window 512, step 512: 3,200 in the full
-	 * example, 800 in the quickstart),
+	 * The field is the library's 800 windows (window 512, step 512, 200 a state),
 	 * recomputed by fit/library_embeddings.py and drawn as one density per state in
 	 * PCA 1-2 of their Omega embeddings, whitened. The trail is the last windows of
 	 * this cycle through the same two axes, from the embeddings the served agent
