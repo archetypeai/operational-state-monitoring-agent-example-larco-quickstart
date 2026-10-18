@@ -5,7 +5,7 @@
 	 *
 	 *   body           the machine in the called state, the embedding space, or the log of changes
 	 *   Machine state  the latest call and its probabilities, the cycle's timeline,
-	 *                  and how served compares with Stage 6's batch output
+	 *                  and the run's totals
 	 */
 	import Pane from '$lib/components/ui/patterns/pane/index.js';
 	import { Badge } from '@archetypeai/ds-ui-svelte-console/primitives/badge';
@@ -16,7 +16,7 @@
 	import WashingMachineIcon from '@lucide/svelte/icons/washing-machine';
 	import ScatterChartIcon from '@lucide/svelte/icons/chart-scatter';
 	import ListIcon from '@lucide/svelte/icons/list';
-	import { larco, macroF1 } from '$lib/api/larco.svelte.js';
+	import { larco } from '$lib/api/larco.svelte.js';
 	import { stateColor, stateLabel } from '$lib/states.js';
 	import Machine from './machine.svelte';
 	import EmbeddingSpace from './embedding-space.svelte';
@@ -30,7 +30,6 @@
 
 	let view = $state('machine');
 	const c = $derived(larco.cycle);
-	const st = $derived(larco.status);
 	const latest = $derived(c.windows.findLast((w) => w.served && !w.served.invalid));
 	/** e.g. "osm-larco-w512-s512-cosine-k31-uniform" → "k 31 · cosine" */
 	const model = $derived.by(() => {
@@ -38,27 +37,12 @@
 		const metric = /-(cosine|l1|l2)-/.exec(larco.agent?.promoted ?? '');
 		return m ? `kNN, k ${m[1]}${metric ? ` · ${metric[1]}` : ''}` : 'kNN';
 	});
-	const served = $derived(st?.revealed ? macroF1(c.windows, 'served') : null);
-	const batch = $derived(st?.revealed && st?.batch ? macroF1(c.windows, 'batch') : null);
 	const perWindow = $derived(
 		c.latency.length ? [...c.latency].sort((a, b) => a - b)[Math.floor(c.latency.length / 2)] : null
 	);
 	const totals = $derived([
 		{ label: 'Windows', value: c.served.toLocaleString() },
-		st?.batch
-			? {
-					label: 'Served = batch',
-					value: c.compared
-						? `${c.sameState.toLocaleString()} / ${c.compared.toLocaleString()}`
-						: '—'
-				}
-			: { label: 'Invalid', value: String(c.invalid) },
-		{
-			label: batch ? 'Macro-F1 · batch' : 'Macro-F1',
-			value: served
-				? served.macro.toFixed(2) + (batch ? ` · ${batch.macro.toFixed(2)}` : '')
-				: 'at reveal'
-		},
+		{ label: 'Invalid', value: String(c.invalid) },
 		{ label: 'Per window', value: perWindow == null ? '—' : `${Math.round(perWindow)} ms` }
 	]);
 </script>
@@ -77,7 +61,7 @@
 				<Tooltip.Content class="max-w-xs">
 					The Stage 5 model, served: each window goes to a serving agent on the platform, which
 					embeds it with Omega and calls the state of its nearest library windows. The probabilities
-					are their shares. Batch is Stage 6's answer for the same window, run as a delivery.
+					are their shares.
 				</Tooltip.Content>
 			</Tooltip.Root>
 		{/snippet}
@@ -130,7 +114,7 @@
 				{/snippet}
 				<Probabilities />
 				<div class="pt-2"><StateTimeline /></div>
-				<div class="grid grid-cols-2 gap-x-6 gap-y-1 pt-2 pr-56 sm:grid-cols-4">
+				<div class="grid grid-cols-2 gap-x-6 gap-y-1 pt-2 pr-56 sm:grid-cols-3">
 					{#each totals as t (t.label)}
 						<div class="flex flex-col">
 							<span class="font-mono text-2xs text-muted-foreground uppercase">{t.label}</span>

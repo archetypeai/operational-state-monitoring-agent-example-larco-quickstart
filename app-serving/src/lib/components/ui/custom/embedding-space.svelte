@@ -3,14 +3,15 @@
 	 * Where the latest windows sit among the library the model compares them with.
 	 *
 	 * The field is the library's 800 windows (window 512, step 512, 200 a state),
-	 * recomputed by fit/library_embeddings.py and drawn as one density per state in
-	 * PCA 1-2 of their Omega embeddings, whitened. The trail is the last windows of
+	 * recomputed by fit/library_embeddings.py and drawn, a dot each and a density per
+	 * state, on the two directions of their Omega embeddings that best separate the
+	 * four states (unit length, PCA to 50, LDA to 2). The trail is the last windows of
 	 * this cycle through the same two axes, from the embeddings the served agent
 	 * returns, each dot in the state the agent called.
 	 *
 	 * A cross-section, not the model: the kNN compares all 6,912 dimensions
-	 * (cosine), and two are drawn, so a window can sit in one state's field here
-	 * and still be called another.
+	 * (cosine), and two directions are drawn, so a window can sit in one state's
+	 * field here and still be called another.
 	 */
 	// @ts-expect-error - d3-contour ships no types
 	import { contourDensity } from 'd3-contour';
@@ -79,6 +80,15 @@
 		trail.map((p, i) => `${i ? 'L' : 'M'}${sx(p.x).toFixed(1)} ${sy(p.y).toFixed(1)}`).join(' ')
 	);
 	const head = $derived(trail.at(-1));
+	const axes = $derived(view?.manifest.axes ?? ['PC 1', 'PC 2']);
+	/** The library's own windows, a dot each, under the trail. */
+	const dots = $derived.by(() => {
+		if (!view) return [];
+		const out = [];
+		for (let i = 0; i < view.state.length; i++)
+			out.push({ x: sx(view.ref[2 * i]), y: sy(view.ref[2 * i + 1]), s: STATES[view.state[i]] });
+		return out;
+	});
 </script>
 
 <div class={cn('flex min-h-0 flex-col gap-2', className)}>
@@ -95,7 +105,7 @@
 				class="h-full w-full"
 				fill="none"
 				role="img"
-				aria-label="The latest windows among the library, PCA 1-2"
+				aria-label="The latest windows among the library"
 			>
 				<line x1={sx(0)} y1={PAD} x2={sx(0)} y2={H - PAD} stroke="var(--color-border)" />
 				<line x1={PAD} y1={sy(0)} x2={W - PAD} y2={sy(0)} stroke="var(--color-border)" />
@@ -103,6 +113,9 @@
 					{#each f.bands as b, i (i)}
 						<path d={b.d} fill={STATE_META[f.state].color} fill-rule="evenodd" opacity={b.o} />
 					{/each}
+				{/each}
+				{#each dots as d, i (i)}
+					<circle cx={d.x} cy={d.y} r="1.25" fill={STATE_META[d.s].color} opacity="0.45" />
 				{/each}
 				{#if trail.length > 1}
 					<path
@@ -127,9 +140,9 @@
 					/>
 				{/if}
 				<text x={W - PAD} y={sy(0) - 6} text-anchor="end" class="fill-muted-foreground text-2xs"
-					>PC 1</text
+					>{axes[0]}</text
 				>
-				<text x={sx(0) + 6} y={PAD + 10} class="fill-muted-foreground text-2xs">PC 2</text>
+				<text x={sx(0) + 6} y={PAD + 10} class="fill-muted-foreground text-2xs">{axes[1]}</text>
 			</svg>
 		</div>
 		<div

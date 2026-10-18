@@ -38,7 +38,7 @@
    Domain tokens: one per washing-machine state, from the DS chart series, so the
    badge, the probabilities, the timeline, the drawing and the embedding space
    all name a state the same colour. Status tokens (atai-good/critical) stay for
-   status: the connection, served = batch, invalid windows.
+   status: the connection, the agent's phase, invalid windows.
    --------------------------------------------------------------------------- */
 :root {
 	--state-fill: var(--chart-4);

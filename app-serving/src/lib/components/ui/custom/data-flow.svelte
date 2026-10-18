@@ -86,11 +86,7 @@
 		20,
 		300,
 		'replayer (node)',
-		[
-			'data/roles/delivery/<cycle>.csv',
-			'a 512-row window every 2.56 s / speed',
-			'labels held back until a reveal'
-		],
+		['data/roles/delivery/<cycle>.csv', 'a 512-row window every 2.56 s / speed'],
 		replayer
 	)}
 	{@render box(

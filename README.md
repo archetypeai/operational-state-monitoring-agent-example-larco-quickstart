@@ -414,14 +414,13 @@ Stage 8 in a browser: [`app-serving/`](app-serving/README.md) replays one of the
 becken-flt cycles at 200 Hz, a 512-row window every 2.56 s, through a serving agent
 of the Stage 5 model, and shows the state it calls (the machine drawn filling,
 washing, spinning or draining), the four probabilities, a timeline of the cycle, the
-embedding space, and every answer against Stage 6's batch output for the same
-window. The held-back labels show only when you reveal them, or at the end of the
-cycle.
+embedding space and a log of state changes.
 
 - **`fit/library_embeddings.py`:** the model is a registry artifact, so the library
   it compares windows with can't be read back. This runs the 4 library files
   through the promoted blueprint in batch with `output_embeddings: true` and writes
-  PCA 1-2 of their 800 windows to `app-serving/static/library-view.{json,bin}`.
+  their 800 windows, on the 2 directions that best separate the four states, to
+  `app-serving/static/library-view.{json,bin}`.
   Ids go to `fit/out/library_state.json`. The repo ships the view (from this
   README's model), so run it again only after promoting another model.
 - **The app** holds one of Dev's 3 serving workers while it runs. It deletes its

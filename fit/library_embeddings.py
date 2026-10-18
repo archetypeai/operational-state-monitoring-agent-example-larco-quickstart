@@ -2,6 +2,7 @@
 """Stage 9 prep, once: the library's embeddings, for app-serving/'s embedding space.
 
     python fit/library_embeddings.py          # 4 batch runs, one per library file, then the view
+    python fit/library_embeddings.py --view   # the view again from the saved outputs, no platform calls
 
 The Stage 5 model is a kNN over the library's windows (window 512, step 512), but it
 is a registry artifact with no download route, so its reference windows can't be
@@ -10,11 +11,14 @@ read back. They can be recomputed: a bundle on the promoted blueprint with
 encoder, on the same windows, and returns each window's 9 x 768 Omega embedding
 (800 windows in all, 200 a state).
 
-The view is PCA 1-2 of those embeddings, whitened, in the layout app-serving/ reads:
-app-serving/static/library-view.{json,bin} holds the 800 points with their state,
-the mean and the two projection rows, so a served window's embedding lands in the
-same coordinates. It is a drawing, not the model: the kNN decides in all 6,912
-dimensions (cosine, k 5), and two of them are drawn.
+The view is the two directions that best separate the four states: each embedding
+scaled to unit length (the model compares by cosine), PCA to 50 dimensions, then
+linear discriminant analysis to 2, each axis scaled to unit spread. PCA 1-2 alone
+mixed fill and wash. It is written in the layout app-serving/ reads:
+app-serving/static/library-view.{json,bin} holds the points with their state, the
+mean and the two projection rows, so a served window's embedding lands in the same
+coordinates. It is a drawing, not the model: the kNN decides in all 6,912
+dimensions, and two directions are drawn.
 
 Outputs: fit/out/library_embeddings/ (the 4 batch outputs, ~50 MB, not committed),
 fit/out/library_embeddings.json (summary), the view files. Ids go to
@@ -114,7 +118,36 @@ def read_embeddings(path, channels):
     return np.stack(vecs)
 
 
+def project(X, codes, k=50, shrink=1e-3):
+    """The 2 discriminant axes of the unit-length embeddings, through PCA to k
+    dimensions: mean [dim], rows [2, dim] (each axis at unit spread), ref [n, 2]."""
+    codes = np.asarray(codes)
+    Xn = X / np.linalg.norm(X, axis=1, keepdims=True)
+    mean = Xn.mean(axis=0)
+    Xc = Xn - mean
+    # PCA through the n x n Gram matrix: n (the windows) is smaller than dim (6,912)
+    eigval, eigvec = np.linalg.eigh(Xc @ Xc.T)
+    top = np.argsort(eigval)[::-1][:k]
+    P = (Xc.T @ eigvec[:, top]) / np.sqrt(eigval[top])           # unit principal axes, [dim, k]
+    Z = Xc @ P
+    m = np.array([Z[codes == i].mean(axis=0) for i in range(len(STATES))])
+    Sw = sum((Z[codes == i] - m[i]).T @ (Z[codes == i] - m[i]) for i in range(len(STATES)))
+    Sw += shrink * np.trace(Sw) / k * np.eye(k)
+    Sb = sum((codes == i).sum() * np.outer(m[i] - Z.mean(0), m[i] - Z.mean(0)) for i in range(len(STATES)))
+    w, V = np.linalg.eig(np.linalg.solve(Sw, Sb))
+    A = P @ V[:, np.argsort(-w.real)[:2]].real                    # [dim, 2]
+    ref = Xc @ A
+    A /= ref.std(axis=0)
+    ref = Xc @ A
+    centroids = np.array([ref[codes == i].mean(axis=0) for i in range(len(STATES))])
+    nearest = ((ref[:, None] - centroids[None]) ** 2).sum(-1).argmin(1)
+    return mean, A.T, ref, float((nearest == codes).mean())
+
+
 def main():
+    view_only = "--view" in sys.argv[1:]
+    if view_only:
+        return write_view(json.load(open(os.path.join(OUT, "library_embeddings.json"))), time.time())
     load_dotenv()
     test = json.load(open(os.path.join(OUT, "test_state.json"))) if os.path.exists(os.path.join(OUT, "test_state.json")) else {}
     if not test.get("blueprint"):
@@ -141,7 +174,14 @@ def main():
             log(f"bundle {b['id']} on {key} (window {window}, step {step}, embeddings on)")
     t0 = time.time()
     run_all(files, state, save, ensure_bundle)
+    return write_view({"blueprint": key, "window_size": window, "step_size": step}, t0)
 
+
+def write_view(meta, t0):
+    """The view from the saved outputs in fit/out/library_embeddings/."""
+    key, window, step = meta["blueprint"], meta["window_size"], meta["step_size"]
+    files = json.load(open(os.path.join(ROLES, "manifest.json")))["library"]["files"]
+    channels = json.load(open(os.path.join(ROLES, "zscore_stats.json")))["channels"]
     vecs, codes = [], []
     for f in files:
         v = read_embeddings(os.path.join(DIR, f"{f['state']}.csv"), channels)
@@ -151,16 +191,7 @@ def main():
     n, dim = X.shape
     log(f"{n:,} windows x {dim:,} values")
 
-    mean = X.mean(axis=0)
-    Xc = X - mean
-    # PCA through the n x n Gram matrix: n (800) is smaller than dim (6,912)
-    eigval, eigvec = np.linalg.eigh(Xc @ Xc.T)
-    top = np.argsort(eigval)[::-1][:2]
-    var = eigval[top] / (n - 1)
-    axes = (Xc.T @ eigvec[:, top]) / np.sqrt(eigval[top])       # unit principal axes, [dim, 2]
-    rows = (axes / np.sqrt(var)).T.astype(np.float32)           # whitened projection rows
-    ref = (Xc @ rows.T).astype(np.float32)
-    explained = var / Xc.var(axis=0, ddof=1).sum()
+    mean, rows, ref, separated = project(X, codes)
 
     os.makedirs(VIEW, exist_ok=True)
     pieces = {"ref": ref, "state": np.array(codes, dtype=np.float32), "mean": mean.astype(np.float32),
@@ -175,18 +206,20 @@ def main():
     per_state = {s: codes.count(i) for i, s in enumerate(STATES)}
     with open(os.path.join(VIEW, "library-view.json"), "w") as fh:
         json.dump({
-            "note": ("PCA 1-2 of the Stage 5 model's library, recomputed: the 4 library files through the promoted "
-                     "blueprint in batch with output_embeddings on (fit/library_embeddings.py). For drawing only."),
+            "note": ("The Stage 5 model's library, recomputed (the 4 library files through the promoted blueprint "
+                     "in batch with output_embeddings on, fit/library_embeddings.py), on the 2 directions that best "
+                     "separate the states: unit-length embeddings, PCA to 50, LDA to 2. For drawing only."),
             "blueprint": key, "channels": channels, "states": STATES, "embeddingDim": dim // len(channels),
             "totalDim": dim, "nReference": n, "perState": per_state, "windowSize": window, "stepSize": step,
-            "whiten": True, "explainedVariance": [round(float(e), 4) for e in explained],
+            "normalize": True, "projection": "lda", "axes": ["LD 1", "LD 2"],
+            "separated": round(separated, 3),
             "layout": layout, "dtype": "float32-le"}, fh, indent=1)
     summary = {"blueprint": key, "window_size": window, "step_size": step, "windows": n, "per_state": per_state,
-               "dim": dim, "explained_variance_pc1_pc2": [round(float(e), 4) for e in explained],
+               "dim": dim, "projection": "lda", "separated_2d": round(separated, 3),
                "view_bytes": offset, "seconds": round(time.time() - t0)}
     json.dump(summary, open(os.path.join(OUT, "library_embeddings.json"), "w"), indent=1)
     print(f"\nlibrary: {n:,} windows ({', '.join(f'{s} {c}' for s, c in per_state.items())}), window {window}, step {step}")
-    print(f"  PCA 1-2 explain {explained[0]:.1%} and {explained[1]:.1%} of the variance")
+    print(f"  2 discriminant axes: {separated:.0%} of the windows nearest their own state's centre")
     print(f"  -> app-serving/static/library-view.bin ({offset / 1e3:.0f} KB), library-view.json")
     print("  python fit/cleanup.py --yes deletes the 4 runs and their bundle")
     return 0

@@ -6,15 +6,10 @@
  *   data/roles/delivery/<file>.csv ──► larco/sensors   whole windows, z-scored, for the bridge
  *                                  └─► larco/raw       per window: level and a trace in g, for the page
  *   larco/status (retained)  where the replay is, the cycle list, speed, windows per query
- *   larco/control            the page's clicks: play, pause, restart, select, speed, wpq, reveal
- *   larco/truth              the held-back labels, only once the viewer reveals them
+ *   larco/control            the page's clicks: play, pause, restart, select, speed, wpq
  *
- * - THE AGENT IS NEVER TOLD THE ANSWER. The labels (data/roles/delivery_labels/)
- *   are read alongside, but they go out only after a reveal or at the end of the
- *   cycle, on their own topic: a state the page shows before then is the agent's.
- * - STAGE 6'S ANSWER RIDES ALONG. When fit/out/delivery/<file>.csv exists (Stage
- *   6's batch output for this file), each window carries batch's state and
- *   probabilities, so the page can count served = batch the way fit/serve.py does.
+ * The page shows the agent's calls only: no labels, and no batch output to
+ * compare with (fit/serve.py, Stage 8, is where served is checked against batch).
  * - PACED BY THE DATA, HELD BY THE AGENT. A window is sent every 2.56 s / speed,
  *   but never more than a few ahead of the agent's answers, and not at all while
  *   the bridge has no running agent. "Max" sends as fast as the agent answers.
@@ -42,7 +37,6 @@ if (!manifest || !zscore) {
 }
 const CHANNELS = zscore.channels;
 const PREFIX = 'becken-flt_BWM5381IX_';
-const STATES = ['fill', 'wash', 'spin', 'drain'];
 const SPEEDS = [1, 2, 4, 8, 'max'];
 const TRACE_POINTS = 64;
 
@@ -58,8 +52,7 @@ const CYCLES = manifest.delivery.files
 				.replace(PREFIX, '')
 				.replace(/\.csv$/, '')
 				.replace(/__seg(\d+)$/, ' · seg $1'),
-			rows: f.rows,
-			seconds: f.seconds
+			rows: f.rows
 		};
 	})
 	.sort((a, b) => a.name.localeCompare(b.name))
@@ -78,14 +71,12 @@ const st = {
 	cycle: (want ?? CYCLES[0]).id,
 	playing: true,
 	ended: false,
-	revealed: false,
 	index: 0,
 	total: 0,
 	speed: pickSpeed(process.env.SPEED ?? 1),
 	wpq: Math.min(8, Math.max(1, Number(process.env.WINDOWS_PER_QUERY ?? 1) || 1)),
 	throttled: false,
-	waiting: 'the agent',
-	batch: false
+	waiting: 'the agent'
 };
 /** The bridge's last larco/agent message: its window size and whether it is running. */
 let agent = null;
@@ -96,8 +87,6 @@ let lastAnswer = Date.now();
 /** Windows the bridge can lose (a restarted bridge, a dropped query): after this
  *  long with no answer, the replayer stops waiting for them. */
 const STALL_MS = 30_000;
-/** Labels of the windows sent so far this epoch, for the reveal. */
-let labels = [];
 
 const client = mqtt.connect(BROKER_URL, { clientId: `larco-replayer-${Date.now()}` });
 
@@ -112,33 +101,12 @@ function publishStatus() {
 			windowSeconds: windowSeconds(),
 			cycleName: c.name,
 			cycleFile: c.base,
-			cycles: CYCLES.map(({ id, name, rows }) => ({ id, name, rows })),
-			// what share of the cycle each state is: ground truth, so only after a reveal
-			truth: st.revealed ? c.seconds : null
+			cycles: CYCLES.map(({ id, name, rows }) => ({ id, name, rows }))
 		}),
 		{ retain: true, qos: 1 }
 	);
 }
 const windowSeconds = () => (agent?.window ?? 512) / 200;
-
-/** Stage 6's batch answer for this file, by finish time in ms. */
-function loadBatch(c) {
-	const file = path.join(REPO, 'fit', 'out', 'delivery', c.base);
-	if (!fs.existsSync(file)) return null;
-	const [head, ...rows] = fs.readFileSync(file, 'utf8').trim().split(/\r?\n/);
-	const cols = head.split(',');
-	const at = (n) => cols.indexOf(n);
-	const out = new Map();
-	for (const r of rows) {
-		const v = r.split(',');
-		if (v[at('invalid')]?.toLowerCase() === 'true') continue;
-		out.set(Math.round(Number(v[at('finish_timestamp')]) * 1000), {
-			state: v[at('predicted_state')],
-			p: Object.fromEntries(STATES.map((s) => [s, Number(v[at(`p_${s}`)])]))
-		});
-	}
-	return out;
-}
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const lines = (file) => {
@@ -157,27 +125,21 @@ const lines = (file) => {
 async function play(epoch) {
 	const c = CYCLES[st.cycle];
 	const W = agent.window;
-	const batch = loadBatch(c);
-	st.batch = Boolean(batch);
 	st.total = Math.floor(c.rows / W);
 	const data = lines(path.join(ROLES, c.file));
-	const lab = lines(path.join(ROLES, 'delivery_labels', c.base));
-	await data.it.next();
-	await lab.it.next(); // the headers
+	await data.it.next(); // the header
 	const cols = CHANNELS.length;
 	let due = Date.now();
 	try {
 		for (let index = 0; index < st.total; index++) {
 			const ts = new Array(W);
 			const x = CHANNELS.map(() => new Array(W));
-			let label = null;
 			for (let r = 0; r < W; r++) {
-				const [d, l] = await Promise.all([data.it.next(), lab.it.next()]);
+				const d = await data.it.next();
 				if (d.done) return;
 				const v = d.value.split(',');
 				ts[r] = Math.round(Number(v[0]) * 1000);
 				for (let k = 0; k < cols; k++) x[k][r] = Number(v[k + 1]);
-				if (r === W - 1 && !l.done) label = l.value.split(',')[1]; // last_record, as Stages 5–7 score
 			}
 			// Hold: paused, no running agent, or too far ahead of its answers.
 			for (;;) {
@@ -217,7 +179,6 @@ async function play(epoch) {
 				{ qos: 1 }
 			);
 			sent++;
-			labels.push(label);
 			// The page's copy, in g: the window's vibration level per channel (RMS
 			// about its own mean) and a decimated trace.
 			const rms = [];
@@ -235,39 +196,18 @@ async function play(epoch) {
 				for (let i = 0; i < W; i += W / TRACE_POINTS) t.push(+(x[k][i] * sd + mu).toFixed(4));
 				trace.push(t);
 			}
-			const b = batch?.get(finish_ms) ?? null;
 			client.publish(
 				'larco/raw',
-				JSON.stringify({
-					epoch,
-					cycle: c.id,
-					index,
-					start_ms,
-					finish_ms,
-					rms,
-					trace,
-					batch: b,
-					label: st.revealed ? label : undefined
-				})
+				JSON.stringify({ epoch, cycle: c.id, index, start_ms, finish_ms, rms, trace })
 			);
 			st.index = index + 1;
 		}
 		st.ended = true;
 		st.playing = false;
-		reveal();
 	} finally {
 		data.close();
-		lab.close();
 		publishStatus();
 	}
-}
-
-function reveal() {
-	if (!st.revealed) {
-		st.revealed = true;
-		client.publish('larco/truth', JSON.stringify({ epoch: st.epoch, cycle: st.cycle, labels }));
-	}
-	publishStatus();
 }
 
 /** Start the selected cycle from its first window, as a new epoch. */
@@ -275,10 +215,8 @@ function restart() {
 	st.epoch++;
 	st.index = 0;
 	st.ended = false;
-	st.revealed = false;
 	st.throttled = false;
 	sent = answered = 0;
-	labels = [];
 	publishStatus();
 	run();
 }
@@ -337,7 +275,6 @@ client.on('message', (topic, payload) => {
 		return restart();
 	} else if (action === 'speed') st.speed = pickSpeed(value);
 	else if (action === 'wpq') st.wpq = Math.min(8, Math.max(1, Number(value) || 1));
-	else if (action === 'reveal') return reveal();
 	publishStatus();
 });
 client.on('error', (e) => console.error('replayer mqtt error:', e.message));

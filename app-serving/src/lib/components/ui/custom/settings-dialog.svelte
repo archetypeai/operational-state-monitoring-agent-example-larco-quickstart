@@ -1,7 +1,7 @@
 <script>
 	/**
 	 * What you do to the demo rather than watch: the replay's pace, how many windows
-	 * a query carries, what is moving over MQTT, the serving agent, and the reveal.
+	 * a query carries, what is moving over MQTT, and the serving agent.
 	 * Which cycle is replayed is chosen in the Input panel.
 	 */
 	import * as Dialog from '@archetypeai/ds-ui-svelte-console/primitives/dialog';
@@ -9,10 +9,8 @@
 	import { Button } from '@archetypeai/ds-ui-svelte-console/primitives/button';
 	import { Badge } from '@archetypeai/ds-ui-svelte-console/primitives/badge';
 	import { Label } from '@archetypeai/ds-ui-svelte-console/primitives/label';
-	import EyeIcon from '@lucide/svelte/icons/eye';
 	import RotateCcwIcon from '@lucide/svelte/icons/rotate-ccw';
 	import { larco, TOPICS } from '$lib/api/larco.svelte.js';
-	import { STATES, STATE_META } from '$lib/states.js';
 	import DataFlow from './data-flow.svelte';
 
 	/** @type {{open?: boolean}} */
@@ -20,7 +18,6 @@
 	const st = $derived(larco.status);
 	const a = $derived(larco.agent);
 	const c = $derived(larco.cycle);
-	const truthTotal = $derived(st?.truth ? STATES.reduce((s, k) => s + (st.truth[k] ?? 0), 0) : 0);
 	const PROSE = 'max-w-prose text-xs text-muted-foreground';
 </script>
 
@@ -111,55 +108,11 @@
 						<dt class="text-muted-foreground">invalid</dt>
 						<dd class={c.invalid ? 'text-atai-warning' : ''}>{c.invalid}</dd>
 					</div>
-					{#if st?.batch}
-						<div class="flex gap-1.5">
-							<dt class="text-muted-foreground">same state as batch</dt>
-							<dd>{c.sameState.toLocaleString()} / {c.compared.toLocaleString()}</dd>
-						</div>
-						<div class="flex gap-1.5">
-							<dt class="text-muted-foreground">probabilities within 1e-4</dt>
-							<dd>{c.sameP.toLocaleString()} / {c.compared.toLocaleString()}</dd>
-						</div>
-					{/if}
 				</dl>
 				<p class={PROSE}>
-					{st?.batch
-						? "Batch is Stage 6's output for this file (fit/out/delivery/). A window near a tie can differ by one neighbour's vote (Stage 8: a few in 3,178)."
-						: 'This file has no Stage 6 output in fit/out/delivery/, so there is nothing to compare with.'}
+					An invalid window is one the agent rejected, or a query the platform didn't answer (the
+					serving bridge's log says which).
 				</p>
-			</section>
-
-			<section class="space-y-2">
-				<Label variant="sectionHeader">Ground truth</Label>
-				{#if st?.revealed && st?.truth}
-					<div class="flex flex-wrap gap-x-6 gap-y-1 text-sm">
-						{#each STATES as s (s)}
-							<span
-								><span style="color: {STATE_META[s].color}">{STATE_META[s].label}</span>
-								<span class="font-mono"
-									>{truthTotal ? Math.round((100 * (st.truth[s] ?? 0)) / truthTotal) : 0}%</span
-								></span
-							>
-						{/each}
-					</div>
-					<p class={PROSE}>
-						The held-back labels (data/roles/delivery_labels/) now show as the timeline's Truth row,
-						in the log, and in the macro-F1.
-					</p>
-				{:else}
-					<p class={PROSE}>
-						Withheld until you ask, or until the cycle ends: the agent never sees them, and the page
-						shows only what it calls.
-					</p>
-					<Button
-						variant="outline"
-						size="sm"
-						disabled={!larco.connected}
-						onclick={() => larco.reveal()}
-					>
-						<EyeIcon aria-hidden="true" />Reveal the labels
-					</Button>
-				{/if}
 			</section>
 
 			<section class="space-y-2">
