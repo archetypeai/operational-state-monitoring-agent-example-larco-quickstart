@@ -56,12 +56,27 @@ def to_ms(value):
 
 
 def time_range(path):
-    """First and last timestamp of a role file, in epoch ms, without reading it all."""
+    """First and last timestamp of a role file, in epoch ms, without reading it all.
+
+    The tail window grows until it holds a complete final record, and is
+    clamped to the file: a fixed seek from the end raises OSError on a file
+    shorter than the window, and a window narrower than one row reads a
+    fragment of a field — which still parses as a number and is silently
+    wrong.
+    """
+    size = os.path.getsize(path)
     with open(path, "rb") as f:
         f.readline()
         first = f.readline().split(b",", 1)[0]
-        f.seek(-4096, os.SEEK_END)
-        last = f.read().strip().split(b"\n")[-1].split(b",", 1)[0]
+        window = 4096
+        while True:
+            f.seek(max(0, size - window))
+            lines = f.read().strip().split(b"\n")
+            # A leading partial line guarantees the last one is whole.
+            if len(lines) > 1 or window >= size:
+                last = lines[-1].split(b",", 1)[0]
+                break
+            window *= 4
     return to_ms(first.decode()), to_ms(last.decode())
 
 
