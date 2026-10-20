@@ -1,10 +1,12 @@
 """Archetype AI platform helpers, stdlib only (adapted from the Volve example's run_osm_example.py).
 
-Reads ATAI_API_KEY and ATAI_API_ENDPOINT from .env. Platform routes are
-<endpoint>/agents/...; file uploads go to <endpoint>/v0.5/files.
+Reads ATAI_API_KEY and ATAI_API_ENDPOINT from .env. Every platform surface
+lives under one versionless /api prefix: <endpoint>/api/agents/... for the
+Agents API, <endpoint>/api/files for uploads.
 """
 import json
 import os
+import re
 import sys
 import time
 import urllib.error
@@ -27,10 +29,17 @@ def load_dotenv(path=os.path.join(ROOT, ".env")):
 
 
 def api_base():
+    """The deployment root with /api appended — every surface lives under it.
+
+    Accepts a bare root, a /vX.Y suffix or /api itself, so one .env works
+    whichever form you have.
+    """
     endpoint = os.environ.get("ATAI_API_ENDPOINT", "").rstrip("/")
     if not endpoint:
         sys.exit("ATAI_API_ENDPOINT is not set (see .env.example)")
-    return endpoint
+    endpoint = re.sub(r"/api$", "", endpoint)
+    endpoint = re.sub(r"/v[0-9]+(\.[0-9]+)*$", "", endpoint)
+    return f"{endpoint}/api"
 
 
 def agents():
@@ -65,7 +74,7 @@ def request(method, url, body=None):
 
 
 def upload_file(path, rename=None):
-    """POST a file to /v0.5/files as multipart/form-data; returns the platform's JSON (with file_id)."""
+    """POST a file to /api/files as multipart/form-data; returns the platform's JSON (with file_id)."""
     boundary = uuid.uuid4().hex
     with open(path, "rb") as f:
         content = f.read()
@@ -74,7 +83,7 @@ def upload_file(path, rename=None):
         f'Content-Disposition: form-data; name="file"; filename="{rename or os.path.basename(path)}"\r\n'.encode(),
         b"Content-Type: text/csv\r\n\r\n", content, f"\r\n--{boundary}--\r\n".encode(),
     ])
-    req = urllib.request.Request(f"{api_base()}/v0.5/files", data=body, method="POST")
+    req = urllib.request.Request(f"{api_base()}/files", data=body, method="POST")
     req.add_header("Authorization", f"Bearer {os.environ['ATAI_API_KEY']}")
     req.add_header("Content-Type", f"multipart/form-data; boundary={boundary}")
     # Retried through brief network or gateway outages (a DNS blip failed a whole search once).
