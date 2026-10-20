@@ -66,7 +66,7 @@ def time_range(path):
 
 
 def fetch(filename):
-    req = urllib.request.Request(f"{api_base()}/v0.5/files/download/{filename}")
+    req = urllib.request.Request(f"{api_base()}/files/download/{filename}")
     req.add_header("Authorization", f"Bearer {os.environ['ATAI_API_KEY']}")
     with urllib.request.urlopen(req, timeout=600) as resp:
         return resp.read().decode("utf-8", errors="replace")
