@@ -39,9 +39,12 @@ from background import add_background_flag, maybe_detach  # noqa: E402
 
 DELIVERY = os.path.join(OUT, "delivery")
 STATE = os.path.join(DELIVERY, "runs.json")
-# The platform can report a run completed while its last output file is still being
-# written (a known issue), so a run counts as completed here only once every file's
-# predictions reach that file's end.
+# The platform reports a run `completed` while an artifact is still being written.
+# Each artifact carries its own status at
+# data.file_attributes.job_output.status (`partial` -> `complete`), which is what
+# the console renders; that is the primary gate. The timestamp check below stays
+# as a second opinion: it also catches an output that is complete but does not
+# cover its input, which a status cannot.
 END_SLACK_MS = 60_000          # a file's last prediction lands within a window of its end
 OUTPUT_WAIT_S = 600            # how long to wait for outputs after the platform says completed
 
@@ -101,11 +104,33 @@ def start(files, per_run, jobs):
     return state
 
 
+def artifact_status(item):
+    """An output's own completion status, or None if the platform does not report one.
+
+    A run reports `completed` while an artifact is still being written -- the
+    console shows the run COMPLETED beside an artifact PARTIAL, and measured:
+    an artifact read 16,018 of an eventual 50,547 bytes at the moment its run
+    reported completed. Reading a partial artifact yields a well-formed CSV
+    that is simply short, so this is the one signal that catches it without
+    needing the input to compare against.
+    """
+    return (item.get("data", {}).get("file_attributes", {})
+                .get("job_output", {}).get("status"))
+
+
 def download(runs, ranges):
-    """The runs' output rows, matched to delivery files by timestamp: ({file: [rows]}, header, unmatched)."""
+    """The runs' output rows, matched to delivery files by timestamp: ({file: [rows]}, header, unmatched).
+
+    Artifacts the platform has not finished writing are skipped, not parsed:
+    their rows would be a prefix, and a prefix is indistinguishable from a
+    complete file once parsed.
+    """
     per_file, header, unmatched = {}, None, 0
     for r in runs:
         for item in request("GET", f"{agents()}/instances/{r['agent']}/results").get("data") or []:
+            status = artifact_status(item)
+            if status is not None and status != "complete":
+                continue
             body = list(csv.reader(io.StringIO(fetch(item["data"]["filename"]))))
             if not body:
                 continue
@@ -164,7 +189,7 @@ def collect(state):
                     f"outputs still end early ({', '.join(os.path.basename(x) for x in short)}); "
                     f"--resume downloads them again")
             else:
-                log(f"  {aid} platform: completed; outputs {n - len(short)} of {n} complete "
+                log(f"  {aid} run reports completed; outputs {n - len(short)} of {n} ready "
                     f"({', '.join(os.path.basename(x) for x in short)} still being written)")
         json.dump(state, open(STATE, "w"), indent=1)
         if pending:
