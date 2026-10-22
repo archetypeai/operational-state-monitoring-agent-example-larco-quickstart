@@ -444,9 +444,10 @@ already in `fit/out/delivery/`), Stage 8's serving agent and bundle if
 the app's serving agents and bundle if its bridge was killed the same way, and the
 library-embedding runs and their bundle. A running
 serving agent holds one of Dev's 3 serving workers until it is deleted, or released
-after 20 minutes idle. Agents go first, since a bundle that still has one answers 409.
-**What stays:** the promoted blueprint and its served copy (deleting a blueprint takes
-an org admin's key), and the optimization and eval. After a cleanup,
+after 20 minutes idle. Agents go first, since a bundle that still has one answers 409,
+then bundles, then the served copy of the Stage 5 blueprint (`fit/serve.py` remakes
+it). One object that won't delete doesn't stop the rest: they're listed at the end.
+**What stays:** the promoted blueprint, and the optimization and eval. After a cleanup,
 `fit/deliver.py --resume` can't collect again.
 
 To see whether a serving agent is still running (yours or anyone's):

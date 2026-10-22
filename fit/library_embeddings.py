@@ -33,7 +33,7 @@ import time
 import numpy as np
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from atai import TERMINAL, agents, api_base, load_dotenv, request  # noqa: E402
+from atai import TERMINAL, agents, api_base, load_dotenv, request, same_deployment  # noqa: E402
 from deliver import END_SLACK_MS, OUTPUT_WAIT_S, fetch, time_range, to_ms  # noqa: E402
 from optimize import OUT, ROLES, log, upload_all  # noqa: E402
 
@@ -152,8 +152,8 @@ def main():
     test = json.load(open(os.path.join(OUT, "test_state.json"))) if os.path.exists(os.path.join(OUT, "test_state.json")) else {}
     if not test.get("blueprint"):
         sys.exit("no fit/out/test_state.json: run fit/test.py (Stage 5) first")
-    if test.get("endpoint", api_base()) != api_base():
-        sys.exit(f"fit/out/test_state.json is from {test['endpoint']}, not {api_base()}")
+    if test.get("endpoint") and not same_deployment(test):
+        sys.exit(f"fit/out/test_state.json is from {test['endpoint']}, a different deployment from {api_base()}")
     key = test["blueprint"]["key"]
     values = request("GET", f"{agents()}/blueprints/{key}")["document"]["values"]
     window, step = values["window_size"], values["step_size"]
@@ -161,8 +161,9 @@ def main():
     channels = json.load(open(os.path.join(ROLES, "zscore_stats.json")))["channels"]
 
     state = json.load(open(STATE)) if os.path.exists(STATE) else {}
-    if state and state.get("endpoint") != api_base():
-        sys.exit(f"{STATE} is from {state.get('endpoint')}: move it aside, or set .env to that deployment")
+    if state and not same_deployment(state):
+        sys.exit(f"{STATE} is from {state.get('endpoint', 'an earlier run')}, a different deployment from {api_base()}: "
+                 f"move it aside, or set .env to that deployment")
     save = lambda: json.dump(state, open(STATE, "w"), indent=1)  # noqa: E731
 
     def ensure_bundle():
