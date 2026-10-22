@@ -1,11 +1,14 @@
 #!/usr/bin/env python3
-"""Clean up: delete the agents and bundles Stages 6 and 8 left on the platform.
+"""Clean up: delete the agents and bundles Stages 6, 8 and 9 left on the platform.
 
     python fit/cleanup.py            # list what would be deleted, and what stays
     python fit/cleanup.py --yes      # delete it
 
 From the ids in fit/out/ (--out for another folder):
 
+  Stage 9   app_serving_state.json: app-serving/'s serving agents and bundle, if its
+            bridge was killed before it could delete them; library_state.json: the
+            4 batch runs of fit/library_embeddings.py and their bundle.
   Stage 8   serve_state.json: a serving agent and its bundle, if fit/serve.py was
             killed before it could delete them. A running serving agent holds one
             of Dev's 3 serving workers until it is cancelled, or idle 20 minutes.
@@ -56,9 +59,15 @@ def bundle_runs(bundle):
         cursor = f"&after={page['next_cursor']}"
 
 
-def targets(serve, deliveries, runs_of=bundle_runs):
+def targets(serve, deliveries, runs_of=bundle_runs, app=None, library=None):
     """(stage, kind, id) to delete, each agent before its bundle."""
     out = []
+    if (app or {}).get("bundle"):
+        out += [("Stage 9", "instances", a) for a in sorted(set(app.get("agents") or []) | runs_of(app["bundle"]))]
+        out += [("Stage 9", "bundles", app["bundle"])]
+    if (library or {}).get("bundle"):
+        out += [("Stage 9", "instances", a) for a in sorted(set((library.get("runs") or {}).values()) | runs_of(library["bundle"]))]
+        out += [("Stage 9", "bundles", library["bundle"])]
     if serve.get("bundle"):
         out += [("Stage 8", "instances", serve["agent"])] if serve.get("agent") else []
         out += [("Stage 8", "bundles", serve["bundle"])]
@@ -78,14 +87,16 @@ def main():
     serve_path = os.path.join(args.out, "serve_state.json")
     serve = load(serve_path)
     deliveries = [load(os.path.join(args.out, d, "runs.json")) for d in ("delivery", "delivery_check")]
-    for st in [serve] + deliveries:
+    app_path, library_path = (os.path.join(args.out, f) for f in ("app_serving_state.json", "library_state.json"))
+    app, library = load(app_path), load(library_path)
+    for st in [serve, app, library] + deliveries:
         if st.get("endpoint", api_base()) != api_base():
             sys.exit(f"ids in {args.out} are from {st['endpoint']}, not {api_base()}: set .env to that deployment")
-    todo_all = targets(serve, deliveries)
+    todo_all = targets(serve, deliveries, app=app, library=library)
     done_path = os.path.join(args.out, "cleanup_state.json")
     gone = set(load(done_path).get("deleted", []))
     todo = [t for t in todo_all if t[2] not in gone]
-    for stage in ("Stage 8", "Stage 6"):
+    for stage in ("Stage 9", "Stage 8", "Stage 6"):
         mine = [t for t in todo if t[0] == stage]
         print(f"{stage}: {sum(t[1] == 'instances' for t in mine)} agent(s), "
               f"{sum(t[1] == 'bundles' for t in mine)} bundle(s) to delete")
@@ -109,8 +120,9 @@ def main():
         if k % 25 == 0 or k == len(todo):
             json.dump({"deleted": sorted(gone)}, open(done_path, "w"), indent=1)
             log(f"deleted {k}/{len(todo)}")
-    if serve.get("bundle"):
-        os.remove(serve_path)
+    for path, st in ((serve_path, serve), (app_path, app), (library_path, library)):
+        if st.get("bundle"):
+            os.remove(path)
     log("done")
     return 0
 

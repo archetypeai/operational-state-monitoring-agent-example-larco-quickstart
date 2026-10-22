@@ -1,0 +1,65 @@
+@import '@fontsource-variable/geist';
+@import '@fontsource-variable/geist-mono';
+/* theme.css does `@import 'tailwindcss'` itself, so the CLAUDE.md order's own
+   `@import 'tailwindcss'` is left out: two Tailwind entries drop the DS base
+   typography in dev (found in the TEP serving app). One entry, through theme.css. */
+@import '@archetypeai/ds-lib-tokens/theme.css';
+@import 'tw-animate-css';
+@source '../../node_modules/@archetypeai/ds-ui-svelte-console/dist';
+@source '../../node_modules/@archetypeai/ds-ui-svelte-labs/dist';
+
+@theme {
+	/* The DS brand faces (PP Neue Montreal) are licensed and can't ship in a public
+	   example, so ds-lib-tokens/fonts.css isn't imported. Geist (OFL-1.1) stands in
+	   at the token layer, so every DS component still resolves font-sans /
+	   font-mono. To use the brand faces: put them in static/fonts/ (gitignored),
+	   import '@archetypeai/ds-lib-tokens/fonts.css' and delete these two lines. */
+	--font-sans: 'Geist Variable', ui-sans-serif, system-ui, -apple-system, sans-serif;
+	--font-mono: 'Geist Mono Variable', ui-monospace, monospace;
+}
+
+@layer base {
+	/* A fixed-viewport workbench: panels scroll, the document doesn't. */
+	html,
+	body {
+		height: 100%;
+		overflow: hidden;
+		overscroll-behavior: none;
+	}
+
+	:root {
+		/* Geist's x-height is ~4% larger than the brand face's; this keeps the DS
+		   sizes at their specified look. A no-op with the brand faces. */
+		font-size-adjust: ex-height 0.51;
+	}
+}
+
+/* ---------------------------------------------------------------------------
+   Domain tokens: one per washing-machine state, from the DS chart series, so the
+   badge, the probabilities, the timeline, the drawing and the embedding space
+   all name a state the same colour. Status tokens (atai-good/critical) stay for
+   status: the connection, served = batch, invalid windows.
+   --------------------------------------------------------------------------- */
+:root {
+	--state-fill: var(--chart-4);
+	--state-wash: var(--chart-2);
+	--state-spin: var(--chart-3);
+	--state-drain: var(--chart-5);
+	/* the drawing's line work, off the neutral ramp so it reads as a drawing */
+	--plate-ink: var(--color-zinc-700);
+	--plate-detail: var(--color-zinc-400);
+}
+
+:root.dark {
+	--plate-ink: var(--color-zinc-300);
+	--plate-detail: var(--color-zinc-500);
+}
+
+@theme {
+	--color-state-fill: var(--state-fill);
+	--color-state-wash: var(--state-wash);
+	--color-state-spin: var(--state-spin);
+	--color-state-drain: var(--state-drain);
+	--color-plate-ink: var(--plate-ink);
+	--color-plate-detail: var(--plate-detail);
+}

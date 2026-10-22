@@ -26,6 +26,7 @@
 | 6 | **deliver:** a bundle from that blueprint, run over the faulty unit's cycles | 3 min |
 | 7 | **score** the delivery against the held-back labels | seconds |
 | 8 | **serve** it a window per query over `/query` (agent serving, Dev only), checked against Stage 6 | 25–35 min |
+| 9 | **watch** it in a browser (`app-serving/`): a cycle replayed live through a serving agent, Dev only | as long as you like |
 
   About **15 minutes** end to end, 10 of them on the platform; serving (Stage 8,
   optional) adds 25–35. Platform times vary
@@ -402,6 +403,34 @@ served 3,178 windows of 5 file(s) in 3,178 queries, 1975 s
 **Writes:** `fit/out/serving/serve_5files_wpq1.csv` (a row per window) and `.json`
 (the summary).
 
+### Stage 9: watch it in a browser (Dev only)
+
+```sh
+python fit/library_embeddings.py     # once: the library's embeddings, for the app's embedding space
+cd app-serving && npm install && npm run dev     # http://localhost:5182
+```
+
+Stage 8 in a browser: [`app-serving/`](app-serving/README.md) replays one of the 5
+becken-flt cycles at 200 Hz, a 512-row window every 2.56 s, through a serving agent
+of the Stage 5 model, and shows the state it calls (the machine drawn filling,
+washing, spinning or draining), the four probabilities, a timeline of the cycle, the
+embedding space, and every answer against Stage 6's batch output for the same
+window. The held-back labels show only when you reveal them, or at the end of the
+cycle.
+
+- **`fit/library_embeddings.py`:** the model is a registry artifact, so the library
+  it compares windows with can't be read back. This runs the 4 library files
+  through the promoted blueprint in batch with `output_embeddings: true` and writes
+  PCA 1-2 of their 800 windows to `app-serving/static/library-view.{json,bin}`.
+  Ids go to `fit/out/library_state.json`.
+- **The app** holds one of Dev's 3 serving workers while it runs. It deletes its
+  agent and bundle when it stops (Ctrl-C or `npm run stop`); the ids sit in
+  `fit/out/app_serving_state.json` until then.
+
+Needs Node 20+ and mosquitto (`brew install mosquitto`). The app's README has the
+architecture, the settings and the ports. The full example's app is the same, with
+all 122 delivery files to pick from; the two share ports, so run one at a time.
+
 ### Cleanup
 
 ```sh
@@ -411,8 +440,10 @@ python fit/cleanup.py --yes      # delete it
 
 It deletes, from the ids in `fit/out/`, Stage 6's delivery agents and their bundle
 (the bundle's own listing also finds the runs a rerun replaced; the outputs are
-already in `fit/out/delivery/`), and Stage 8's serving agent and bundle if
-`fit/serve.py` was killed before it could (`kill -9`, a closed laptop). A running
+already in `fit/out/delivery/`), Stage 8's serving agent and bundle if
+`fit/serve.py` was killed before it could (`kill -9`, a closed laptop), and Stage 9's:
+the app's serving agents and bundle if its bridge was killed the same way, and the
+library-embedding runs and their bundle. A running
 serving agent holds one of Dev's 3 serving workers until it is deleted, or released
 after 20 minutes idle. Agents go first, since a bundle that still has one answers 409.
 **What stays:** the promoted blueprint and its served copy (deleting a blueprint takes
@@ -477,7 +508,9 @@ outputs above show at which stage.
 | `fit/deliver.py` | Stage 6 |
 | `fit/score_delivery.py` | Stage 7 |
 | `fit/serve.py` | Stage 8 (Dev only) |
-| `fit/cleanup.py` | delete the agents and bundles of Stages 6 and 8 |
+| `fit/library_embeddings.py` | Stage 9, once: the library's embeddings for the app → `app-serving/static/library-view.{json,bin}` |
+| `app-serving/` | Stage 9 (Dev only): the browser app ([its README](app-serving/README.md)) |
+| `fit/cleanup.py` | delete the agents and bundles of Stages 6, 8 and 9 |
 | `data/` | the split, the Zenodo listing, the licence, metadata and preflight reports; `data/archives/` holds the packed role files |
 
 ## Licence
