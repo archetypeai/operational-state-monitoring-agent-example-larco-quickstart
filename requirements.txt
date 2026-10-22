@@ -2,3 +2,4 @@ numpy>=1.24
 pandas>=2.0
 pyarrow>=14
 scipy>=1.11
+websocket-client>=1.7     # Stage 8 only (/connect)
