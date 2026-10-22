@@ -42,7 +42,7 @@ import numpy as np
 import pandas as pd
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from atai import agents, api_base, load_dotenv, request  # noqa: E402
+from atai import agents, api_base, load_dotenv, request, same_deployment  # noqa: E402
 from optimize import OUT, ROLES, log  # noqa: E402
 from score_delivery import scores  # noqa: E402
 
@@ -53,14 +53,16 @@ MODEL = "larco-osm"            # the name a query gives in `model`, for a served
 MAX_WPQ = 16
 
 
-def served_document(src, channels, timestamp_column="timestamp", model=MODEL):
+def served_document(src, channels, timestamp_column="timestamp"):
     """The blueprint's document with an atai-records serving source and sink."""
     doc = copy.deepcopy(src["document"])
     doc.pop("blueprint_id", None)
-    endpoint = {"format": "serving", "kind": "http", "protocols": ["atai-records"]}
+    # The platform fills in protocols and models for a served blueprint and
+    # rejects the document outright if we set them ourselves.
+    endpoint = {"format": "serving", "kind": "http"}
     doc["connectors"] = {
         "source": {"key": "RecordsSource", "config": {
-            **endpoint, "models": [model],
+            **endpoint,
             "data_columns": [{"dtype": "f32", "names": channels}], "timestamp_column": timestamp_column}},
         "sink": {"key": "RecordsSink", "config": dict(endpoint)},
     }
@@ -69,11 +71,11 @@ def served_document(src, channels, timestamp_column="timestamp", model=MODEL):
 
 
 def served_blueprint(promoted, channels):
-    """The atai-records served copy of `promoted`, created once, and the model name it answers to."""
+    """The atai-records served copy of `promoted`, created once, and the model name a query gives."""
     key = f"{promoted}-served-records"
     try:
-        doc = request("GET", f"{agents()}/blueprints/{key}")["document"]
-        return key, doc["connectors"]["source"]["config"]["models"][0]
+        request("GET", f"{agents()}/blueprints/{key}")
+        return key, MODEL
     except RuntimeError as e:
         if "(404)" not in str(e):
             raise
@@ -131,14 +133,15 @@ def main():
     ap.add_argument("--windows-per-query", type=int, default=1, help=f"1 = live, one window a query; up to {MAX_WPQ}")
     args = ap.parse_args()
     load_dotenv()
-    if "api.dev." not in api_base():
-        sys.exit("agent serving is on dev only for now (https://api.dev.u1.archetypeai.app)")
+    # Match the deployment generation, not one host: dev is api.dev.* and platform.dev.*
+    if ".dev." not in api_base():
+        sys.exit("agent serving is on dev only for now (e.g. https://platform.dev.u1.archetypeai.app)")
     ts_path = os.path.join(args.out, "test_state.json")
     if not os.path.exists(ts_path):
         sys.exit(f"no {ts_path}: run fit/test.py first")
     test = json.load(open(ts_path))
-    if test.get("endpoint", api_base()) != api_base():
-        sys.exit(f"{ts_path} is from {test['endpoint']}, not {api_base()}")
+    if not same_deployment(test):
+        sys.exit(f"{ts_path} is from {test.get('endpoint', 'an earlier run')}, a different deployment from {api_base()}")
     promoted = test["blueprint"]["key"]
     bp = request("GET", f"{agents()}/blueprints/{promoted}")["document"]["values"]
     window = bp["window_size"]

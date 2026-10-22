@@ -6,7 +6,7 @@ agent** on the Archetype AI platform calls for each 2.56 s window: fill, wash,
 spin or drain. It is Stage 8 (`fit/serve.py`) made visible: the same served
 blueprint and the same queries, one window at a time, as it arrives.
 
-> **Dev only.** Agent serving is on `https://api.dev.u1.archetypeai.app`, with 3
+> **Dev only.** Agent serving is on Dev (`https://platform.dev.u1.archetypeai.app`), with 3
 > serving workers shared by everyone. The app holds one while it runs and gives it
 > back when it stops ([Stop and clean up](#stop-and-clean-up)).
 

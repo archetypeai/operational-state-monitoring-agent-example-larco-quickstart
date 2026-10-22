@@ -31,15 +31,21 @@ import path from 'node:path';
 import { REPO, BROKER_URL, loadEnv, readJson } from './common.js';
 
 loadEnv();
-const ENDPOINT = (process.env.ATAI_API_ENDPOINT ?? '')
+// The deployment root, with any /api or /vX.Y suffix removed, then /api appended:
+// every platform surface lives under it, and one .env works whichever form you have.
+// Keeping /api on ENDPOINT also matches what fit/ writes into the state files.
+const ROOT = (process.env.ATAI_API_ENDPOINT ?? '')
 	.replace(/\/+$/, '')
+	.replace(/\/api$/, '')
 	.replace(/\/v\d+(\.\d+)*$/, '');
+const ENDPOINT = ROOT ? `${ROOT}/api` : '';
 const KEY = process.env.ATAI_API_KEY;
 if (!ENDPOINT || !KEY) {
 	console.error('bridge: set ATAI_API_ENDPOINT and ATAI_API_KEY in the repo .env');
 	process.exit(1);
 }
-if (!ENDPOINT.includes('api.dev.')) {
+// Match the deployment generation, not one host: dev is api.dev.* and platform.dev.*
+if (!ROOT.includes('.dev.')) {
 	console.error(`bridge: ${ENDPOINT}: agent serving is on Dev only for now`);
 	process.exit(1);
 }
@@ -55,12 +61,24 @@ if (!test?.blueprint?.key) {
 	console.error('bridge: no fit/out/test_state.json: run fit/test.py (Stage 5) first');
 	process.exit(1);
 }
-if (test.endpoint && test.endpoint !== ENDPOINT) {
-	console.error(`bridge: fit/out/test_state.json is from ${test.endpoint}, not ${ENDPOINT}`);
+/** The deployment an endpoint addresses, whatever hostname it arrives under (as fit/atai.py). */
+const deployment = (e) =>
+	e
+		.trim()
+		.replace(/^[a-z]+:\/\//, '')
+		.split('/')[0]
+		.split(':')[0]
+		.replace(/^(api|platform)\./, '')
+		.toLowerCase();
+if (test.endpoint && deployment(test.endpoint) !== deployment(ENDPOINT)) {
+	console.error(
+		`bridge: fit/out/test_state.json is from ${test.endpoint}, a different deployment from ${ENDPOINT}`
+	);
 	process.exit(1);
 }
 const PROMOTED = test.blueprint.key;
 const SERVED = `${PROMOTED}-served-records`;
+const MODEL = 'larco-osm'; // the name a query gives in `model`, as fit/serve.py
 const CHANNELS = readJson(path.join(REPO, 'data', 'roles', 'zscore_stats.json'))?.channels;
 if (!CHANNELS) {
 	console.error(
@@ -139,24 +157,25 @@ function announce(phase, detail = '') {
 }
 
 /** The served copy fit/serve.py makes (and reuses): Stage 5's blueprint with an
- *  atai-records serving source and sink. Returns the model name it answers to. */
+ *  atai-records serving source and sink. Returns the model name a query gives. */
 async function ensureServedBlueprint() {
 	try {
 		const doc = (await api('GET', `/blueprints/${SERVED}`)).document;
-		return { model: doc.connectors.source.config.models[0], window: doc.values.window_size };
+		return { model: MODEL, window: doc.values.window_size };
 	} catch (e) {
 		if (e.status !== 404) throw e;
 	}
 	const src = await api('GET', `/blueprints/${PROMOTED}`);
 	const doc = structuredClone(src.document);
 	delete doc.blueprint_id;
-	const endpoint = { format: 'serving', kind: 'http', protocols: ['atai-records'] };
+	// The platform fills in protocols and models for a served blueprint and
+	// rejects the document outright if we set them ourselves.
+	const endpoint = { format: 'serving', kind: 'http' };
 	doc.connectors = {
 		source: {
 			key: 'RecordsSource',
 			config: {
 				...endpoint,
-				models: ['larco-osm'],
 				data_columns: [{ dtype: 'f32', names: CHANNELS }],
 				timestamp_column: 'timestamp'
 			}
@@ -171,7 +190,7 @@ async function ensureServedBlueprint() {
 		description: `${PROMOTED} served with atai-records.`
 	});
 	console.log(`bridge: created served blueprint ${SERVED}`);
-	return { model: 'larco-osm', window: doc.values.window_size };
+	return { model: MODEL, window: doc.values.window_size };
 }
 
 async function startAgent() {
