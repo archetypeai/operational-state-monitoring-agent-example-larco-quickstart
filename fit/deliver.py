@@ -31,7 +31,7 @@ import time
 import urllib.request
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from atai import TERMINAL, agents, api_base, load_dotenv, request  # noqa: E402
+from atai import TERMINAL, agents, api_base, load_dotenv, request, same_deployment  # noqa: E402
 from optimize import OUT, ROLES, log, upload_all  # noqa: E402
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "prep"))
@@ -97,8 +97,8 @@ def start(files, per_run, jobs):
     if not os.path.exists(test_state):
         sys.exit("no Stage 5 blueprint yet: run fit/test.py first")
     ts = json.load(open(test_state))
-    if ts.get("endpoint") != api_base():
-        sys.exit(f"{test_state} is from {ts.get('endpoint', 'another deployment')}, not {api_base()}: run fit/test.py here first")
+    if not same_deployment(ts):
+        sys.exit(f"{test_state} is from {ts.get('endpoint', 'an earlier run')}, a different deployment from {api_base()}: run fit/test.py here first")
     KEY = ts["blueprint"]["key"]
     bp = request("GET", f"{agents()}/blueprints/{KEY}")
     stamp = datetime.datetime.now(datetime.timezone.utc).strftime("%Y%m%dT%H%M%SZ")
@@ -253,8 +253,8 @@ def main():
         if not args.resume:
             log(f"{STATE} exists: collecting those runs (delete it to deliver again)")
         state = json.load(open(STATE))
-        if state.get("endpoint") != api_base():
-            sys.exit(f"{STATE} is from {state.get('endpoint', 'another deployment')}, not {api_base()}: "
+        if not same_deployment(state):
+            sys.exit(f"{STATE} is from {state.get('endpoint', 'an earlier run')}, a different deployment from {api_base()}: "
                      f"move fit/out/delivery/ aside to deliver on this deployment")
     else:
         files = json.load(open(os.path.join(ROLES, "manifest.json")))["delivery"]["files"]
