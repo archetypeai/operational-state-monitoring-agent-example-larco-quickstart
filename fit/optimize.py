@@ -29,6 +29,7 @@ import json
 import os
 import sys
 import time
+from collections import Counter
 from concurrent.futures import ThreadPoolExecutor
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -93,13 +94,24 @@ def library_windows(lib_files, window, step):
     return sum(windows_in(p["rows"], window, step) for f in lib_files for p in (f.get("pieces") or [f]))
 
 
+def no_trial_scored(opt, trials, path):
+    """The message for an optimization that ended with no trial scored."""
+    statuses = ", ".join(f"{n} {s}" for s, n in sorted(Counter(t["status"] for t in trials).items()))
+    never = all(t.get("started_at") is None for t in trials)
+    return (f"optimization {opt['id']} is {opt['status']}, but no trial was scored ({statuses}"
+            + ("; none of them started" if never else "") + "): there is nothing for Stage 5 to promote. "
+            "Cancelled trials with no error usually mean the platform's optimizer didn't pick them up; "
+            f"rerun fit/optimize.py later. Results kept in {path}.")
+
+
 def summarize(opt, trials, val_files, lib_files):
     """Print every trial's scores, duplicates and the platform rate; return the rows saved."""
     # Every trial is created with the optimization, and they run one after another, so a
     # trial's own time runs from the previous completion (or its creation) to its completion.
     parse = lambda v: datetime.datetime.fromisoformat(v.replace("Z", "+00:00"))  # noqa: E731
     minutes, prev = {}, None
-    for t in sorted((t for t in trials if t.get("completed_at") and t.get("created_at")),
+    # only completed trials time a trial: a cancelled one gets a completed_at without having run
+    for t in sorted((t for t in trials if t["status"] == "completed" and t.get("completed_at") and t.get("created_at")),
                     key=lambda t: t["completed_at"]):
         start = max(parse(t["created_at"]), prev) if prev else parse(t["created_at"])
         prev = parse(t["completed_at"])
@@ -118,7 +130,7 @@ def summarize(opt, trials, val_files, lib_files):
         m = "   -  " if r["macro_f1"] is None else f"{r['macro_f1']:.4f}"
         print(f"  #{r['trial']:<3} w={r['window']:<4} step={r['step']:<4} k={r['k']:<3} {r['metric']:<6} {r['weights']:<8} "
               f"{r['status']:<9} macro-F1 {m}  " + "  ".join(f"{s_} {r['f1'].get(s_, 0):.2f}" for s_ in STATES)
-              + f"  windows {r['windows_scored']:,}  {r['minutes']} min")
+              + f"  windows {r['windows_scored']:,}  " + (f"{r['minutes']} min" if r["minutes"] is not None else "-"))
     seen = {}
     for r in rows:
         seen.setdefault((r["window"], r["step"], r["k"], r["metric"], r["weights"]), []).append(r["trial"])
@@ -235,6 +247,8 @@ def main():
                    "search_space": space, "blueprint": args.blueprint, "allow_gaps": bool(args.allow_gaps),
                    "endpoint": api_base(),
                    "validation": [f["file"] for f in val_files]}, f, indent=1)
+    if not any(r["macro_f1"] is not None for r in rows):
+        sys.exit(no_trial_scored(opt, trials, path))
     log(f"results: {path}; next, Stage 5: python fit/test.py --background")
 
 
