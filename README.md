@@ -422,14 +422,14 @@ cycle.
   it compares windows with can't be read back. This runs the 4 library files
   through the promoted blueprint in batch with `output_embeddings: true` and writes
   PCA 1-2 of their 800 windows to `app-serving/static/library-view.{json,bin}`.
-  Ids go to `fit/out/library_state.json`.
+  Ids go to `fit/out/library_state.json`. The repo ships the view (from this
+  README's model), so run it again only after promoting another model.
 - **The app** holds one of Dev's 3 serving workers while it runs. It deletes its
   agent and bundle when it stops (Ctrl-C or `npm run stop`); the ids sit in
   `fit/out/app_serving_state.json` until then.
 
 Needs Node 20+ and mosquitto (`brew install mosquitto`). The app's README has the
-architecture, the settings and the ports. The full example's app is the same, with
-all 122 delivery files to pick from; the two share ports, so run one at a time.
+architecture, the settings and the ports.
 
 ### Cleanup
 

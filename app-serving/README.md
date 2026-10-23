@@ -68,15 +68,16 @@ The Embedding tab draws the library the model compares each window with: its
 800 windows (200 a state, window 512, step 512) in PCA 1-2 of their Omega
 embeddings, one density per state, with the last minute or two of the cycle as a
 trail, each point in the state the agent called. The model is a registry artifact
-with no download route, so the library's embeddings are recomputed once on the
-platform:
+with no download route, so the library's embeddings were recomputed on the
+platform, and the result ships with the repo: `static/library-view.{json,bin}`
+(about 90 KB), from the promoted model (k 5, cosine) on Dev, 2026-10-18. The page
+loads it at start; without it the tab says so and the rest of the app works. To
+recompute it, for instance after promoting another model:
 
 ```sh
 python fit/library_embeddings.py      # 4 batch runs, one per library file, then the view
 ```
 
-It writes `app-serving/static/library-view.{json,bin}` (about 90 KB), which the
-page loads at start. Without it the tab says so and the rest of the app works.
 The runs and their bundle go in `fit/out/library_state.json`, so a rerun resumes
 and `python fit/cleanup.py --yes` deletes them.
 
@@ -133,8 +134,7 @@ left running holds one of Dev's 3 workers until it is deleted, or released after
 | this app | 1892     | 9010    | 5182 |
 
 The slot after the RED and TEP serving apps (`mosquitto/mosquitto.conf` has the
-table), so they can run side by side. The full and quickstart examples' apps share
-it: run one at a time.
+table), so they can run side by side.
 
 ## Layout
 
