@@ -74,9 +74,7 @@
 				</span>
 			</div>
 			<p class="text-xs text-muted-foreground">
-				{pace}{st && !st.batch
-					? " · no Stage 6 output for this file, so served isn't compared with batch"
-					: ''}
+				{pace}
 			</p>
 		</Pane>
 	</div>

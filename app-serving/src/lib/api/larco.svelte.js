@@ -2,14 +2,12 @@
  * The one MQTT-backed store the page reads from. The browser subscribes to
  * mosquitto's WebSocket listener directly; there is no backend.
  *
- *   larco/raw       replayer -> a window's vibration level and trace in g, and Stage 6's answer for it
+ *   larco/raw       replayer -> a window's vibration level and trace in g
  *   larco/status    replayer -> where the replay is, the cycle list, speed, windows per query (retained)
- *   larco/truth     replayer -> the held-back labels, after a reveal
  *   larco/agent     bridge   -> the serving agent: starting, running, replacing (retained)
  *   larco/results   bridge   -> the served agent's answer for one window
  *
- * What the agent says comes from larco/results only. The labels arrive on their
- * own topic after a reveal, and never colour the agent's answer.
+ * What the page shows of the agent comes from larco/results only.
  */
 import mqtt from 'mqtt';
 import { STATES } from '$lib/states.js';
@@ -26,15 +24,13 @@ export const TOPICS = [
 	'larco/status',
 	'larco/control',
 	'larco/agent',
-	'larco/results',
-	'larco/truth'
+	'larco/results'
 ];
 
 function emptyCycle() {
 	return {
 		/** One entry per window of the cycle, by index.
-		 *  @type {{index: number, served?: {state: string, p: Record<string, number>, invalid: boolean},
-		 *          batch?: {state: string, p: Record<string, number>} | null, label?: string | null}[]} */
+		 *  @type {{index: number, served?: {state: string, p: Record<string, number>, invalid: boolean}}[]} */
 		windows: [],
 		/** Latest window's level per channel (g RMS) and trace. @type {number[]} */
 		rms: [],
@@ -49,10 +45,6 @@ function emptyCycle() {
 		changes: [],
 		served: 0,
 		invalid: 0,
-		/** windows with a batch answer to compare, and how many agree */
-		compared: 0,
-		sameState: 0,
-		sameP: 0,
 		/** @type {number[]} */
 		latency: []
 	};
@@ -119,7 +111,7 @@ class LarcoStore {
 		this.#client = null;
 	}
 
-	/** PCA 1-2 of the library, written by fit/library_embeddings.py. */
+	/** The library on its two drawn axes, written by fit/library_embeddings.py. */
 	async loadView() {
 		try {
 			const [manifest, buf] = await Promise.all([
@@ -147,14 +139,17 @@ class LarcoStore {
 		}
 	}
 
-	/** A window's embedding on the library's two axes. @param {number[]} e */
+	/** A window's embedding on the library's two axes (unit length first, when the
+	 *  view was fitted that way). @param {number[]} e */
 	#project(e) {
 		const v = this.view;
 		if (!v || !Array.isArray(e) || e.length !== v.mean.length) return null;
+		let s = 1;
+		if (v.manifest.normalize) s = 1 / Math.hypot(...e) || 1;
 		let x = 0;
 		let y = 0;
 		for (let i = 0; i < e.length; i++) {
-			const d = e[i] - v.mean[i];
+			const d = e[i] * s - v.mean[i];
 			x += v.pc0[i] * d;
 			y += v.pc1[i] * d;
 		}
@@ -192,16 +187,7 @@ class LarcoStore {
 		}
 		if (m.epoch !== this.#epoch) return;
 		const c = this.cycle;
-		if (topic === 'larco/truth') {
-			m.labels.forEach(
-				(/** @type {string | null} */ l, /** @type {number} */ i) => (this.#window(i).label = l)
-			);
-			return;
-		}
 		if (topic === 'larco/raw') {
-			const w = this.#window(m.index);
-			w.batch = m.batch;
-			if (m.label !== undefined) w.label = m.label;
 			c.rms = m.rms;
 			c.trace = m.trace;
 			m.rms.forEach((/** @type {number} */ v, /** @type {number} */ k) => {
@@ -209,7 +195,6 @@ class LarcoStore {
 				c.history[k].push(v);
 				if (c.history[k].length > MAX_HISTORY) c.history[k].shift();
 			});
-			this.#compare(w);
 			return;
 		}
 		// larco/results: the agent's answer
@@ -238,18 +223,6 @@ class LarcoStore {
 			c.trail.push({ ...xy, state: m.predicted_state });
 			if (c.trail.length > MAX_TRAIL) c.trail.shift();
 		}
-		this.#compare(w);
-	}
-
-	/** Served against Stage 6's batch answer for the same window, once both are in.
-	 *  @param {any} w */
-	#compare(w) {
-		if (w.compared || !w.served || w.served.invalid || !w.batch) return;
-		w.compared = true;
-		const c = this.cycle;
-		c.compared++;
-		if (w.served.state === w.batch.state) c.sameState++;
-		if (STATES.every((s) => Math.abs(w.served.p[s] - w.batch.p[s]) < 1e-4)) c.sameP++;
 	}
 
 	/** @param {string} action @param {unknown} [value] */
@@ -264,9 +237,6 @@ class LarcoStore {
 	}
 	restart() {
 		this.#publish('restart');
-	}
-	reveal() {
-		this.#publish('reveal');
 	}
 	/** @param {number} id */
 	select(id) {
@@ -283,22 +253,3 @@ class LarcoStore {
 }
 
 export const larco = new LarcoStore();
-
-/** Macro-F1 over the four states, platform-style (a state with no windows and no
- *  calls scores 0), for windows with both a label and a valid answer.
- *  @param {any[]} windows @param {'served' | 'batch'} who */
-export function macroF1(windows, who) {
-	const pairs = windows
-		.filter((w) => w.label && w[who] && !w[who].invalid)
-		.map((w) => [w.label, w[who].state]);
-	if (!pairs.length) return null;
-	const f1 = Object.fromEntries(
-		STATES.map((s) => {
-			const tp = pairs.filter(([y, p]) => y === s && p === s).length;
-			const fp = pairs.filter(([y, p]) => y !== s && p === s).length;
-			const fn = pairs.filter(([y, p]) => y === s && p !== s).length;
-			return [s, tp ? (2 * tp) / (2 * tp + fp + fn) : 0];
-		})
-	);
-	return { macro: STATES.reduce((a, s) => a + f1[s], 0) / STATES.length, f1, n: pairs.length };
-}
