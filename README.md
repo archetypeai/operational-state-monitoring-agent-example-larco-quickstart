@@ -25,8 +25,8 @@
 | 5 | **promote** the best setting to a blueprint, **test** it once with the Evals API | 3 min |
 | 6 | **deliver:** a bundle from that blueprint, run over the faulty unit's cycles | 3 min |
 | 7 | **score** the delivery against the held-back labels | seconds |
-| 8 | **serve** it a window per query over `/query` (agent serving, Dev only), checked against Stage 6 | 25–35 min |
-| 9 | **watch** it in a browser (`app-serving/`): a cycle replayed live through a serving agent, Dev only | as long as you like |
+| 8 | **serve** it a window per query over `/query` (agent serving, Dev and Staging), checked against Stage 6 | 25–35 min |
+| 9 | **watch** it in a browser (`app-serving/`): a cycle replayed live through a serving agent, Dev and Staging | as long as you like |
 
   About **15 minutes** end to end, 10 of them on the platform; serving (Stage 8,
   optional) adds 25–35. Platform times vary
@@ -347,15 +347,16 @@ python fit/serve.py --windows-per-query 8    # up to 8 consecutive windows a que
 Stage 6 delivers in batch: upload the files, run an agent, download the outputs
 when it's done. **Agent serving** keeps an agent loaded and answers a window in one
 round trip, with no upload, queue or polling: what the machine's controller would
-call every 2.56 s with the latest 512 readings. It is on Dev only, for first
-internal tests, with 3 serving workers shared by everyone; the
+call every 2.56 s with the latest 512 readings. It is on Dev and Staging only, for
+first internal tests (Dev has 3 serving workers shared by everyone); the
 [agent-serving example](https://github.com/archetypeai/agent-serving-example) has
 the calls and their limits.
 
-1. **Served blueprint:** a copy of Stage 5's (`<key>-served-records`, made once):
-   the same classifier, encoder and values, with the CSV source and sink swapped
-   for an `atai-records` serving endpoint.
-2. **Serving agent:** a bundle of it, run with `{"mode": "serving"}`.
+1. **Bundle:** Stage 5's blueprint as it is, with its source's columns as values,
+   `data_columns` (the 9 channels) and `timestamp_column: "timestamp"`: batch reads
+   them from the CSV header, and a served query has none. No copy of the blueprint
+   is made: the platform supplies the `atai-records` serving connectors itself.
+2. **Serving agent:** the bundle, run with `{"mode": "serving"}`.
 3. **Each delivery file replayed a window at a time.** Every query carries one
    window, 512 rows of the 9 channels, one list per channel, and gets one record
    back:
@@ -403,7 +404,7 @@ served 3,178 windows of 5 file(s) in 3,178 queries, 1975 s
 **Writes:** `fit/out/serving/serve_5files_wpq1.csv` (a row per window) and `.json`
 (the summary).
 
-### Stage 9: watch it in a browser (Dev only)
+### Stage 9: watch it in a browser (Dev and Staging)
 
 ```sh
 python fit/library_embeddings.py     # once: the library's embeddings, for the app's embedding space
@@ -423,7 +424,7 @@ embedding space and a log of state changes.
   `app-serving/static/library-view.{json,bin}`.
   Ids go to `fit/out/library_state.json`. The repo ships the view (from this
   README's model), so run it again only after promoting another model.
-- **The app** holds one of Dev's 3 serving workers while it runs. It deletes its
+- **The app** holds a serving worker (Dev has 3) while it runs. It deletes its
   agent and bundle when it stops (Ctrl-C or `npm run stop`); the ids sit in
   `fit/out/app_serving_state.json` until then.
 
@@ -443,11 +444,12 @@ already in `fit/out/delivery/`), Stage 8's serving agent and bundle if
 `fit/serve.py` was killed before it could (`kill -9`, a closed laptop), and Stage 9's:
 the app's serving agents and bundle if its bridge was killed the same way, and the
 library-embedding runs and their bundle. A running
-serving agent holds one of Dev's 3 serving workers until it is deleted, or released
+serving agent holds a serving worker (Dev has 3) until it is deleted, or released
 after 20 minutes idle. Agents go first, since a bundle that still has one answers 409,
-then bundles, then the served copy of the Stage 5 blueprint (`fit/serve.py` remakes
-it). One object that won't delete doesn't stop the rest: they're listed at the end.
-**What stays:** the promoted blueprint, and the optimization and eval. After a cleanup,
+then bundles, then a served copy of the Stage 5 blueprint (`<key>-served-records`) if
+an earlier version made one. One object that won't delete doesn't stop the rest:
+they're listed at the end. **What stays:** the promoted blueprint (deleting it needs
+the admin role), and the optimization and eval. After a cleanup,
 `fit/deliver.py --resume` can't collect again.
 
 To see whether a serving agent is still running (yours or anyone's):
@@ -507,9 +509,9 @@ outputs above show at which stage.
 | `fit/test.py` | Stage 5 |
 | `fit/deliver.py` | Stage 6 |
 | `fit/score_delivery.py` | Stage 7 |
-| `fit/serve.py` | Stage 8 (Dev only) |
+| `fit/serve.py` | Stage 8 (Dev and Staging) |
 | `fit/library_embeddings.py` | Stage 9, once: the library's embeddings for the app → `app-serving/static/library-view.{json,bin}` |
-| `app-serving/` | Stage 9 (Dev only): the browser app ([its README](app-serving/README.md)) |
+| `app-serving/` | Stage 9 (Dev and Staging): the browser app ([its README](app-serving/README.md)) |
 | `fit/cleanup.py` | delete the agents and bundles of Stages 6, 8 and 9 |
 | `data/` | the split, the Zenodo listing, the licence, metadata and preflight reports; `data/archives/` holds the packed role files |
 

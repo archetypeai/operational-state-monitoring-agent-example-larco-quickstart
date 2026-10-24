@@ -12,9 +12,10 @@ washing machine's controller would ask it every 2.56 s about the latest 512 read
 This replays Stage 6's delivery files that way and checks every answer against the
 batch output for the same window:
 
-  1. the served copy of Stage 5's blueprint, made once and reused
-     (`<key>-served-records`): the same classifier, encoder and values, with the CSV
-     source and sink swapped for an `atai-records` serving endpoint;
+  1. a bundle of Stage 5's blueprint as it is, with its source's columns given as
+     bundle values (a served query has no CSV header): the platform supplies the
+     `atai-records` serving connectors when it runs a bundle in serving mode, so no
+     served copy is made (atai_core #7286; creating one takes the admin role);
   2. a bundle of it, run in serving mode;
   3. each file replayed a window at a time: every query holds one window's 512 rows
      of the 9 channels (--windows-per-query N sends N consecutive windows);
@@ -25,12 +26,11 @@ batch output for the same window:
      SIGTERM and SIGHUP included). Their ids stay in fit/out/serve_state.json until
      then, so fit/cleanup.py finds them after a kill -9.
 
-Dev only (https://github.com/archetypeai/agent-serving-example). A served agent keeps
+Dev and Staging only (https://github.com/archetypeai/agent-serving-example). A served agent keeps
 nothing between queries, so a query carries the whole window, and the timestamps in its
 answer are row indices within the query. Writes fit/out/serving/.
 """
 import argparse
-import copy
 import json
 import os
 import signal
@@ -49,42 +49,8 @@ from score_delivery import scores  # noqa: E402
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "prep"))
 from states import STATES  # noqa: E402
 
-MODEL = "larco-osm"            # the name a query gives in `model`, for a served copy made here
+MODEL = "larco-osm"            # the name a query gives in `model` (a served agent does not check it)
 MAX_WPQ = 16
-
-
-def served_document(src, channels, timestamp_column="timestamp"):
-    """The blueprint's document with an atai-records serving source and sink."""
-    doc = copy.deepcopy(src["document"])
-    doc.pop("blueprint_id", None)
-    # The platform fills in protocols and models for a served blueprint and
-    # rejects the document outright if we set them ourselves.
-    endpoint = {"format": "serving", "kind": "http"}
-    doc["connectors"] = {
-        "source": {"key": "RecordsSource", "config": {
-            **endpoint,
-            "data_columns": [{"dtype": "f32", "names": channels}], "timestamp_column": timestamp_column}},
-        "sink": {"key": "RecordsSink", "config": dict(endpoint)},
-    }
-    doc["name"] = f"{src['name']} (served, records)"
-    return doc
-
-
-def served_blueprint(promoted, channels):
-    """The atai-records served copy of `promoted`, created once, and the model name a query gives."""
-    key = f"{promoted}-served-records"
-    try:
-        request("GET", f"{agents()}/blueprints/{key}")
-        return key, MODEL
-    except RuntimeError as e:
-        if "(404)" not in str(e):
-            raise
-    doc = served_document(request("GET", f"{agents()}/blueprints/{promoted}"), channels)
-    bp = request("POST", f"{agents()}/blueprints", body={
-        "blueprint_key": key, "name": doc["name"], "document": doc,
-        "description": f"{promoted} served with atai-records."})
-    log(f"created served blueprint {key} ({bp['id']})")
-    return key, MODEL
 
 
 def query_body(chunk, model=MODEL):
@@ -133,9 +99,10 @@ def main():
     ap.add_argument("--windows-per-query", type=int, default=1, help=f"1 = live, one window a query; up to {MAX_WPQ}")
     args = ap.parse_args()
     load_dotenv()
-    # Match the deployment generation, not one host: dev is api.dev.* and platform.dev.*
-    if ".dev." not in api_base():
-        sys.exit("agent serving is on dev only for now (e.g. https://platform.dev.u1.archetypeai.app)")
+    # Match the deployment, not one host: dev is api.dev.* and platform.dev.*, staging platform.stage.*
+    if not any(d in api_base() for d in (".dev.", ".stage.")):
+        sys.exit("agent serving is on dev and staging only for now "
+                 "(e.g. https://platform.dev.u1.archetypeai.app, https://platform.stage.u1.archetypeai.app)")
     ts_path = os.path.join(args.out, "test_state.json")
     if not os.path.exists(ts_path):
         sys.exit(f"no {ts_path}: run fit/test.py first")
@@ -168,12 +135,13 @@ def main():
     log(f"{len(plan)} file(s), {sum(len(p[3]) for p in plan):,} windows of {window} rows, {wpq} per query; "
         f"model {promoted}")
 
-    key, model = served_blueprint(promoted, channels)
     sf = os.path.join(args.out, "serve_state.json")
     if os.path.exists(sf):
         sys.exit(f"{sf} holds an earlier replay's agent and bundle: run fit/cleanup.py --yes first")
     ex = {"endpoint": api_base(), "agent": None,
-          "bundle": request("POST", f"{agents()}/bundles", body={"blueprint": key, "name": "LARCO serve"})["id"]}
+          "bundle": request("POST", f"{agents()}/bundles", body={
+              "blueprint": promoted, "name": "LARCO serve",
+              "values": {"data_columns": channels, "timestamp_column": "timestamp"}})["id"]}
     json.dump(ex, open(sf, "w"), indent=1)
     served, latency = {}, []
     t0 = time.time()
@@ -195,7 +163,7 @@ def main():
                     count += 1
                 t = time.time()
                 answer = request("POST", f"{agents()}/instances/{ex['agent']}/query",
-                                 body=query_body(X[firsts[k]:firsts[k] + count * window], model))
+                                 body=query_body(X[firsts[k]:firsts[k] + count * window]))
                 latency.append(time.time() - t)
                 records = (answer.get("response") or {}).get("data")
                 if not isinstance(records, list) or len(records) != count:
@@ -226,7 +194,7 @@ def main():
     stem = os.path.join(sdir, f"serve_{len(plan)}files{f'_first{args.max_windows}' if args.max_windows else ''}_wpq{wpq}")
     df.to_csv(stem + ".csv", index=False)
     ms = sorted(x * 1000 for x in latency)
-    summary = {"blueprint": promoted, "served_blueprint": key, "files": names, "windows": len(df),
+    summary = {"blueprint": promoted, "files": names, "windows": len(df),
                "windows_per_query": wpq, "queries": len(latency),
                "same_state": int(df.same_state.sum()), "same_p": int(df.same_p.sum()),
                "max_p_diff": float(df.max_p_diff.max()), "invalid": int(df.served_invalid.sum()),
