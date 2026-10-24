@@ -22,7 +22,7 @@
  *   finds them after a hard kill. An agent the platform released (20 minutes
  *   without a query, e.g. a paused replay) is replaced on the next window.
  *
- * Env (repo .env): ATAI_API_ENDPOINT (Dev only), ATAI_API_KEY.
+ * Env (repo .env): ATAI_API_ENDPOINT (Dev or Staging), ATAI_API_KEY.
  * Env (app-serving/.env): WINDOWS_PER_QUERY (default 1).
  */
 import mqtt from 'mqtt';
@@ -44,9 +44,9 @@ if (!ENDPOINT || !KEY) {
 	console.error('bridge: set ATAI_API_ENDPOINT and ATAI_API_KEY in the repo .env');
 	process.exit(1);
 }
-// Match the deployment generation, not one host: dev is api.dev.* and platform.dev.*
-if (!ROOT.includes('.dev.')) {
-	console.error(`bridge: ${ENDPOINT}: agent serving is on Dev only for now`);
+// Match the deployment, not one host: dev is api.dev.* and platform.dev.*, staging platform.stage.*
+if (!['.dev.', '.stage.'].some((d) => ROOT.includes(d))) {
+	console.error(`bridge: ${ENDPOINT}: agent serving is on Dev and Staging only for now`);
 	process.exit(1);
 }
 const STATE = path.join(REPO, 'fit', 'out', 'app_serving_state.json');
@@ -77,8 +77,7 @@ if (test.endpoint && deployment(test.endpoint) !== deployment(ENDPOINT)) {
 	process.exit(1);
 }
 const PROMOTED = test.blueprint.key;
-const SERVED = `${PROMOTED}-served-records`;
-const MODEL = 'larco-osm'; // the name a query gives in `model`, as fit/serve.py
+const MODEL = 'larco-osm'; // the name a query gives in `model`, as fit/serve.py (not checked)
 const CHANNELS = readJson(path.join(REPO, 'data', 'roles', 'zscore_stats.json'))?.channels;
 if (!CHANNELS) {
 	console.error(
@@ -144,7 +143,7 @@ function announce(phase, detail = '') {
 			running: live.running,
 			agent: live.agent,
 			bundle: live.bundle,
-			blueprint: SERVED,
+			blueprint: PROMOTED,
 			promoted: PROMOTED,
 			model: live.model,
 			window: live.window,
@@ -156,51 +155,22 @@ function announce(phase, detail = '') {
 	);
 }
 
-/** The served copy fit/serve.py makes (and reuses): Stage 5's blueprint with an
- *  atai-records serving source and sink. Returns the model name a query gives. */
-async function ensureServedBlueprint() {
-	try {
-		const doc = (await api('GET', `/blueprints/${SERVED}`)).document;
-		return { model: MODEL, window: doc.values.window_size };
-	} catch (e) {
-		if (e.status !== 404) throw e;
-	}
-	const src = await api('GET', `/blueprints/${PROMOTED}`);
-	const doc = structuredClone(src.document);
-	delete doc.blueprint_id;
-	// The platform fills in protocols and models for a served blueprint and
-	// rejects the document outright if we set them ourselves.
-	const endpoint = { format: 'serving', kind: 'http' };
-	doc.connectors = {
-		source: {
-			key: 'RecordsSource',
-			config: {
-				...endpoint,
-				data_columns: [{ dtype: 'f32', names: CHANNELS }],
-				timestamp_column: 'timestamp'
-			}
-		},
-		sink: { key: 'RecordsSink', config: { ...endpoint } }
-	};
-	doc.name = `${src.name} (served, records)`;
-	await api('POST', '/blueprints', {
-		blueprint_key: SERVED,
-		name: doc.name,
-		document: doc,
-		description: `${PROMOTED} served with atai-records.`
-	});
-	console.log(`bridge: created served blueprint ${SERVED}`);
+/** The promoted blueprint's window, and the model name a query gives. Served as it is:
+ *  the platform supplies the serving connectors when a bundle runs in serving mode. */
+async function promotedModel() {
+	const doc = (await api('GET', `/blueprints/${PROMOTED}`)).document;
 	return { model: MODEL, window: doc.values.window_size };
 }
 
 async function startAgent() {
 	if (!live.bundle) {
-		// Embeddings on, for the embedding space; the classifier is unchanged.
+		// The promoted blueprint as it is: its source's columns as values (a served
+		// query has no CSV header), and embeddings on for the embedding space.
 		live.bundle = (
 			await api('POST', '/bundles', {
-				blueprint: SERVED,
+				blueprint: PROMOTED,
 				name: 'LARCO app-serving',
-				values: { output_embeddings: true }
+				values: { data_columns: CHANNELS, timestamp_column: 'timestamp', output_embeddings: true }
 			})
 		).id;
 		save();
@@ -219,7 +189,7 @@ async function startAgent() {
 	}
 	live.running = true;
 	announce('running');
-	console.log(`bridge: serving agent ${live.agent} running (bundle ${live.bundle}, ${SERVED})`);
+	console.log(`bridge: serving agent ${live.agent} running (bundle ${live.bundle}, ${PROMOTED})`);
 }
 
 /** Cancel and delete an agent; true once it is gone (404 counts). */
@@ -456,7 +426,7 @@ client.on('error', (e) => console.error('bridge mqtt error:', e.message));
 // ------------------------------------------------------------------------ start
 
 try {
-	Object.assign(live, await ensureServedBlueprint());
+	Object.assign(live, await promotedModel());
 	await startWithRetry();
 	drain().catch((e) => console.error(`bridge: ${e.message}`));
 } catch (e) {

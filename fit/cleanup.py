@@ -19,7 +19,7 @@ From the ids in fit/out/ (--out for another folder):
             replaced. The outputs are already in fit/out/delivery/.
 
 Agents go first (a bundle that still has an agent answers 409), then bundles, then
-the served copy of the Stage 5 blueprint (fit/serve.py and the bridge remake it). A
+the served copy of the Stage 5 blueprint, if an earlier version made one. A
 running agent is cancelled before it is deleted, an id already gone counts as done,
 and one object that won't delete doesn't stop the rest: they are listed at the end.
 Progress goes to fit/out/cleanup_state.json, so a rerun picks up where it stopped.
@@ -113,7 +113,7 @@ def main():
     print(f"already deleted: {len(gone & {t[2] for t in todo_all})}")
     if key:
         if f"{key}-served-records" not in gone:
-            print(f"also deletes: blueprint {key}-served-records (fit/serve.py remakes it)")
+            print(f"also deletes: blueprint {key}-served-records, if an earlier version made one")
         print(f"stays: blueprint {key}, and the optimizations and eval")
     if not args.yes:
         print("\nnothing deleted: rerun with --yes")
