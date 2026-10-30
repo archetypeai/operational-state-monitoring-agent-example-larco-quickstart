@@ -16,7 +16,7 @@
     their labels held back.
 - **The lifecycle:**
 
-| stage | what happens | time (measured 2026-09-30) |
+| stage | what happens | time |
 |---|---|---|
 | 0 | pick the cycles and download them (142 MB) | ~2 min |
 | 1a–1c | check the raw data, resample it to an exact 200 Hz grid, check again | ~10 s |
@@ -123,8 +123,7 @@ Then go to [Stage 4](#stage-4-optimize).
 nothing else. The `osm` blueprint is resolved by its key on each deployment, the
 upload cache is kept per deployment, and every result and state file in `fit/out/` records its
 endpoint: `test.py` only picks this deployment's trials, and `test.py` and `deliver.py` refuse to
-resume another deployment's run. Results reproduce across deployments: every deployment we
-ran it on gave the same numbers at every stage (0.8305 / 0.8617 / 3,178 windows / 0.7707).
+resume another deployment's run.
 
 **To run again from scratch,** move the previous outputs aside first:
 `data/raw`, `data/prepared`, `data/roles` and `fit/out`. `fit/out/` matters most:
@@ -388,10 +387,9 @@ served 3,178 windows of 5 file(s) in 3,178 queries, 1438 s
   votes (fifths, at k 5). 2 windows of `warm_fast-45_40_2` are one vote off (0.2:
   wash 0.8 / spin 0.2, spin 0.8 / drain 0.2) with the state unchanged: a float
   difference between served and batch embeddings swaps one neighbour. Some runs
-  match every probability; when they don't, it is these 2 windows. The full example's k 31 model,
-  served on the same 5 cycles, had 8 windows a neighbour's vote off, 2 of them at a
-  near-tie that changed the state: `fit/serve.py` exits 1 only if more than 0.1% of
-  the states differ.
+  match every probability; when they don't, it is these 2 windows. A near tie can
+  also flip a state, so `fit/serve.py` exits 1 only if more than 0.1% of the states
+  differ.
 - **Under half a second a window** (448 ms median), so the 5 cycles take about
   25 minutes: over 5 times faster than the data, which arrives a window every
   2.56 s. The latency depends on your plan: on free trials agents are served on
@@ -445,8 +443,7 @@ library-embedding runs and their bundle. A running
 serving agent holds a serving worker until it is deleted, or released
 after 20 minutes idle. Agents go first, since a bundle that still has one answers 409,
 then bundles. One object that won't delete doesn't stop the rest:
-they're listed at the end. **What stays:** the promoted blueprint (deleting it needs
-the admin role), and the optimization and eval. After a cleanup,
+they're listed at the end. **What stays:** the promoted blueprint, and the optimization and eval. After a cleanup,
 `fit/deliver.py --resume` can't collect again.
 
 To see whether any of your serving agents is still running:
@@ -470,9 +467,9 @@ production (Stages 4–7 on 2026-10-29, from Stage 4; Stage 8 the same day) did 
 |---|---|---|---|---|
 | 1–3 | prepared rows; validation / test / delivery windows (1,024 rows) | 9,826,559; 1,224 / 1,760 / 1,587 | same | (reused) |
 | 4 | validation macro-F1, k 5 / k 31 | 0.8305 / 0.7980 | same | same |
-| 5 | test macro-F1 | 0.8617 | same, with the same confusion matrix, from its own blueprint `…-7ddzrn` | same, with the same confusion matrix |
+| 5 | test macro-F1 | 0.8617 | same, with the same confusion matrix | same, with the same confusion matrix |
 | 7 | delivery macro-F1 | 0.7707 | same, per cycle too | same, per cycle too |
-| 8 | served macro-F1; states matching batch | | | 0.7707; 3,178/3,178 (2 probabilities a vote off) |
+| 8 | served macro-F1; states matching batch | – | – | 0.7707; 3,178/3,178 (2 probabilities a vote off) |
 
 Macro-F1 is the mean of the four states' F1 scores, so each state counts equally.
 
