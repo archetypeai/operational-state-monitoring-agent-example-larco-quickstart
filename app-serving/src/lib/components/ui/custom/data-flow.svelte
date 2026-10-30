@@ -96,7 +96,7 @@
 		'serving bridge (node)',
 		[
 			`POST /query, ${wpq} window(s) at a time`,
-			'serving agent · platform (Dev)',
+			'serving agent · platform',
 			'the API key stays here'
 		],
 		agentOn

@@ -6,9 +6,7 @@ agent** on the Archetype AI platform calls for each 2.56 s window: fill, wash,
 spin or drain. It is Stage 8 (`fit/serve.py`) made visible: the same promoted
 blueprint and the same queries, one window at a time, as it arrives.
 
-> **Dev and Staging only.** Agent serving is on Dev (`https://platform.dev.u1.archetypeai.app`),
-> with 3 serving workers shared by everyone, and Staging (`https://platform.stage.u1.archetypeai.app`).
-> The app holds a worker while it runs and gives it back when it stops
+> The app holds a serving agent while it runs and deletes it when it stops
 > ([Stop and clean up](#stop-and-clean-up)).
 
 - **Input:** the cycle's nine accelerometer channels (back, side and top, x/y/z):
@@ -28,7 +26,7 @@ blueprint and the same queries, one window at a time, as it arrives.
                  ▼
         ┌──────────────────┐  larco/sensors   ┌───────────┐  larco/sensors  ┌────────────────┐  POST /query  ┌───────────────┐
         │ replayer (node)  │ ───────────────► │ mosquitto │ ──────────────► │ serving bridge │ ────────────► │ serving agent │
-        │ a 512-row window │ ◄─────────────── │ tcp :1892 │ ◄────────────── │ (node)         │ ◄──────────── │ Dev / Staging │
+        │ a 512-row window │ ◄─────────────── │ tcp :1892 │ ◄────────────── │ (node)         │ ◄──────────── │ the platform  │
         │ every 2.56 s     │  larco/control   │ ws  :9010 │  larco/results  │ holds the key  │               └───────────────┘
         └──────────────────┘  larco/results   └───────────┘  larco/agent    └────────────────┘
                   │ larco/raw · status              ▲   │
@@ -66,7 +64,7 @@ embeddings, a dot each and a density per state, with the last minute or two of t
 cycle as a trail, each point in the state the agent called. The model is a registry artifact
 with no download route, so the library's embeddings were recomputed on the
 platform, and the result ships with the repo: `static/library-view.{json,bin}`
-(about 90 KB), from the promoted model (k 5, cosine) on Dev, 2026-10-18. The page
+(about 90 KB), from the promoted model (k 5, cosine) on production, 2026-10-29. The page
 loads it at start; without it the tab says so and the rest of the app works. To
 recompute it, for instance after promoting another model:
 
@@ -89,7 +87,7 @@ be called another.
 
 ## Run it
 
-Needs Stage 5 run on Dev or Staging (`fit/out/test_state.json`), the role files in `data/roles/`, Node 20+ and
+Needs Stage 5 run (`fit/out/test_state.json`), the role files in `data/roles/`, Node 20+ and
 mosquitto (`brew install mosquitto`).
 
 ```sh
@@ -104,9 +102,9 @@ The agent takes a minute or so to start; the badge in the menubar turns to
 - **Cycle:** the selector in the Input panel. `CYCLE=warm_sport_40_2` in
   `app-serving/.env` starts on another one.
 - **Speed** (Settings): 1×, 2×, 4× or 8× real time, or Max, as fast as the agent
-  answers. Stage 8 measured about 0.6 s a window at 1 a query and 0.38 s at 4
-  (without embeddings), so about 4× and 7× real time; above that the replay waits
-  for the agent.
+  answers. Stage 8 measured about 0.45 s a window at 1 a query on production
+  (without embeddings), so about 5× real time; more windows a query is faster per
+  window. Above that the replay waits for the agent.
 - **Windows per query** (Settings): 1 is live, as the machine's controller would
   ask every 2.56 s; more wait for each other but cost less each.
 
@@ -125,7 +123,7 @@ ls ../fit/out/app_serving_state.json      # gone once the bridge cleaned up
 
 If it is still there (a `kill -9`, a closed laptop), the bridge couldn't finish:
 `python fit/cleanup.py --yes` from the repo deletes what it lists. A serving agent
-left running holds a worker (Dev has 3) until it is deleted, or released after
+left running holds a worker until it is deleted, or released after
 20 minutes without a query. The bridge refuses to start while the file is there.
 
 ## Ports

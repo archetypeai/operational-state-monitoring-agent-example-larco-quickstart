@@ -52,7 +52,7 @@
 		variant="panel"
 		title="OSM Agent"
 		icon={CircleArrowDownIcon}
-		subtitle="Omega 1.5 + {model} · Archetype AI platform (Dev), agent serving"
+		subtitle="Omega 1.5 + {model} · Archetype AI platform, agent serving"
 		class="relative min-h-0 flex-1"
 	>
 		{#snippet titleAfter()}

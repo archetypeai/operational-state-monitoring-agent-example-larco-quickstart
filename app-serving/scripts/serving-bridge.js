@@ -16,13 +16,13 @@
  * - THE ANSWER GETS ITS WINDOW BACK. The served agent numbers rows 0..511 within
  *   the query; the bridge knows which windows it sent and puts their cycle, index
  *   and timestamps on each record.
- * - ONE SERVING WORKER, HELD WHILE THIS RUNS. Dev has 3 for everyone. On exit the
+ * - ONE SERVING WORKER, HELD WHILE THIS RUNS. On exit the
  *   agent is cancelled and deleted, and the bundle deleted; the ids sit in
  *   fit/out/app_serving_state.json until then, so `python fit/cleanup.py --yes`
  *   finds them after a hard kill. An agent the platform released (20 minutes
  *   without a query, e.g. a paused replay) is replaced on the next window.
  *
- * Env (repo .env): ATAI_API_ENDPOINT (Dev or Staging), ATAI_API_KEY.
+ * Env (repo .env): ATAI_API_ENDPOINT, ATAI_API_KEY.
  * Env (app-serving/.env): WINDOWS_PER_QUERY (default 1).
  */
 import mqtt from 'mqtt';
@@ -42,11 +42,6 @@ const ENDPOINT = ROOT ? `${ROOT}/api` : '';
 const KEY = process.env.ATAI_API_KEY;
 if (!ENDPOINT || !KEY) {
 	console.error('bridge: set ATAI_API_ENDPOINT and ATAI_API_KEY in the repo .env');
-	process.exit(1);
-}
-// Match the deployment, not one host: dev is api.dev.* and platform.dev.*, staging platform.stage.*
-if (!['.dev.', '.stage.'].some((d) => ROOT.includes(d))) {
-	console.error(`bridge: ${ENDPOINT}: agent serving is on Dev and Staging only for now`);
 	process.exit(1);
 }
 const STATE = path.join(REPO, 'fit', 'out', 'app_serving_state.json');
@@ -209,7 +204,7 @@ async function dropAgent(id) {
 	return true;
 }
 
-/** Start an agent, retrying while Dev's serving workers are all taken. */
+/** Start an agent, retrying while the serving workers are all taken. */
 async function startWithRetry() {
 	live.running = false;
 	for (let wait = 15_000; !stopping; wait = Math.min(wait * 2, 120_000)) {

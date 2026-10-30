@@ -12,7 +12,7 @@ From the ids in fit/out/ (--out for another folder):
   Stage 8   serve_state.json: a serving agent and its bundle, if fit/serve.py was
             killed before it could delete them. The bundle's own listing also finds
             an agent a rejected run created but never recorded. A running serving
-            agent holds one of Dev's 3 serving workers until it is cancelled, or
+            agent holds a serving worker until it is cancelled, or
             idle 20 minutes.
   Stage 6   delivery/runs.json (and delivery_check/runs.json): the delivery agents
             and their bundle. The bundle's own listing also finds runs a rerun

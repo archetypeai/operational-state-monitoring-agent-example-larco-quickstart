@@ -1,6 +1,6 @@
 {
  "note": "The Stage 5 model's library, recomputed (the 4 library files through the promoted blueprint in batch with output_embeddings on, fit/library_embeddings.py), on the 2 directions that best separate the states: unit-length embeddings, PCA to 50, LDA to 2. For drawing only.",
- "blueprint": "osm-larco-quickstart-w512-s512-cosine-k5-uniform-kab915",
+ "blueprint": "osm-larco-quickstart-w512-s512-cosine-k5-uniform-f2vp70",
  "channels": [
   "back.x",
   "back.y",

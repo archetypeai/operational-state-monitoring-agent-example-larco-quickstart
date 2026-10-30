@@ -15,7 +15,7 @@ batch output for the same window:
   1. a bundle of Stage 5's blueprint as it is, with its source's columns given as
      bundle values (a served query has no CSV header): the platform supplies the
      `atai-records` serving connectors when it runs a bundle in serving mode, so no
-     served copy is made (atai_core #7286; creating one takes the admin role);
+     served copy is made;
   2. a bundle of it, run in serving mode;
   3. each file replayed a window at a time: every query holds one window's 512 rows
      of the 9 channels (--windows-per-query N sends N consecutive windows);
@@ -26,7 +26,7 @@ batch output for the same window:
      SIGTERM and SIGHUP included). Their ids stay in fit/out/serve_state.json until
      then, so fit/cleanup.py finds them after a kill -9.
 
-Dev and Staging only (https://github.com/archetypeai/agent-serving-example). A served agent keeps
+A served agent keeps
 nothing between queries, so a query carries the whole window, and the timestamps in its
 answer are row indices within the query. Writes fit/out/serving/.
 """
@@ -99,10 +99,6 @@ def main():
     ap.add_argument("--windows-per-query", type=int, default=1, help=f"1 = live, one window a query; up to {MAX_WPQ}")
     args = ap.parse_args()
     load_dotenv()
-    # Match the deployment, not one host: dev is api.dev.* and platform.dev.*, staging platform.stage.*
-    if not any(d in api_base() for d in (".dev.", ".stage.")):
-        sys.exit("agent serving is on dev and staging only for now "
-                 "(e.g. https://platform.dev.u1.archetypeai.app, https://platform.stage.u1.archetypeai.app)")
     ts_path = os.path.join(args.out, "test_state.json")
     if not os.path.exists(ts_path):
         sys.exit(f"no {ts_path}: run fit/test.py first")
