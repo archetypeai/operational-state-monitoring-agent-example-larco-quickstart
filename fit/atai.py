@@ -45,10 +45,10 @@ def api_base():
 def deployment(endpoint):
     """What deployment an endpoint addresses, whatever hostname it arrives under.
 
-    api.dev.u1.archetypeai.app and platform.dev.u1.archetypeai.app are one
+    api.u1.archetypeai.app and platform.u1.archetypeai.app are one
     deployment under two names: an agent created through either is visible
     through the other. So the generation (api, platform) left of the first dot
-    is dropped; the rest still separates dev.u1 from u1 from u2.
+    is dropped; the rest still separates u1 from u2.
     """
     host = re.sub(r"^[a-z]+://", "", endpoint.strip()).split("/")[0].split(":")[0]
     return re.sub(r"^(api|platform)\.", "", host).lower()

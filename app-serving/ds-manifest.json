@@ -1,0 +1,1461 @@
+{
+	"name": "archetypeai-design-system",
+	"version": "0.19.0",
+	"components": [
+		{
+			"name": "alert",
+			"import": "@archetypeai/ds-ui-svelte-console/primitives/alert",
+			"source": "https://design-system-console.archetypeai.workers.dev/r/alert.json",
+			"description": "Inline callout for operation results and system messages.",
+			"usage": [
+				"Pick variant by severity: success | warning | danger | info | neutral (default).",
+				"Slots: AlertTitle (outcome), optional AlertHeadline (specific cause, e.g. the failed file), AlertDescription (next step).",
+				"AlertAction with a `Button variant=\"secondaryCta\"` for follow-ups (View Logs)."
+			],
+			"variants": {
+				"alertVariants": {
+					"axes": {
+						"variant": [
+							"success",
+							"warning",
+							"danger",
+							"info",
+							"neutral"
+						]
+					},
+					"defaults": {
+						"variant": "neutral"
+					}
+				}
+			}
+		},
+		{
+			"name": "aspect-ratio",
+			"import": "@archetypeai/ds-ui-svelte-labs/primitives/aspect-ratio",
+			"source": "https://design-system-labs.archetypeai.workers.dev/r/aspect-ratio.json",
+			"description": "Fixed-ratio container for media and placeholders.",
+			"usage": [
+				"`<AspectRatio ratio={16 / 9}>` wrapping an image, video, or bg-muted placeholder."
+			]
+		},
+		{
+			"name": "avatar",
+			"import": "@archetypeai/ds-ui-svelte-console/primitives/avatar",
+			"source": "https://design-system-console.archetypeai.workers.dev/r/avatar.json",
+			"description": "User or entity avatar with an image and an initials fallback.",
+			"usage": [
+				"Always compose Root + Fallback: `Avatar.Root` on its own renders an empty circle. The fallback is what shows while the image loads, when there is no `src`, and when the image 404s — so initials (`{user.name.split(' ').map((p) => p[0]).join('')}`) belong there even when you expect a photo.",
+				"Image: `Avatar.Image src={user.avatarUrl} alt={user.name}` — it is a real `<img>`, so `alt` is yours to pass and a missing one is an accessibility violation. Use the person's name, not \"avatar\".",
+				"Size: `sm` (28px) for dense chrome like the side-nav profile row, `default` (36px) for lists and headers, `lg` (48px) for a profile or detail header. The size lands on `data-size` and the fallback's type scales off it through `group-data-[size=…]/avatar`, so overriding the root's `size-*` by hand desynchronises the two — add a size variant instead.",
+				"Shape: `circle` for people, `squircle` (12px radius at every size) for non-human entities (an org, a workspace, a model) so the two read apart at a glance. The radius is deliberately generous — at `sm` the squircle sits close to a circle, which is the intended look.",
+				"Skipping the loading flash: pass `loadingStatus=\"loaded\"` when the image is already cached or inlined, which shows it immediately instead of flashing the fallback. It is bindable, so `bind:loadingStatus` also reads the outcome (`loading` | `loaded` | `error`) if the caller needs to react to a broken image.",
+				"Stacking (“who is on this session”): a `flex -space-x-2` row plus `*:data-[slot=avatar]:ring-2 *:data-[slot=avatar]:ring-background *:data-[slot=avatar]:border-0` on the container. The ring is what cuts each avatar out of the one behind it, and it hangs off `data-slot`, so separation stays a container concern rather than a prop. Drop the border in a stack: the root's `border-border` sits just inside the ring, so leaving it on renders a grey rim against a white gap against the next rim, and the overlap reads muddy. Stack images, not initials — the overlap covers each avatar's trailing edge, which a face survives and two letters do not."
+			],
+			"variants": {
+				"avatarVariants": {
+					"axes": {
+						"size": [
+							"sm",
+							"default",
+							"lg"
+						],
+						"shape": [
+							"circle",
+							"squircle"
+						]
+					},
+					"defaults": {
+						"size": "default",
+						"shape": "circle"
+					}
+				}
+			}
+		},
+		{
+			"name": "badge",
+			"import": "@archetypeai/ds-ui-svelte-console/primitives/badge",
+			"source": "https://design-system-console.archetypeai.workers.dev/r/badge.json",
+			"description": "Small pill for a run's status, a selected item, or a step number — nothing else.",
+			"usage": [
+				"Restraint: a badge is for state the user acts on, not decoration. Do not badge categories, tags, counts, model names, versions, units or metadata — write them as plain text (`text-muted-foreground` for secondary). One status badge per item at most, and never a badge next to text that already says the same thing.",
+				"Status: `variant=\"status\"` colored by a status token on the text alone, e.g. class=\"text-atai-good\" (Completed), atai-critical (Failed), atai-warning (Interrupted), atai-neutral (Running), muted-foreground (Pending). The outline follows the text colour, so never pass a `border-*` class or remove the outline.",
+				"Size: `size=\"sm\"` gives the status pill smaller type and tighter spacing for tight spaces (cards, tables) or inline with text; defaults to `size=\"default\"`.",
+				"Selection: `variant=\"selection\"` for dismissible picks, with an embedded `Button variant=\"ghost\" size=\"inline\" visibility=\"dimmed\"` X icon to remove.",
+				"Step: `variant=\"step\"` is the filled circle that numbers the steps of an ordered procedure, e.g. `<Badge variant=\"step\" aria-hidden=\"true\">{i + 1}</Badge>` leading each row with `flex items-center gap-2`. Pass the number only, 1-based; one digit is a circle and more digits stretch it into a pill of the same height. Hide it from assistive tech when the row's label already names the step. `size=\"sm\"` (16px) suits dense lists and `text-xs` labels; `size=\"lg\"` (24px) steps set beside larger type.",
+				"Spacing: the badge carries no outer margin — the container owns the gap (e.g. `flex gap-2`). For the rare trailing-edge case, add `class=\"-mr-1\"` at the call site."
+			],
+			"variants": {
+				"badgeVariants": {
+					"axes": {
+						"variant": [
+							"selection",
+							"status",
+							"step"
+						],
+						"size": [
+							"default",
+							"sm",
+							"lg"
+						]
+					},
+					"defaults": {
+						"variant": "status",
+						"size": "default"
+					}
+				}
+			}
+		},
+		{
+			"name": "breadcrumb",
+			"import": "@archetypeai/ds-ui-svelte-console/primitives/breadcrumb",
+			"source": "https://design-system-console.archetypeai.workers.dev/r/breadcrumb.json",
+			"description": "Hierarchical navigation trail for nested console flows (e.g. user management).",
+			"usage": [
+				"Compose Breadcrumb.Root > Breadcrumb.List > Breadcrumb.Item; place a Breadcrumb.Separator between items (defaults to a chevron, override via children).",
+				"Ancestors are links (`Breadcrumb.Link href=\"...\"`); the current location is the non-link `Breadcrumb.Page` (carries aria-current=\"page\").",
+				"Collapse long trails by putting `Breadcrumb.Ellipsis` inside a Breadcrumb.Item. Typography is mono/uppercase to match the `backToDashboard` button."
+			]
+		},
+		{
+			"name": "button",
+			"import": "@archetypeai/ds-ui-svelte-console/primitives/button",
+			"source": "https://design-system-console.archetypeai.workers.dev/r/button.json",
+			"description": "Action trigger for every emphasis level; renders an <a> when href is set. `loading` prop swaps in a spinner.",
+			"usage": [
+				"cta — filled primary action (Create, Submit, modal confirm); one per view. `size=\"sm\"` in toolbars and dialog footers.",
+				"secondaryCta — capitalized text action, underline on hover (Learn More, alert/banner follow-ups).",
+				"outline — secondary action paired against a cta (Cancel/Close in dialog footers); also `width=\"full\"` add-file buttons in pickers.",
+				"ghost + size=\"icon\" — quiet icon action everywhere: row actions, pager arrows, sidebar collapse, card headers (copy, dismiss).",
+				"accent + size=\"icon\" — quiet icon control that gains a bg on hover (steppers, profile/theme triggers).",
+				"destructive + size=\"icon\" — delete/end action, turns red on hover; add visibility=\"hover\" inside list rows so it only appears on row hover.",
+				"floating + size=\"overlay\" — backdrop-blurred control floating over media or scrolling panels (sort selector).",
+				"link — inline text link; size=\"inline\" flows inside prose (empty states). announcement — babyblue brand pill.",
+				"typography=\"mono\" uppercases label text (dialog footer CTAs); width=\"full\" for full-width form buttons."
+			],
+			"variants": {
+				"buttonVariants": {
+					"axes": {
+						"variant": [
+							"cta",
+							"secondaryCta",
+							"ghost",
+							"outline",
+							"accent",
+							"destructive",
+							"floating",
+							"link",
+							"announcement"
+						],
+						"size": [
+							"default",
+							"sm",
+							"lg",
+							"icon",
+							"overlay",
+							"inline"
+						],
+						"typography": [
+							"default",
+							"mono"
+						],
+						"visibility": [
+							"default",
+							"hover",
+							"dimmed"
+						],
+						"width": [
+							"default",
+							"fit",
+							"full"
+						],
+						"justify": [
+							"default",
+							"between"
+						]
+					},
+					"defaults": {
+						"variant": "cta",
+						"size": "default",
+						"typography": "default",
+						"visibility": "default",
+						"width": "default",
+						"justify": "default"
+					}
+				}
+			}
+		},
+		{
+			"name": "card",
+			"import": "@archetypeai/ds-ui-svelte-console/primitives/card",
+			"source": "https://design-system-console.archetypeai.workers.dev/r/card.json",
+			"description": "Surface container with Header/Title/Action/Content/Footer sub-parts.",
+			"usage": [
+				"Detail panel: `variant=\"info\"` + Card.Header (Card.Title + Card.Action icon) + Card.Content layout=\"stack\" holding Label sectionHeader → mono value pairs (Job Details, dialog notes).",
+				"Grid tile: `variant=\"status\"` for clickable job/model status cards in dashboard grids (pass href); `variant=\"intro\"` for hero/landing cards.",
+				"Card.Title capitalizes by default. Pass `titleCase={false}` when the title is user-authored and must render verbatim (agent names, filenames) — never reach in with `[&_[data-slot=card-title]]:normal-case`.",
+				"Single-metric status cards often need no CardHeader — omit when content is self-explanatory."
+			],
+			"variants": {
+				"cardVariants": {
+					"axes": {
+						"variant": [
+							"default",
+							"intro",
+							"status",
+							"info"
+						],
+						"titleCase": [
+							"true",
+							"false"
+						]
+					},
+					"defaults": {
+						"variant": "default",
+						"titleCase": "true"
+					}
+				},
+				"cardContentVariants": {
+					"axes": {
+						"layout": [
+							"stack",
+							"compact"
+						]
+					}
+				}
+			}
+		},
+		{
+			"name": "chart",
+			"import": "@archetypeai/ds-ui-svelte-labs/primitives/chart",
+			"source": "https://design-system-labs.archetypeai.workers.dev/r/chart.json",
+			"description": "Chart.Container + Chart.Tooltip wrappers around layerchart for custom charts (prefer sensor-chart / scatter-chart when they fit).",
+			"usage": [
+				"Wrap every layerchart in `<Chart.Container config={...} class=\"aspect-auto h-[220px] w-full\">`; config maps data keys to { label, color: 'var(--chart-N)' } (chart-1…chart-5).",
+				"layerchart is pinned to an exact prerelease — never loosen it."
+			]
+		},
+		{
+			"name": "checkbox",
+			"import": "@archetypeai/ds-ui-svelte-console/primitives/checkbox",
+			"source": "https://design-system-console.archetypeai.workers.dev/r/checkbox.json",
+			"description": "Binary selection control (bits-ui).",
+			"usage": [
+				"`bind:checked` + aria-label; for selectable file rows wrap checkbox + name + size in a <label> row, selected state via bg-atai-brand-babyblue/60."
+			]
+		},
+		{
+			"name": "codeblock",
+			"import": "@archetypeai/ds-ui-svelte-console/primitives/codeblock",
+			"source": "https://design-system-console.archetypeai.workers.dev/r/codeblock.json",
+			"description": "Syntax-highlighted code display (CodeBlock, shiki; yaml/json/python/shell) and editable code field with JSON-schema validation for YAML (CodeBlockEditor).",
+			"usage": [
+				"`<CodeBlock code language=\"yaml\" />` for read-only code (border built in). `language` accepts `\"yaml\" | \"json\" | \"python\" | \"shell\"` — use `\"shell\"` for bash/sh/curl snippets. Theme switches are CSS-only — no {#key} wrapper needed. Grows to content by default and never clips: whenever its height is constrained — by a `max-h-*` class, by a flex/grid parent like `Dialog.Body`, or by the `maxHeight`/`scroll` props — the internal scroller shows a scrollbar instead. To cap it yourself pass `maxHeight=\"20rem\"` (any CSS length) or the `scroll` shorthand (=600px); neither is needed just to avoid clipping. `showLineNumbers={false}` hides the gutter; `wrap` wraps long lines instead of scrolling horizontally.",
+				"Config editors: `<CodeBlockEditor bind:value bind:valid bind:validating bind:schemaUnavailable schema={jsonSchema} placeholder showDownload downloadBaseName disabled />` + a status badge row driven by the bindables (validating → 'Checking…' spinner; !valid → 'Invalid'; valid+schemaUnavailable → 'YAML parses'; valid → 'Valid YAML'). Grows to content (floor via `minHeight`, default 10rem) and scrolls rather than clips whenever its height is constrained; cap it yourself via `maxHeight` (any length) or `scroll` (=600px). Visually identical to CodeBlock. `language` (same union, default `\"yaml\"`) switches highlighting; live validation runs only for `\"yaml\"` — for other languages `schema` is ignored and `valid` stays true. The download button's extension/MIME follows the language (.yaml/.json/.py/.sh). Validation errors pair what happened with a fix (schema pointers render as `model.learning_rate`, types as plain words); when the schema fails with no field to point at, `schemaFallbackFix=\"...\"` overrides the generic fix line with app-specific guidance."
+			]
+		},
+		{
+			"name": "collapsible",
+			"import": "@archetypeai/ds-ui-svelte-console/primitives/collapsible",
+			"source": "https://design-system-console.archetypeai.workers.dev/r/collapsible.json",
+			"description": "Expandable/collapsible section.",
+			"usage": [
+				"`Collapsible.Root bind:open` + `Collapsible.Trigger chevron=\"start\"` wrapping a Label sectionHeader → folding config/detail sections."
+			],
+			"variants": {
+				"collapsibleTriggerVariants": {
+					"axes": {
+						"width": [
+							"default",
+							"fit",
+							"full"
+						],
+						"chevron": [
+							"start",
+							"end"
+						]
+					},
+					"defaults": {
+						"width": "default",
+						"chevron": "start"
+					}
+				}
+			}
+		},
+		{
+			"name": "command",
+			"import": "@archetypeai/ds-ui-svelte-console/primitives/command",
+			"source": "https://design-system-console.archetypeai.workers.dev/r/command.json",
+			"description": "Searchable menu: a text field over a filtered, keyboard-navigable list of items, with groups, an empty state and a footer that stays in view. Reads as a DropdownMenu.",
+			"usage": [
+				"`<Command.Root>` holds a `Command.Input`, a `Command.List` of `Command.Group`s (each a `Command.GroupHeading` and a `Command.GroupItems` of `Command.Item`s, with `Command.Separator`s between), a `Command.Empty`, and an optional `Command.Footer`. Put it in a `Popover.Content class=\"w-120 p-0\"` for a searchable menu, or on the page as a standalone search list.",
+				"Filtering: by default Command filters and ranks the items itself against each item's `value` (plus any `keywords`). When the caller filters (its own match rule, a sort, a server search), pass `shouldFilter={false}` and render only the matching items; bind the input with `bind:value` to read the query.",
+				"`Command.Input` is an `InputGroup` with the search icon at its start. Controls that belong in the field, such as a sort toggle (`Tabs.List variant=\"segmented\"` with icon-only triggers and an `aria-label` on each), go in as its children and sit at its end.",
+				"`Command.Item` takes `onSelect` (Enter or click) and `disabled`, which skips it in arrow-key navigation and dims it; say why in a `title`. The arrow keys move the highlight; pass `loop` on the root to wrap from the last item to the first. It takes DropdownMenu.Item's `variant` (`destructive`), `inset`, `typography` and `justify`, so a row is built the same way in both menus.",
+				"Mark the current pick with `data-checked={item.value === current}`: the item's trailing check shows on it, so the menu opens showing what's picked. Every item reserves the check's width, so rows line up whether or not one is checked.",
+				"`Command.Empty` shows when no item is left: \"No file matches “report”.\" names the query. With the built-in filter that happens on its own. With `shouldFilter={false}` Command counts every mounted item, so while a query is typed leave out the static rows (an \"All files\" row, the footer) or Empty never shows.",
+				"`Command.Footer` sits below the list, outside its scroll, so it stays in view however long the list is (\"Show all 240 files\"). A `Command.Item` in the footer is still reached by the arrow keys; give it `forceMount` if it should stay while a built-in filter runs.",
+				"Headings, items and separators take DropdownMenu's own variants (`dropdownMenuGroupHeadingVariants`, `dropdownMenuItemVariants` through `commandItemVariants`, `dropdownMenuSeparatorVariants`), so the two menus can't drift apart. Style an item's row layout with `class`; don't restyle the highlight."
+			],
+			"variants": {
+				"commandItemVariants": {
+					"axes": {
+						"variant": [
+							"default",
+							"destructive"
+						]
+					}
+				}
+			}
+		},
+		{
+			"name": "console-utils",
+			"import": "@archetypeai/ds-ui-svelte-console/primitives/utils",
+			"source": "https://design-system-console.archetypeai.workers.dev/r/console-utils.json",
+			"description": "className merge helper cn() (clsx + tailwind-merge with the rounded-interactive extension). Re-exported as $lib/utils in scaffolded apps."
+		},
+		{
+			"name": "copy-button",
+			"import": "@archetypeai/ds-ui-svelte-console/primitives/copy-button",
+			"source": "https://design-system-console.archetypeai.workers.dev/r/copy-button.json",
+			"description": "Copy-to-clipboard control that owns its own copied state.",
+			"usage": [
+				"Icon beside a value: `CopyButton value={job.id} label=\"Copy job ID\" title={job.id}` — `label` is the accessible name, so say what is being copied rather than \"Copy\", and pass the full value as `title` whenever the visible text is truncated.",
+				"Value inside the control: pass the value as children (`<CopyButton value={id} label=\"Copy blueprint ID\">{id}</CopyButton>`) and the whole thing becomes one copy target with one hover, instead of a 16px icon beside plain text. The hit area follows automatically — children give the `inline` size, icon-only gives the 36px `icon` size.",
+				"Feedback: a check mark replaces the glyph for 1500ms (`feedbackDuration`) and a toast fires on both success and failure, so a mounted `<Toaster />` is a prerequisite. Pass `toast={false}` where the inline check is feedback enough — a table of IDs, where a toast per copy is noise — and the component announces the copy to screen readers itself instead. `successMessage` / `errorMessage` override the wording; `onCopy(copied)` hooks anything else.",
+				"Inside a row that navigates: `stopPropagation` keeps the click off the row's own handler (and off an enclosing anchor). Reveal-on-hover is the Button axis, `visibility=\"hover\"`, which needs `group` on the row — but not when the value is inside the control, since it would fade the value too.",
+				"Copying without a button: `copyText(text)` is exported from the same subpath for a labelled action that happens to copy (a \"Copy CSV\" button in a dialog footer). It resolves to whether the write landed."
+			]
+		},
+		{
+			"name": "counter",
+			"import": "@archetypeai/ds-ui-svelte-console/primitives/counter",
+			"source": "https://design-system-console.archetypeai.workers.dev/r/counter.json",
+			"description": "Odometer for a numeric count: a pill by default, or bare so any number on the page can tick.",
+			"usage": [
+				"Count: `Counter value={412}` rolls only the digit places that changed; past 999 it abbreviates (`1.2K`, `123K`, `1.2M`) so it never grows a fifth column, and the exact number stays in its title + accessible label.",
+				"Absent vs zero vs loading: omit the component entirely when there is no count, pass `value={0}` for an empty one, and `value={null}` while it is still loading (reserves the same width so nothing reflows when it arrives).",
+				"At least, for a list you cannot size: `Counter value={103} atLeast` renders `103+` when the caller has loaded 103 rows and knows only that more exist (keyset pagination, a capped query). The number is the caller's own, not a rounded threshold, and the accessible label reads \"at least 103\". Past 999 the abbreviation truncates instead of rounding, so `1250` shows `1.2K+` and never claims rows nobody loaded. `atLeast` is ignored on `value={0}`, where it would state nothing.",
+				"Three axes, each one thing: `variant` is the treatment (`pill`, the default, or `bare`), `tone` is colour (`solid` or `muted`, and `muted` still reads as muted on a bare counter), and `size` is the box (`sm` for dense rows like tables and list items). Inside a tab strip use `Tabs.Count`, which re-colors it for the active/inactive trigger.",
+				"A number anywhere, not just a pill: `variant=\"bare\" size=\"inherit\"` drops the pill and the mono face and takes the typography of whatever it sits in, so a headline figure, a table cell or a number in running text can roll. It sits on the surrounding baseline and reserves no width of its own, so it can be dropped mid-sentence: `Processed <Counter value={n} variant=\"bare\" size=\"inherit\" exact /> of 2,000 rows.` Size and weight come from the parent (`<span class=\"text-6xl\">`), and the digit row tracks the line height, so it works at any scale.",
+				"Decimals: `decimals={2}` keeps two places (`0.97`, `1.00`) instead of rounding to a whole number, rounding half up like `Math.round(v * 100) / 100`, and is never abbreviated. Use it for a score or a rate; a count stays a whole number.",
+				"Exact digits: `exact` turns off the `1.2K` abbreviation and rolls the whole number. Use it where the reader is meant to read the figure rather than glance at it (a headline, a total in a sentence); leave it off in chrome, where a fifth column would reflow the layout."
+			],
+			"variants": {
+				"counterVariants": {
+					"axes": {
+						"tone": [
+							"solid",
+							"muted"
+						],
+						"variant": [
+							"pill",
+							"bare"
+						],
+						"size": [
+							"default",
+							"sm",
+							"inherit"
+						]
+					},
+					"defaults": {
+						"tone": "solid",
+						"variant": "pill",
+						"size": "default"
+					}
+				}
+			}
+		},
+		{
+			"name": "dialog",
+			"import": "@archetypeai/ds-ui-svelte-console/primitives/dialog",
+			"source": "https://design-system-console.archetypeai.workers.dev/r/dialog.json",
+			"description": "Modal dialog for forms and confirmations.",
+			"usage": [
+				"Open from a button: `<Dialog.Trigger>{#snippet child({ props })}<Button variant=\"outline\" size=\"sm\" {...props}>…</Button>{/snippet}</Dialog.Trigger>`.",
+				"Content = Dialog.Header (Title + Description) + Dialog.Body (form fields) + Dialog.Footer justify=\"between\" pairing `outline` Cancel and `cta` Submit, both size=\"sm\" typography=\"mono\"."
+			],
+			"variants": {
+				"dialogFooterVariants": {
+					"axes": {
+						"justify": [
+							"default",
+							"between"
+						]
+					},
+					"defaults": {
+						"justify": "default"
+					}
+				}
+			}
+		},
+		{
+			"name": "dropdown-menu",
+			"import": "@archetypeai/ds-ui-svelte-console/primitives/dropdown-menu",
+			"source": "https://design-system-console.archetypeai.workers.dev/r/dropdown-menu.json",
+			"description": "Contextual action menu.",
+			"usage": [
+				"Trigger via child snippet spread onto a Button (profile menu: `variant=\"accent\"` avatar + chevron, rounded-full).",
+				"Styled triggers: `DropdownMenu.Trigger variant=\"filter\"` for toolbar/list filter dropdowns; `variant=\"input\"` for form-field-styled dropdowns in pickers.",
+				"`DropdownMenu.Content align=\"end\" class=\"min-w-64\"`; items `justify=\"between\"` with a trailing icon; `closeOnSelect={false}` for in-menu toggles (dark mode); Separator before Sign Out.",
+				"Section headings: `DropdownMenu.Label` for a standalone heading, `DropdownMenu.GroupHeading` inside a `Group`. Both render in the console's section-header treatment by default (10px mono, uppercase, muted, more space above than below so the heading binds to the rows it introduces), so a heading recedes rather than competing with its items. Set no type or colour classes on them; if a Label is carrying a row of content rather than a heading, override with `class`."
+			],
+			"variants": {
+				"dropdownMenuTriggerVariants": {
+					"axes": {
+						"variant": [
+							"default",
+							"ghost",
+							"input",
+							"filter"
+						],
+						"typography": [
+							"default",
+							"mono"
+						]
+					},
+					"defaults": {
+						"variant": "default",
+						"typography": "default"
+					}
+				},
+				"dropdownMenuItemVariants": {
+					"axes": {
+						"variant": [
+							"default",
+							"destructive"
+						],
+						"inset": [
+							"true",
+							"false"
+						],
+						"typography": [
+							"default",
+							"mono"
+						],
+						"justify": [
+							"default",
+							"between"
+						]
+					},
+					"defaults": {
+						"variant": "default",
+						"inset": "false",
+						"typography": "default",
+						"justify": "default"
+					}
+				},
+				"dropdownMenuSubTriggerVariants": {
+					"axes": {
+						"inset": [
+							"true",
+							"false"
+						]
+					},
+					"defaults": {
+						"inset": "false"
+					}
+				},
+				"dropdownMenuLabelVariants": {
+					"axes": {
+						"inset": [
+							"true",
+							"false"
+						]
+					},
+					"defaults": {
+						"inset": "false"
+					}
+				},
+				"dropdownMenuGroupHeadingVariants": {
+					"axes": {
+						"inset": [
+							"true",
+							"false"
+						]
+					},
+					"defaults": {
+						"inset": "false"
+					}
+				}
+			}
+		},
+		{
+			"name": "dropzone",
+			"import": "@archetypeai/ds-ui-svelte-console/primitives/dropzone",
+			"source": "https://design-system-console.archetypeai.workers.dev/r/dropzone.json",
+			"description": "File-upload drop target with per-phase snippets.",
+			"usage": [
+				"`<DropZone.Root size=\"compact\" multiple ariaLabel=\"Upload files\">` in file pickers, {#snippet idle()} / dragging() / uploading()} states; `size=\"fill\"` fills an entire empty panel.",
+				"idle = icon + DropZone.CaptionStack (Title + Action + Hint); uploading = `<Spinner size=\"lg\" />` + Title."
+			],
+			"variants": {
+				"dropzoneVariants": {
+					"axes": {
+						"size": [
+							"default",
+							"fill",
+							"compact"
+						]
+					},
+					"defaults": {
+						"size": "default"
+					}
+				}
+			}
+		},
+		{
+			"name": "empty-state",
+			"import": "@archetypeai/ds-ui-svelte-console/primitives/empty-state",
+			"source": "https://design-system-console.archetypeai.workers.dev/r/empty-state.json",
+			"description": "Placeholder for lists, tables, and panels with no content.",
+			"usage": [
+				"`variant=\"list\"` inside list/log containers (\"No matching logs found.\").",
+				"Point at the fix with inline links: `Button variant=\"link\" size=\"inline\"` inside the muted prose."
+			],
+			"variants": {
+				"emptyStateVariants": {
+					"axes": {
+						"variant": [
+							"default",
+							"list"
+						]
+					},
+					"defaults": {
+						"variant": "default"
+					}
+				}
+			}
+		},
+		{
+			"name": "input",
+			"import": "@archetypeai/ds-ui-svelte-console/primitives/input",
+			"source": "https://design-system-console.archetypeai.workers.dev/r/input.json",
+			"description": "Single-line text input.",
+			"usage": [
+				"`variant=\"search\"` + placeholder + bind:value — search boxes in toolbars and log viewers (Search jobs…).",
+				"default variant for form fields; `variant=\"filter\"` — search field inside filter/dropdown popovers; `variant=\"login\"` pairs with input-group login."
+			],
+			"variants": {
+				"inputVariants": {
+					"axes": {
+						"variant": [
+							"default",
+							"search",
+							"login",
+							"filter"
+						],
+						"size": [
+							"sm",
+							"default"
+						]
+					},
+					"defaults": {
+						"variant": "default",
+						"size": "default"
+					}
+				}
+			}
+		},
+		{
+			"name": "input-group",
+			"import": "@archetypeai/ds-ui-svelte-console/primitives/input-group",
+			"source": "https://design-system-console.archetypeai.workers.dev/r/input-group.json",
+			"description": "Input with attached addons and buttons.",
+			"usage": [
+				"Credential field: `InputGroup.Root variant=\"login\"` + `InputGroup.Input variant=\"login\" type=\"password\"` + `InputGroup.Addon align=\"inline-end\"` holding an `InputGroup.Button size=\"icon-sm\"` eye toggle (aria-label for show/hide)."
+			],
+			"variants": {
+				"inputGroupVariants": {
+					"axes": {
+						"variant": [
+							"default",
+							"login",
+							"form"
+						],
+						"width": [
+							"default",
+							"fit",
+							"full"
+						]
+					},
+					"defaults": {
+						"variant": "default",
+						"width": "full"
+					}
+				},
+				"inputGroupAddonVariants": {
+					"axes": {
+						"align": [
+							"inline-start",
+							"inline-end",
+							"block-start",
+							"block-end"
+						]
+					},
+					"defaults": {
+						"align": "inline-start"
+					}
+				},
+				"inputGroupButtonVariants": {
+					"axes": {
+						"size": [
+							"xs",
+							"sm",
+							"icon-xs",
+							"icon-sm"
+						]
+					},
+					"defaults": {
+						"size": "xs"
+					}
+				}
+			}
+		},
+		{
+			"name": "item",
+			"import": "@archetypeai/ds-ui-svelte-console/primitives/item",
+			"source": "https://design-system-console.archetypeai.workers.dev/r/item.json",
+			"description": "List-row unit for files, sessions, and uploads.",
+			"usage": [
+				"File/attachment row: `variant=\"outline\"` + Item.Media (file icon) + Item.Content (Item.Title + Item.Description with size · type).",
+				"Data row: `variant=\"rowItem\"` + Item.Row of Item.Column column=\"grow|wide|mid|status\" typography=\"mono\" — truncated mono ids with a ghost icon copy button, a status Badge column, and Item.Actions holding icon buttons with visibility=\"hover\" (the standard job/session/file row).",
+				"`variant=\"banner\"` for banner-style rows; the phase axis (pending | uploading | complete | error) + Item.Status track upload lifecycles."
+			],
+			"variants": {
+				"itemVariants": {
+					"axes": {
+						"variant": [
+							"default",
+							"outline",
+							"muted",
+							"rowItem",
+							"banner"
+						],
+						"size": [
+							"default",
+							"sm",
+							"xs",
+							"compact"
+						],
+						"phase": [
+							"default",
+							"pending",
+							"uploading",
+							"complete",
+							"error"
+						],
+						"dimmed": [
+							"off",
+							"on"
+						]
+					},
+					"defaults": {
+						"variant": "default",
+						"size": "default",
+						"phase": "default",
+						"dimmed": "off"
+					}
+				},
+				"itemColumnVariants": {
+					"axes": {
+						"column": [
+							"grow",
+							"wide",
+							"mid",
+							"status"
+						],
+						"typography": [
+							"default",
+							"mono"
+						]
+					},
+					"defaults": {
+						"column": "grow",
+						"typography": "default"
+					}
+				},
+				"itemContentVariants": {
+					"axes": {
+						"typography": [
+							"default",
+							"mono"
+						]
+					},
+					"defaults": {
+						"typography": "default"
+					}
+				},
+				"itemMediaVariants": {
+					"axes": {
+						"variant": [
+							"default",
+							"icon",
+							"image"
+						]
+					},
+					"defaults": {
+						"variant": "default"
+					}
+				},
+				"itemStatusVariants": {
+					"axes": {
+						"phase": [
+							"default",
+							"pending",
+							"uploading",
+							"complete",
+							"error"
+						],
+						"visibility": [
+							"default",
+							"idleOnly"
+						]
+					},
+					"defaults": {
+						"phase": "default",
+						"visibility": "default"
+					}
+				}
+			}
+		},
+		{
+			"name": "kbd",
+			"import": "@archetypeai/ds-ui-svelte-labs/primitives/kbd",
+			"source": "https://design-system-labs.archetypeai.workers.dev/r/kbd.json",
+			"description": "Keyboard-shortcut display.",
+			"usage": [
+				"`Kbd.Group` holding one `Kbd.Root` per key (⌘ K, Ctrl Shift P)."
+			]
+		},
+		{
+			"name": "label",
+			"import": "@archetypeai/ds-ui-svelte-console/primitives/label",
+			"source": "https://design-system-console.archetypeai.workers.dev/r/label.json",
+			"description": "Text label for form fields, sections, and headings.",
+			"usage": [
+				"`variant=\"sectionHeader\"` — the ubiquitous mono uppercase heading above values and form sections, in card content and collapsible triggers.",
+				"`variant=\"tableColumnHeader\"` — dashboard table/list column headers; `variant=\"selectionSubHeader\"` — sub-header over selection rows in pickers.",
+				"`variant=\"fieldError\"` — validation error under a field; `variant=\"workbenchHeader\"` — workbench panel headers; `variant=\"pagination\"` — 'Page X of Y'.",
+				"default variant + for= on form inputs."
+			],
+			"variants": {
+				"labelVariants": {
+					"axes": {
+						"variant": [
+							"default",
+							"pagination",
+							"destructive",
+							"fieldError",
+							"sectionHeader",
+							"tableColumnHeader",
+							"workbenchHeader",
+							"responseCaption",
+							"selectionSubHeader"
+						]
+					},
+					"defaults": {
+						"variant": "default"
+					}
+				}
+			}
+		},
+		{
+			"name": "labs-utils",
+			"import": "@archetypeai/ds-ui-svelte-labs/primitives/utils",
+			"source": "https://design-system-labs.archetypeai.workers.dev/r/labs-utils.json",
+			"description": "Labs domain helpers plus cn() re-exported from console."
+		},
+		{
+			"name": "loading-bar",
+			"import": "@archetypeai/ds-ui-svelte-console/primitives/loading-bar",
+			"source": "https://design-system-console.archetypeai.workers.dev/r/loading-bar.json",
+			"description": "Indeterminate loading bar for route/navigation transitions.",
+			"usage": [
+				"Mount once in the root layout and gate on navigation: `{#if navigating.to}<LoadingBar />{/if}` (SvelteKit `navigating` from `$app/state`). Presentational only — it does not read navigation state itself.",
+				"`position=\"bottom\"` pins it to the viewport bottom; always fixed + full-width. For navigation only. Work inside a page uses `Progress`: a value when the total is known, `value={null}` when it is not."
+			],
+			"variants": {
+				"loadingBarVariants": {
+					"axes": {
+						"position": [
+							"top",
+							"bottom"
+						]
+					},
+					"defaults": {
+						"position": "top"
+					}
+				}
+			}
+		},
+		{
+			"name": "logo",
+			"import": "@archetypeai/ds-ui-svelte-labs/primitives/logo",
+			"source": "https://design-system-labs.archetypeai.workers.dev/r/logo.json",
+			"description": "Archetype AI brand logo mark.",
+			"usage": [
+				"Headers: `<Logo class=\"h-6 w-auto\" />` next to the app title; sizes sm | default | lg.",
+				"Compact lockup: `variant=\"compact\"` is the stacked social/avatar artwork (~1.6:1 instead of the wordmark's ~5.4:1). Use it where a horizontal wordmark will not fit — square tiles, avatars, narrow sidebars, splash marks. Defaults to `variant=\"default\"`.",
+				"Sizing is shared: both variants honour size sm | default | lg (h-4 | h-6 | h-8) and take their width from the artwork aspect, so compact renders far narrower at the same height. Prefer default or lg for compact."
+			],
+			"variants": {
+				"logoVariants": {
+					"axes": {
+						"variant": [
+							"default",
+							"compact"
+						],
+						"size": [
+							"sm",
+							"default",
+							"lg"
+						]
+					},
+					"defaults": {
+						"variant": "default",
+						"size": "default"
+					}
+				}
+			}
+		},
+		{
+			"name": "menubar",
+			"import": "@archetypeai/ds-ui-svelte-labs/primitives/menubar",
+			"source": "https://design-system-labs.archetypeai.workers.dev/r/menubar.json",
+			"description": "Branded app header with logo, partner-logo slot, action children, and built-in dark-mode toggle.",
+			"usage": [
+				"Top of every dashboard shell; children render as right-side actions — `Button variant=\"link\" class=\"text-muted-foreground no-underline hover:underline\"`."
+			]
+		},
+		{
+			"name": "popover",
+			"import": "@archetypeai/ds-ui-svelte-console/primitives/popover",
+			"source": "https://design-system-console.archetypeai.workers.dev/r/popover.json",
+			"description": "A floating panel anchored to a trigger, on DropdownMenu's surface and motion. Padded by default; hosts a Command for a searchable menu.",
+			"usage": [
+				"DropdownMenu vs Popover + Command: a plain list of actions or choices is a `DropdownMenu`. Reach for `Popover` + `Command` only when the list needs a search field, which DropdownMenu can't host (its typeahead takes the keystrokes), or a footer that stays in view while the list scrolls.",
+				"`<Popover.Root bind:open>` with a `Popover.Trigger` and a `Popover.Content`. The trigger is unstyled: pass a `Button` through its `child` snippet (`{#snippet child({ props })}<Button variant=\"outline\" {...props}>…</Button>{/snippet}`) so it looks like every other trigger.",
+				"`Popover.Content` is portalled, offset 4px, `w-72` and padded (`p-4`, children `gap-4`) for free-form content. For a searchable menu, put a `Command` inside and pass `class=\"w-120 p-0\"` (any width, no padding) so the Command sits flush. `align=\"start\"` lines it up with a trigger at the start of a row.",
+				"A searchable menu's trigger is a combobox: give the `Button` `role=\"combobox\"`, `aria-expanded={open}` and an `aria-label` naming what it picks (a combobox isn't named by its text, unlike a button), and bind its `ref`. On a pick, close and hand focus back to the trigger: `open = false; tick().then(() => triggerRef?.focus())`. `Popover.Close` wraps a control that should close it directly."
+			]
+		},
+		{
+			"name": "progress",
+			"import": "@archetypeai/ds-ui-svelte-console/primitives/progress",
+			"source": "https://design-system-console.archetypeai.workers.dev/r/progress.json",
+			"description": "Progress bar: fills to a known value, or sweeps while the total is unknown.",
+			"usage": [
+				"A rolling percentage above the bar is composed, not a prop: wrap a bare Counter and the bar in a `flex flex-col gap-2.5`, with the figure as `<span class=\"font-mono text-6xl\"><Counter value={pct} variant=\"bare\" size=\"inherit\" exact /></span>` and a `text-muted-foreground text-lg` unit beside it. Mark the whole figure row `aria-hidden`: the bar already announces the value through `aria-valuenow`, so the number drawn beside it is presentation, not a second thing to read out.",
+				"Pair with a large mono readout: `<span class=\"font-mono text-4xl\">{value}</span><span class=\"text-muted-foreground text-sm\">%</span>` beside the bar.",
+				"`size=\"sm\"` for compact/inline progress (upload rows); always aria-label.",
+				"Unknown total vs not started: `value={null}` is work whose total isn't known (a running eval that reports rows scored but no row count). The bar sweeps, drops `aria-valuenow`, sets `aria-busy` and marks `data-indeterminate`. Pass `value={0}` for work with a known total that hasn't moved yet. Show what is known beside the bar (`1,276 rows scored`), never a made-up percentage.",
+				"Reduced motion holds the sweep still in the centre of the track, so it can't be read as partly done.",
+				"`variant=\"running\"` paints the bar in `atai-neutral`, the colour the console uses for a running job (see Badge's status recipe). `success` and `critical` are for finished work."
+			],
+			"variants": {
+				"progressVariants": {
+					"axes": {
+						"size": [
+							"default",
+							"sm"
+						]
+					},
+					"defaults": {
+						"size": "default"
+					}
+				},
+				"progressIndicatorVariants": {
+					"axes": {
+						"variant": [
+							"default",
+							"running",
+							"success",
+							"critical"
+						]
+					},
+					"defaults": {
+						"variant": "default"
+					}
+				}
+			}
+		},
+		{
+			"name": "scatter-chart",
+			"import": "@archetypeai/ds-ui-svelte-labs/primitives/scatter-chart",
+			"source": "https://design-system-labs.archetypeai.workers.dev/r/scatter-chart.json",
+			"description": "Scatter-plot card for embeddings and cluster views; composes BackgroundCard + Chart.",
+			"usage": [
+				"`<ScatterChart title icon data categoryKey=\"cluster\" categories={{ q1: 'Cluster A', … }} xMin xMax yMin yMax xTicks yTicks />` — data rows are { x, y, <categoryKey> }; categories map drives legend + series colors.",
+				"Streaming: append rows and set `maxPoints` for a sliding window."
+			]
+		},
+		{
+			"name": "score-bento",
+			"import": "@archetypeai/ds-ui-svelte-console/primitives/score-bento",
+			"source": "https://design-system-console.archetypeai.workers.dev/r/score-bento.json",
+			"description": "Score hero: a 0..1 score as a field of one hundred cells painted in the tone, revealed from the bottom-right corner while the figure rolls up to its value.",
+			"usage": [
+				"`ScoreBento value={0.97} label=\"Macro F1\"` paints the whole field and rolls the figure to `0.97` (a bare `Counter` with `decimals={2}`). The value is 0..1 and shown to two decimals; round the same way (`Math.round(v * 100) / 100`) anywhere else the page prints this score, so the hero and a list can't disagree on a digit.",
+				"Unscored vs in flight vs scored: `value={null}` renders the empty field and an em dash (no score yet, or a failed run). While the run is going, pass `status=\"running\"` with `value={null}`: a single diagonal sweeps the empty field back and forth without claiming a score, and `valueText` + `meta` carry what is known (`valueText=\"1,276\" meta=\"rows scored\"`). `status=\"completed\"` with a value reveals the field from the corner on first paint and lands the `eyebrow` once the last cell does.",
+				"`status` takes the agent service's eval and optimization statuses as they come (`pending`, `running`, `completed`, `failed`, `cancelled`); only `running` and `completed` move, the rest are still. Reduced motion stills both.",
+				"`tone` picks the colour: `neutral` (the default) paints from the theme's foreground and works for any score; `babyblue` and `yellow` are brand fills; `warning` is the system's warning colour, for a score that needs attention; `slate` is graded, so the score picks its step (below). Which tone a score wears is the caller's decision, e.g. a band map kept beside the thresholds. A score paints every cell in the tone's token at full strength in both themes, so the colour and the figure carry it, not an amount of cells; with no score the cells show the bento's background. A new colour is a new tone in `scoreBentoFieldVariants` and `scoreBentoInkVariants`, not a call-site override.",
+				"`tone=\"slate\"` is the one graded tone: the score's tenth picks a step on the slate scale, 50 at 0.05 up to 900 at 0.95, run the other way in dark (950 up to 100) so a high score still stands furthest from the page, with the ink flipping to white from 500. Use it where the score itself should colour the bento; the fixed tones paint the same colour at every score.",
+				"Around the figure: `eyebrow` is a short line above it (a verdict such as \"Great\"), `meta` a line under it, `valueText` replaces the two-decimal figure with a caller-formatted string, and `trailing` is a top-right line such as a delta against the previous run. `help` is a plain-words explanation of the label, behind an info disc in the top-right corner. `help` renders a Tooltip, so the page needs a `Tooltip.Provider` above it; put one in the app layout rather than wrapping each bento.",
+				"`size=\"compact\"` fits a side panel or another narrow column (a shorter field, `text-7xl` figure); `default` is the page hero. The bento sets no width or grid placement of its own: lay it out with `class` (`md:col-span-7 md:row-span-2` beside two `StatBento`s at `md:col-span-2`)."
+			],
+			"variants": {
+				"scoreBentoVariants": {
+					"axes": {
+						"size": [
+							"default",
+							"compact"
+						]
+					},
+					"defaults": {
+						"size": "default"
+					}
+				},
+				"scoreBentoFieldVariants": {
+					"axes": {
+						"tone": [
+							"neutral",
+							"babyblue",
+							"yellow",
+							"warning",
+							"slate"
+						]
+					},
+					"defaults": {
+						"tone": "neutral"
+					}
+				},
+				"scoreBentoInkVariants": {
+					"axes": {
+						"tone": [
+							"neutral",
+							"babyblue",
+							"yellow",
+							"warning",
+							"slate"
+						]
+					},
+					"defaults": {
+						"tone": "neutral"
+					}
+				},
+				"scoreBentoSlateVariants": {
+					"axes": {
+						"step": [
+							"0",
+							"1",
+							"2",
+							"3",
+							"4",
+							"5",
+							"6",
+							"7",
+							"8",
+							"9"
+						]
+					},
+					"defaults": {
+						"step": "0"
+					}
+				},
+				"scoreBentoValueVariants": {
+					"axes": {
+						"size": [
+							"default",
+							"compact"
+						]
+					},
+					"defaults": {
+						"size": "default"
+					}
+				}
+			}
+		},
+		{
+			"name": "select",
+			"import": "@archetypeai/ds-ui-svelte-console/primitives/select",
+			"source": "https://design-system-console.archetypeai.workers.dev/r/select.json",
+			"description": "Single-choice dropdown (bits-ui).",
+			"usage": [
+				"`Select.Root type=\"single\" bind:value` + `Select.Trigger variant=\"input\"` in forms; render a $derived label with a 'Select a …' fallback as trigger text.",
+				"`Select.Content > Select.Group > Select.Item value label` per option; default trigger variant in toolbars/headers."
+			],
+			"variants": {
+				"selectTriggerVariants": {
+					"axes": {
+						"variant": [
+							"default",
+							"ghost",
+							"input"
+						],
+						"size": [
+							"default",
+							"sm"
+						],
+						"typography": [
+							"default",
+							"mono"
+						]
+					},
+					"defaults": {
+						"variant": "default",
+						"size": "default",
+						"typography": "default"
+					}
+				},
+				"selectItemVariants": {
+					"axes": {
+						"typography": [
+							"default",
+							"mono"
+						]
+					},
+					"defaults": {
+						"typography": "default"
+					}
+				},
+				"selectContentVariants": {
+					"axes": {
+						"size": [
+							"default",
+							"sm"
+						]
+					},
+					"defaults": {
+						"size": "default"
+					}
+				}
+			}
+		},
+		{
+			"name": "sensor-chart",
+			"import": "@archetypeai/ds-ui-svelte-labs/primitives/sensor-chart",
+			"source": "https://design-system-labs.archetypeai.workers.dev/r/sensor-chart.json",
+			"description": "Time-series line-chart card with multi-signal support and sliding-window streaming; composes BackgroundCard + Chart.",
+			"usage": [
+				"`<SensorChart title=\"ACCELERATION SENSOR\" icon={AudioWaveformIcon} data={rows} signals={{ accel_x: 'Accel X', … }} yMin yMax yTicks />` — data rows are { timestamp: Date, <signalKey>: number }.",
+				"Streaming: append rows and set `maxPoints` (sliding window); `axis=\"y\"` hides the time axis while streaming."
+			]
+		},
+		{
+			"name": "separator",
+			"import": "@archetypeai/ds-ui-svelte-console/primitives/separator",
+			"source": "https://design-system-console.archetypeai.workers.dev/r/separator.json",
+			"description": "Hairline divider.",
+			"usage": [
+				"Horizontal between stacked sections; `orientation=\"vertical\"` in multi-column layouts."
+			]
+		},
+		{
+			"name": "side-panel",
+			"import": "@archetypeai/ds-ui-svelte-console/primitives/side-panel",
+			"source": "https://design-system-console.archetypeai.workers.dev/r/side-panel.json",
+			"description": "Non-modal side panel for peeking at or inspecting one object without leaving the list it came from.",
+			"usage": [
+				"Bind the panel to an object id, never to a row: `<SidePanel.Root open={selectedId !== null} onOpenChange={(o) => !o && (selectedId = null)}>`. Keep the id in the URL so the state survives refresh, back and sharing; the primitive itself never reads or writes the URL. Do NOT derive the panel's content straight from that id: the panel stays mounted while it closes, so the content would blank out before it leaves. Latch the last opened object instead, `let shown = $state(null); $effect(() => { const next = find(selectedId); if (next) shown = next; })`, and render from `shown`.",
+				"Peek vs inspect: content with no page of its own just fills `SidePanel.Body`. Content that has a full page renders the page's body component inside Body and puts the handoff ONCE, in the Header `actions` snippet, as an outline icon button beside the built-in Close: `<SidePanel.Header>{#snippet actions()}<Button variant=\"outline\" size=\"icon\" class=\"size-8\" aria-label=\"Open full page\" href={fullPageUrl}><ArrowUpRightIcon /></Button>{/snippet}<SidePanel.Title>…</SidePanel.Title></SidePanel.Header>`. Header actions are outline icon buttons at the sm height (`class=\"size-8\"`, Button has no small icon size) so they read as one set with Close, pinned to the header's top-right, and match `size=\"sm\"` Footer buttons; never repeat the handoff in the Footer.",
+				"It never renders an overlay or scrim and never traps focus or scroll: the list behind stays fully interactive, clicking outside does nothing, Escape closes. If the task needs the page blocked, use Dialog instead.",
+				"One panel at a time. Drilling in replaces Body's content and adds an in-panel back; it never opens a second SidePanel.",
+				"Read-mostly: actions inside are fine, but destructive confirmations spawn a Dialog over the panel. The panel does not own confirmation.",
+				"`size=\"sm\"` (384px) for a record and its fields; `size=\"md\"` (576px) when Body carries a preview, a chart or a code block; `size=\"lg\"` (768px, capped at the window's width) when Body holds a full-size page section such as a scorecard or a confusion grid. `side=\"left\"` only when the list itself lives on the right.",
+				"Header layout follows Dialog: a `space-y-2` block, so `SidePanel.Title` and then either `SidePanel.Description` (plain text) or `SidePanel.Meta` (badges, a status line, key/value metadata) stack full width. The `actions` cluster and the close sit absolutely at the top right, so the header reserves right padding and a long Title truncates rather than running under them. Give header actions the same bare icon treatment as the close via `sidePanelCloseButtonVariants`; keep `Description` when the subtitle is text, because it is what wires `aria-describedby` and `Meta` cannot.",
+				"Content renders in place (no portal) so Tab reaches it after the list; do not mount it inside a transformed ancestor, where `fixed` misplaces. Focus does not move on open. Header renders an outline icon Close by default (`showCloseButton={false}` to place `SidePanel.Close` yourself). `SidePanel.Footer` is optional: it holds the actions on the data being viewed, never Close or the full-page handoff. One primary action sits right; with `justify=\"between\"` secondary actions (copy an id, compare) go first and land left."
+			],
+			"variants": {
+				"sidePanelContentVariants": {
+					"axes": {
+						"side": [
+							"right",
+							"left"
+						],
+						"size": [
+							"sm",
+							"md",
+							"so it still fits a window narrower than the panel\n      lg"
+						],
+						"mode": [
+							"overlay"
+						]
+					},
+					"defaults": {
+						"side": "right",
+						"size": "sm",
+						"mode": "overlay"
+					}
+				},
+				"sidePanelFooterVariants": {
+					"axes": {
+						"justify": [
+							"default",
+							"between"
+						]
+					},
+					"defaults": {
+						"justify": "default"
+					}
+				}
+			}
+		},
+		{
+			"name": "slider",
+			"import": "@archetypeai/ds-ui-svelte-labs/primitives/slider",
+			"source": "https://design-system-labs.archetypeai.workers.dev/r/slider.json",
+			"description": "Range slider (bits-ui).",
+			"usage": [
+				"`<Slider type=\"single\" bind:value max={100} step={1} aria-label=\"…\" />`; also the scrub control inside video-player."
+			]
+		},
+		{
+			"name": "sonner",
+			"import": "@archetypeai/ds-ui-svelte-console/primitives/sonner",
+			"source": "https://design-system-console.archetypeai.workers.dev/r/sonner.json",
+			"description": "Toast notifications (svelte-sonner themed for the DS).",
+			"usage": [
+				"Mount `<Toaster />` once at the app root; fire `toast.success('3 files uploaded')` / `toast.error(...)` from anywhere, `{ description }` for a second line."
+			]
+		},
+		{
+			"name": "spinner",
+			"import": "@archetypeai/ds-ui-svelte-console/primitives/spinner",
+			"source": "https://design-system-console.archetypeai.workers.dev/r/spinner.json",
+			"description": "Loading indicator.",
+			"usage": [
+				"`size=\"lg\"` in upload/empty panels; default size with `class=\"size-4\"` for inline row/status loaders; `variant=\"braille\"` for terminal-style loaders; Button embeds it via its `loading` prop."
+			],
+			"variants": {
+				"spinnerVariants": {
+					"axes": {
+						"variant": [
+							"default",
+							"braille"
+						],
+						"size": [
+							"default",
+							"md",
+							"lg"
+						]
+					},
+					"defaults": {
+						"variant": "default",
+						"size": "default"
+					}
+				}
+			}
+		},
+		{
+			"name": "stat-bento",
+			"import": "@archetypeai/ds-ui-svelte-console/primitives/stat-bento",
+			"source": "https://design-system-console.archetypeai.workers.dev/r/stat-bento.json",
+			"description": "Small figure bento: a label top-left, the value bottom-right, one line of context bottom-left. ScoreBento's quiet sibling.",
+			"usage": [
+				"`StatBento label=\"Accuracy\" value=\"0.94\" meta=\"1,203 of 1,276\"`. `value` is a string the caller formats (`0.94`, `12%`, `3m 20s`), so the bento never guesses at precision or units.",
+				"Missing vs pending: pass `value=\"—\"` when the figure does not exist, and say why in `meta` while it is still coming (`meta=\"when complete\"`). Omit `meta` when there is nothing to add; the value keeps its bottom-right place either way.",
+				"Where the bento is too narrow for `meta` and the value side by side, the value wraps under the context line instead of widening the bento, so the bento can go in a two- or three-up grid of any width.",
+				"It sits on the card surface, not a tone, so a coloured `ScoreBento` beside it stays the only coloured thing. It sets no height or grid placement: size and lay it out with `class` (`min-h-28` in a side panel, `md:col-span-2` beside a bento).",
+				"`help` renders a Tooltip info disc in the top-right corner, so the page needs a `Tooltip.Provider` above it; put one in the app layout."
+			]
+		},
+		{
+			"name": "switch",
+			"import": "@archetypeai/ds-ui-svelte-labs/primitives/switch",
+			"source": "https://design-system-labs.archetypeai.workers.dev/r/switch.json",
+			"description": "On/off toggle switch (bits-ui).",
+			"usage": [
+				"`bind:checked` + aria-label; sizes sm | default | lg."
+			],
+			"variants": {
+				"switchVariants": {
+					"axes": {
+						"size": [
+							"sm",
+							"default",
+							"lg"
+						]
+					},
+					"defaults": {
+						"size": "default"
+					}
+				},
+				"switchThumbVariants": {
+					"axes": {
+						"size": [
+							"sm",
+							"default",
+							"lg"
+						]
+					},
+					"defaults": {
+						"size": "default"
+					}
+				}
+			}
+		},
+		{
+			"name": "table",
+			"import": "@archetypeai/ds-ui-svelte-console/primitives/table",
+			"source": "https://design-system-console.archetypeai.workers.dev/r/table.json",
+			"description": "Data table.",
+			"usage": [
+				"Log/event tables: width-classed Table.Head columns, `Table.Body class=\"font-sans text-xs\"`, level cells colored with status tokens (text-atai-critical for error rows).",
+				"Mono body (`typography=\"mono\"` on Table.Body) for id-heavy tables; pair with `EmptyState variant=\"list\"` when empty.",
+				"Header rows never take the data-row hover — `Table.Header` neutralizes it; don't cancel `hover:bg-*` from consumer code.",
+				"Sortable columns: `Table.Head sortable direction={col === sort ? order : null} onSort={() => setSort(col)}`. The primitive owns the affordance, the three-state indicator and `aria-sort`; the consumer owns the sort state, so a Sort menu and the headers can drive the same state and stay in step. Mark only the columns the API can actually order by. Non-sortable heads are unchanged and simply are not clickable."
+			],
+			"variants": {
+				"tableBodyVariants": {
+					"axes": {
+						"typography": [
+							"default",
+							"mono"
+						]
+					},
+					"defaults": {
+						"typography": "default"
+					}
+				},
+				"tableHeadVariants": {
+					"axes": {
+						"sortable": [
+							"true",
+							"false"
+						]
+					},
+					"defaults": {
+						"sortable": "false"
+					}
+				},
+				"tableHeadSortVariants": {
+					"axes": {
+						"active": [
+							"true",
+							"false"
+						]
+					},
+					"defaults": {
+						"active": "false"
+					}
+				},
+				"tableHeadSortIconVariants": {
+					"axes": {
+						"active": [
+							"true",
+							"false"
+						],
+						"flipped": [
+							"true",
+							"false"
+						]
+					},
+					"defaults": {
+						"active": "false",
+						"flipped": "false"
+					}
+				}
+			}
+		},
+		{
+			"name": "tabs",
+			"import": "@archetypeai/ds-ui-svelte-console/primitives/tabs",
+			"source": "https://design-system-console.archetypeai.workers.dev/r/tabs.json",
+			"description": "View and section switcher.",
+			"usage": [
+				"The look is set once, on `Tabs.List`; triggers take it from the list and have no styling props of their own beyond `variant=\"icon\"`.",
+				"Page-section tabs (Progress | Logs | Artifacts): `Tabs.List` (`variant=\"line\"` is the default) with plain text triggers and a `Tabs.Content` per tab; always `Tabs.Root bind:value`.",
+				"A second strip nested inside a section's panel: `Tabs.List size=\"sm\"`, so it reads as a level below the page's strip. `size` exists on `line` only.",
+				"Mode or view switch over the same content (Library | File IDs | Upload, Share | Count): `Tabs.List variant=\"segmented\"` with text triggers and no `Tabs.Content`.",
+				"Icon view toggle (list/grid) or sort direction: `Tabs.List variant=\"segmented\"` + `Tabs.Trigger variant=\"icon\"` with an icon, and a `title` or `aria-label` on each trigger.",
+				"Count on a trigger: `<Tabs.Trigger value=\"logs\">Logs <Tabs.Count value={logCount} /></Tabs.Trigger>` — an odometer pill that abbreviates past 999 (`1.2K`) so the strip never reflows. Pass `value={null}` while the count is still loading (it reserves the width), `value={0}` for an empty tab, and omit `Tabs.Count` entirely for a tab that has no count at all.",
+				"Count on a tab that cannot be sized: `<Tabs.Count value={loaded} atLeast />` renders `103+` for a keyset-paginated tab that knows only how many rows it has so far. Prefer it over dropping the count entirely, which reads as \"none\"."
+			],
+			"variants": {
+				"tabsVariants": {
+					"axes": {
+						"variant": [
+							"line",
+							"segmented"
+						],
+						"size": [
+							"default",
+							"sm"
+						]
+					},
+					"defaults": {
+						"variant": "line",
+						"size": "default"
+					}
+				},
+				"tabsTriggerVariants": {
+					"axes": {
+						"variant": [
+							"text",
+							"icon"
+						]
+					},
+					"defaults": {
+						"variant": "text"
+					}
+				}
+			}
+		},
+		{
+			"name": "textarea",
+			"import": "@archetypeai/ds-ui-svelte-console/primitives/textarea",
+			"source": "https://design-system-console.archetypeai.workers.dev/r/textarea.json",
+			"description": "Multi-line text input.",
+			"usage": [
+				"Feedback/description fields under a Label sectionHeader; bind:value + placeholder."
+			],
+			"variants": {
+				"textareaVariants": {
+					"axes": {
+						"size": [
+							"sm",
+							"default",
+							"lg"
+						]
+					},
+					"defaults": {
+						"size": "default"
+					}
+				}
+			}
+		},
+		{
+			"name": "theme",
+			"import": "@archetypeai/ds-ui-svelte-console/primitives/theme",
+			"source": "https://design-system-console.archetypeai.workers.dev/r/theme.json",
+			"description": "darkMode singleton controller syncing the `dark` class on <html>.",
+			"usage": [
+				"`darkMode.set(window.matchMedia('(prefers-color-scheme: dark)').matches)` on startup; `darkMode.toggle()` from a menu item or icon button; `darkMode.current` for reactive reads."
+			]
+		},
+		{
+			"name": "toggle",
+			"import": "@archetypeai/ds-ui-svelte-labs/primitives/toggle",
+			"source": "https://design-system-labs.archetypeai.workers.dev/r/toggle.json",
+			"description": "Pressed-state button (bits-ui).",
+			"usage": [
+				"Icon-only by default (aria-label required); `variant=\"outline\"` for icon + text."
+			],
+			"variants": {
+				"toggleVariants": {
+					"axes": {
+						"variant": [
+							"default",
+							"outline"
+						],
+						"size": [
+							"default",
+							"sm",
+							"lg"
+						]
+					},
+					"defaults": {
+						"variant": "default",
+						"size": "default"
+					}
+				}
+			}
+		},
+		{
+			"name": "tooltip",
+			"import": "@archetypeai/ds-ui-svelte-console/primitives/tooltip",
+			"source": "https://design-system-console.archetypeai.workers.dev/r/tooltip.json",
+			"description": "Hover hint.",
+			"usage": [
+				"Wrap the app/section in `Tooltip.Provider delayDuration={200}`.",
+				"Field help: `Tooltip.Trigger variant=\"info\"` is a filled 16px disc holding a mono `i` — pass it no children, it renders its own glyph. Explanation goes in `Tooltip.Content`.",
+				"`aria-label` on the info trigger is required and is the caller's: name what is being explained (`aria-label=\"About Detection Log\"`). The glyph is `aria-hidden`, so without a label the button has no accessible name.",
+				"The info disc squares against `Counter size=\"sm\"`'s height on purpose — a section title, its `Counter` and its info disc in one `flex items-center gap-2` row is the intended cluster, the solid pill reading as the count and the muted one as the meaning. 16px is also exactly the height of a `Label variant=\"sectionHeader\"` box, so the disc sits level with the title rather than towering over it.",
+				"`size=\"lg\"` is the 20px disc, for a cluster built around `Counter size=\"default\"` (`h-5`) rather than a section label. `size` is inert on the other trigger treatments, which have no box.",
+				"`variant=\"inlineLink\"` — underlined trigger flowing inside prose (supported file requirements).",
+				"The arrow centres itself on the trigger on all four sides and protrudes half its box — `arrowClasses` is for its ink or size, not for centring corrections. If a tip looks off, it is a bug in `tooltipArrowVariants`, not something to counter-shift at the call site."
+			],
+			"variants": {
+				"tooltipTriggerVariants": {
+					"axes": {
+						"variant": [
+							"default",
+							"info",
+							"inlineLink"
+						],
+						"size": [
+							"default",
+							"lg"
+						]
+					},
+					"defaults": {
+						"variant": "default",
+						"size": "default"
+					}
+				}
+			}
+		},
+		{
+			"name": "video-player",
+			"import": "@archetypeai/ds-ui-svelte-labs/primitives/video-player",
+			"source": "https://design-system-labs.archetypeai.workers.dev/r/video-player.json",
+			"description": "Media-playback card whose seek track doubles as a timeline: named marker windows, tinted highlight bands and bindable playback state. Composes Card + AspectRatio + Button + Slider.",
+			"usage": [
+				"`<VideoPlayer src muted />` for the standard controlled player; `controls={false}` for ambient/looping footage. `preload=\"metadata\"` by default, so `duration` is known before the first play.",
+				"Playback state: `bind:time` / `bind:duration` / `bind:paused` mirror the media element out, and `time` and `paused` are writable - assigning to `time` seeks, assigning `paused = false` plays. That is how another view drives the player.",
+				"Markers: `markers={[{ start, end, label?, color? }]}` in **seconds, not fractions** draws one focusable dot per window on the seek track. Clicking a dot expands it into a range pill, seeks to its start and plays; one is expanded at a time, and `bind:activeMarker` is its index (or null). Scrubbing by hand, or a click on the video surface, collapses it. `loopActiveMarker` loops playback inside the expanded window.",
+				"Linked brushing: `highlights={[{ start, end, color? }]}` tints regions another view is pointing at (brushing in), and `onMarkerHover(index | null)` fires on hover **and focus** so a hovered marker can highlight the matching row elsewhere (brushing out).",
+				"Two lifecycle traps when `src` changes: a new `src` remounts the player and Svelte's media bindings write your bound values into the fresh element, so reset `time = 0` and `paused = true` yourself or a stale position becomes the new clip's start; and `bind:duration` holds the previous clip's value until `loadedmetadata`, so reseed `duration` from a known length if marker geometry must be right on the first frame (`duration === 0` collapses every marker to the left edge).",
+				"`controlsVisibility=\"always\"` pins the control bar open - required whenever markers must stay clickable during playback, since the default `\"auto\"` fades the bar (and the markers with it) 2.5s into playback. `formatTime` replaces the mm:ss clock in the time readout and the marker captions.",
+				"Style hooks: `data-slot` on `video-player`, `-video`, `-overlay`, `-controls`, `-time`, `-markers`, `-marker` (carries `data-expanded`), `-marker-caption`, `-highlight`. A per-marker `color` inks the outline and fill via `currentColor`.",
+				"Marker seeking needs an origin that serves HTTP Range requests; against one that does not, seeks silently do nothing (serve the clip from a blob URL instead)."
+			],
+			"variants": {
+				"videoPlayerOverlayVariants": {
+					"axes": {
+						"visible": [
+							"true",
+							"false"
+						]
+					},
+					"defaults": {
+						"visible": "true"
+					}
+				},
+				"videoPlayerControlsVariants": {
+					"axes": {
+						"visible": [
+							"true",
+							"false"
+						]
+					},
+					"defaults": {
+						"visible": "true"
+					}
+				},
+				"videoPlayerMarkerVariants": {
+					"axes": {
+						"expanded": [
+							"true",
+							"false"
+						],
+						"filled": [
+							"true",
+							"false"
+						],
+						"emphasis": [
+							"hidden",
+							"full",
+							"ambient"
+						]
+					},
+					"defaults": {
+						"expanded": "false",
+						"filled": "false",
+						"emphasis": "ambient"
+					}
+				}
+			}
+		}
+	]
+}
