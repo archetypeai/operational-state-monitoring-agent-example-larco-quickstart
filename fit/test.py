@@ -58,15 +58,24 @@ def chosen_trial(trial_id=None):
 
 def blueprint(opt, trial):
     key = blueprint_key(trial)
+    if trial.get("promoted_blueprint"):  # promoted already, perhaps under the platform's key
+        return request("GET", f"{agents()}/blueprints/{trial['promoted_blueprint']['blueprint_key']}")
     try:
         return request("GET", f"{agents()}/blueprints/{key}")
     except RuntimeError:
         pass  # not promoted yet
     w, st, k, metric, weights = trial_setting(trial)
-    bp = request("POST", f"{agents()}/optimizations/{opt}/trials/{trial['id']}/promote", body={
-        "blueprint_key": key, "name": f"OSM LARCO quickstart (w{w}, s{st}, {metric}, k{k}, {weights})",
+    url = f"{agents()}/optimizations/{opt}/trials/{trial['id']}/promote"
+    body = {"name": f"OSM LARCO quickstart (w{w}, s{st}, {metric}, k{k}, {weights})",
         "description": f"Stage 5 model: window {w}, step {st}, {metric}, k {k}, {weights}; "
-                       f"library = 4 files, 100 windows per state, 8 short becken cycles."})
+                       f"library = 4 files, 100 windows per state, 8 short becken cycles."}
+    try:
+        bp = request("POST", url, body={"blueprint_key": key, **body})
+    except RuntimeError as e:
+        # choosing the key needs the admin role (a free-trial org has none): let the platform choose it
+        if "(403)" not in str(e) or "blueprint_key" not in str(e):
+            raise
+        bp = request("POST", url, body=body)
     log(f"promoted {trial['id']} -> {bp['blueprint_key']} ({bp['id']})")
     return bp
 
