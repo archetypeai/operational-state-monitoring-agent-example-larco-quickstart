@@ -502,15 +502,18 @@ curl -s "${ATAI_API_ENDPOINT%/api}/api/agents/deployments?status=ready&limit=100
 
 We ran the quickstart twice from Stage 0: the second time with a fresh download
 from Zenodo and `fit/out/` moved aside. Every number came out the same. A run on
-production (Stages 4–7 on 2026-10-29, from Stage 4; Stage 8 the same day) did too:
+production through bundles (Stages 4–7 on 2026-10-29, from Stage 4; Stage 8 the same
+day) did too, and so did a run of Stages 4–9 through projects, packages, deployments
+and sessions (2026-10-30, [MIGRATION.md](MIGRATION.md)):
 
-| stage | measure | first run | fresh run | production, 2026-10-29 |
-|---|---|---|---|---|
-| 1–3 | prepared rows; validation / test / delivery windows (1,024 rows) | 9,826,559; 1,224 / 1,760 / 1,587 | same | (reused) |
-| 4 | validation macro-F1, k 5 / k 31 | 0.8305 / 0.7980 | same | same |
-| 5 | test macro-F1 | 0.8617 | same, with the same confusion matrix | same, with the same confusion matrix |
-| 7 | delivery macro-F1 | 0.7707 | same, per cycle too | same, per cycle too |
-| 8 | served macro-F1; states matching batch | – | – | 0.7707; 3,178/3,178 (2 probabilities a vote off) |
+| stage | measure | first run | fresh run | production, 2026-10-29 | packages and sessions, 2026-10-30 |
+|---|---|---|---|---|---|
+| 1–3 | prepared rows; validation / test / delivery windows (1,024 rows) | 9,826,559; 1,224 / 1,760 / 1,587 | same | (reused) | (reused) |
+| 4 | validation macro-F1, k 5 / k 31 | 0.8305 / 0.7980 | same | same | same |
+| 5 | test macro-F1 | 0.8617 | same, with the same confusion matrix | same, with the same confusion matrix | same, with the same confusion matrix |
+| 7 | delivery macro-F1 | 0.7707 | same, per cycle too | same, per cycle too | same, per cycle too |
+| 8 | served macro-F1; states matching batch | – | – | 0.7707; 3,178/3,178 (2 probabilities a vote off) | the same, the same 2 windows; 512 ms median |
+| 9 | the library view | – | – | 800 windows, 86% nearest their own state | the same to within 1.4×10⁻⁵ |
 
 Macro-F1 is the mean of the four states' F1 scores, so each state counts equally.
 
