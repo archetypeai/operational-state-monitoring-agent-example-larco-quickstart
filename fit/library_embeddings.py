@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Stage 9 prep, once: the library's embeddings, for app-serving/'s embedding space.
 
-    python fit/library_embeddings.py          # 4 batch runs, one per library file, then the view
+    python fit/library_embeddings.py          # 4 batch runs, one per library file (3 at a time on the free trial), then the view
     python fit/library_embeddings.py --view   # the view again from the saved outputs, no platform calls
 
 The Stage 5 model is a kNN over the library's windows (window 512, step 512), but it
@@ -33,7 +33,7 @@ import time
 import numpy as np
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from atai import TERMINAL, agents, api_base, load_dotenv, request, same_deployment  # noqa: E402
+from atai import TERMINAL, agents, api_base, free_trial, load_dotenv, request, same_deployment  # noqa: E402
 from deliver import END_SLACK_MS, OUTPUT_WAIT_S, fetch, time_range, to_ms  # noqa: E402
 from optimize import OUT, ROLES, log, upload_all  # noqa: E402
 
@@ -56,26 +56,29 @@ def outputs(agent):
     return header, rows
 
 
-def run_all(files, state, save, ensure_bundle):
-    """One batch run per library file; each output saved once it reaches its file's end."""
+def run_all(files, state, save, ensure_bundle, parallel):
+    """One batch run per library file, at most `parallel` at once; each output saved
+    once it reaches its file's end."""
     paths = [os.path.join(ROLES, f["file"]) for f in files]
     done = lambda f: os.path.exists(os.path.join(DIR, f"{f['state']}.csv"))  # noqa: E731
     if all(done(f) for f in files):
         return
     ensure_bundle()
     ids = upload_all(paths, 3)
-    for f, p in zip(files, paths):
-        if not done(f) and f["state"] not in state["runs"]:
-            run = request("POST", f"{agents()}/bundles/{state['bundle']}/run",
-                          body={"connectors": {"source": [{"type": "file", "id": ids[p]}]}})
-            state["runs"][f["state"]] = run["id"]
-            save()
-            log(f"  {f['state']}: run {run['id']}")
     os.makedirs(DIR, exist_ok=True)
-    pending = {f["state"]: p for f, p in zip(files, paths) if not os.path.exists(os.path.join(DIR, f"{f['state']}.csv"))}
+    pending = {f["state"]: p for f, p in zip(files, paths) if not done(f)}
     deadline = {}
     while pending:
+        for s, p in pending.items():
+            if s not in state["runs"] and len(set(pending) & set(state["runs"])) < parallel:
+                run = request("POST", f"{agents()}/bundles/{state['bundle']}/run",
+                              body={"connectors": {"source": [{"type": "file", "id": ids[p]}]}})
+                state["runs"][s] = run["id"]
+                save()
+                log(f"  {s}: run {run['id']}")
         for s, p in list(pending.items()):
+            if s not in state["runs"]:
+                continue
             aid = state["runs"][s]
             if s not in deadline:
                 status = request("GET", f"{agents()}/instances/{aid}")["status"]
@@ -174,7 +177,11 @@ def main():
             save()
             log(f"bundle {b['id']} on {key} (window {window}, step {step}, embeddings on)")
     t0 = time.time()
-    run_all(files, state, save, ensure_bundle)
+    parallel = len(files)
+    if free_trial():
+        parallel = 3
+        log("free trial (try.archetypeai.app): at most 3 jobs at once, so 3 runs at a time")
+    run_all(files, state, save, ensure_bundle, parallel)
     return write_view({"blueprint": key, "window_size": window, "step_size": step}, t0)
 
 

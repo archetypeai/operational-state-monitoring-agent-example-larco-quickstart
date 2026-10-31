@@ -35,6 +35,9 @@
 
 - **Skip Stages 0–3:** the role files are in the repo, packed in Git LFS
   (~96 MB). See [Shortcut](#shortcut-skip-stages-03).
+- **On the free trial** (`try.archetypeai.app`) the same commands work, with no
+  extra flags; Stages 4–8 take about **1.5 hours** there. See
+  [On the free trial](#on-the-free-trial).
 
 > **The scores here aren't the full example's.** The quickstart uses only short
 > `warm_*` programs. It has no cotton or eco cycles, and its state mix is
@@ -116,6 +119,42 @@ files with `data/prepared/`, which only Stage 1 makes. The other checks run as
 usual, and the result is still `PASS`.
 
 Then go to [Stage 4](#stage-4-optimize).
+
+### On the free trial
+
+The free trial (`ATAI_API_ENDPOINT=https://try.archetypeai.app/api`, in
+`.env.example`) runs on CPU, at most 3 jobs per org at once, and stops every job
+after 2 hours (`DeadlineExceeded`, with no output). An eval or agent run there
+scores about 950 windows × channels a minute, so this quickstart's jobs fit as
+they are: Stage 5's eval is 3,520 windows of 9 channels (~35 min), Stage 6's run
+3,178 (~30 min).
+
+**How the scripts know:** `fit/atai.py`'s `free_trial()` is true when the
+endpoint's host is `try.archetypeai.app` (a free-trial key works nowhere else).
+Then one default changes, and the script says so when it starts:
+
+| stage | production default | free-trial default | why |
+|---|---|---|---|
+| 9 `fit/library_embeddings.py` | 4 runs at once | 3 at a time | 3 jobs at once |
+
+**What it gives** (ours, 2026-10-31):
+
+| stage | free trial | production |
+|---|---|---|
+| 4 | 5 min; the same 2 trials and scores | 4 min |
+| 5 | 34 min; macro-F1 0.8617 and the confusion matrix **identical** | 3 min |
+| 6 | 31 min, one run of the 5 files | 3 min |
+| 7 | macro-F1 0.7707, every cycle's scores **identical** | the same |
+| 8 | 3,178 windows in 20 min, every state and probability matching Stage 6, median 377 ms a query | 25 min, 448 ms |
+| 9 | `fit/library_embeddings.py` 6 min, the view the repo's to within 5e-4 | – |
+
+- **A queued job may already be on the clock** (it reports `running`). Keep other jobs
+  (another example, a serving agent, `app-serving/`) off the account while Stages 5
+  and 6 run.
+- **With your own data,** keep each eval or run under ~100,000 windows × channels
+  (about 1 h 45 min): `fit/deliver.py --files-per-run N` splits a delivery into
+  runs; `fit/test.py` runs one eval of the whole test role, so keep that role
+  under it too.
 
 ## The stages
 
@@ -272,7 +311,7 @@ python fit/test.py --background                  # log fit/out/test.log
 2. **Upload** the 3 test cycles.
 3. **Evaluate** them **once** with the Evals API, which scores the blueprint
    on files it has never seen. Ours took 3 minutes (the full example's evals
-   took ~40).
+   took ~40; this one 34 on the [free trial](#on-the-free-trial)).
 
 **Expect** (ours):
 
@@ -305,6 +344,8 @@ matched no file; failed runs: none`.
 
 **Writes:** `fit/out/delivery/<file>.csv` and `fit/out/delivery/runs.json`
 (`--resume` collects the runs without starting new ones).
+
+**On the free trial** the run took 31 minutes, with the same outputs.
 
 ### Stage 7: score the delivery
 
@@ -403,7 +444,7 @@ served 3,178 windows of 5 file(s) in 3,178 queries, 1438 s
 ### Stage 9: watch it in a browser
 
 ```sh
-python fit/library_embeddings.py     # once: the library's embeddings, for the app's embedding space
+python fit/library_embeddings.py     # once: the library's embeddings, for the app's embedding space (3 runs at a time on the free trial)
 cd app-serving && npm install && npm run dev     # http://localhost:5182
 ```
 

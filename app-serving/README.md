@@ -69,7 +69,7 @@ loads it at start; without it the tab says so and the rest of the app works. To
 recompute it, for instance after promoting another model:
 
 ```sh
-python fit/library_embeddings.py      # 4 batch runs, one per library file, then the view
+python fit/library_embeddings.py      # 4 batch runs, one per library file (3 at a time on the free trial), then the view
 ```
 
 The runs and their bundle go in `fit/out/library_state.json`, so a rerun resumes

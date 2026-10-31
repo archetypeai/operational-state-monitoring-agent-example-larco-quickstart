@@ -10,6 +10,7 @@ import re
 import sys
 import time
 import urllib.error
+import urllib.parse
 import urllib.request
 import uuid
 
@@ -40,6 +41,17 @@ def api_base():
     endpoint = re.sub(r"/api$", "", endpoint)
     endpoint = re.sub(r"/v[0-9]+(\.[0-9]+)*$", "", endpoint)
     return f"{endpoint}/api"
+
+
+FREE_TRIAL_HOST = "try.archetypeai.app"
+
+
+def free_trial():
+    """True on the free trial: CPU only, 3 jobs at once, each stopped after 2 hours.
+
+    The free trial is its own deployment, so its endpoint's host says so; a free-trial
+    key works nowhere else."""
+    return urllib.parse.urlparse(api_base()).hostname == FREE_TRIAL_HOST
 
 
 def deployment(endpoint):
