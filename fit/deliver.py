@@ -210,7 +210,7 @@ def collect(state):
         json.dump(state, open(STATE, "w"), indent=1)
         if pending:
             if pending - set(finishing):
-                log(f"  {len(pending - set(finishing))} of {len(state['runs'])} runs still going")
+                log(f"  {len(pending - set(finishing))} of {len(state['runs'])} sessions still going")
             time.sleep(15 if pending <= set(finishing) else 60)
 
     done = [r for r in state["runs"] if r.get("status") == "completed"]
