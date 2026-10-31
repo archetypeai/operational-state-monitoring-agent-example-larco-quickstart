@@ -1,15 +1,22 @@
 #!/usr/bin/env python3
 """Stage 9 prep, once: the library's embeddings, for app-serving/'s embedding space.
 
-    python fit/library_embeddings.py          # 4 batch runs, one per library file, then the view
+    python fit/library_embeddings.py          # the embeddings blueprint, 4 batch sessions, then the view
     python fit/library_embeddings.py --view   # the view again from the saved outputs, no platform calls
 
 The Stage 5 model is a kNN over the library's windows (window 512, step 512), but it
 is a registry artifact with no download route, so its reference windows can't be
-read back. They can be recomputed: a bundle on the promoted blueprint with
-`output_embeddings: true` runs each library file (one per state) through the same
-encoder, on the same windows, and returns each window's 9 x 768 Omega embedding
-(800 windows in all, 200 a state).
+read back. They can be recomputed: each library file (one per state) run through the
+same encoder, on the same windows, with `output_embeddings: true`, returns each
+window's 9 x 768 Omega embedding (800 windows in all, 200 a state).
+
+A package runs a blueprint exactly as promoted and can't turn an output on, so this
+first makes a blueprint that has it on: a 1-trial optimization at Stage 5's trial's
+point (window, step, k, metric, weights), on the same library and validation files,
+with `output_embeddings: true` pinned, then promoted. Its kNN is refitted, but the
+embeddings depend only on the encoder and the windowing, so they are Stage 5's. Then a
+package of it, one batch deployment and a session per library file. app-serving/'s
+bridge serves the same blueprint, for its live embedding trail.
 
 The view is the two directions that best separate the four states: each embedding
 scaled to unit length (the model compares by cosine), PCA to 50 dimensions, then
@@ -22,9 +29,11 @@ dimensions, and two directions are drawn.
 
 Outputs: fit/out/library_embeddings/ (the 4 batch outputs, ~50 MB, not committed),
 fit/out/library_embeddings.json (summary), the view files. Ids go to
-fit/out/library_state.json, so a rerun resumes and fit/cleanup.py deletes them.
+fit/out/library_state.json, so a rerun resumes and fit/cleanup.py deletes the sessions,
+deployment and package (the embeddings blueprint and its optimization stay).
 """
 import csv
+import glob
 import json
 import os
 import sys
@@ -33,9 +42,11 @@ import time
 import numpy as np
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from atai import TERMINAL, agents, api_base, load_dotenv, request, same_deployment  # noqa: E402
+from atai import (TERMINAL, agents, api_base, create_package, deploy, lifecycle_url, list_trials, load_dotenv,  # noqa: E402
+                  open_session, request, same_deployment, trial_setting, wait_optimization)
 from deliver import END_SLACK_MS, OUTPUT_WAIT_S, fetch, time_range, to_ms  # noqa: E402
-from optimize import OUT, ROLES, log, upload_all  # noqa: E402
+from optimize import OUT, ROLES, log, pinned_values, upload_all  # noqa: E402
+from test import blueprint as promote  # noqa: E402
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "prep"))
 from states import STATES  # noqa: E402
@@ -45,32 +56,71 @@ STATE = os.path.join(OUT, "library_state.json")
 VIEW = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "app-serving", "static")
 
 
-def outputs(agent):
-    """The run's output rows, header first, from every result file it wrote."""
+def embeddings_blueprint(test, state, save):
+    """{id, key} of a blueprint at Stage 5's trial's point with output_embeddings on: a 1-trial
+    optimization in the project, then promoted. Resumable through `state`."""
+    if state.get("embeddings_blueprint"):
+        return state["embeddings_blueprint"]
+    if not state.get("embeddings_optimization"):
+        opt, tid = test["model"]["optimization"], test["model"]["trial"]
+        w, st, k, metric, weights = trial_setting(next(t for t in list_trials(opt) if t["id"] == tid))
+        base = json.load(open(os.path.join(OUT, "project_state.json")))["base"]
+        bp = request("GET", f"{agents()}/blueprints/{base['id']}")
+        library = sorted(glob.glob(os.path.join(ROLES, "library", "*.csv")))
+        validation = [os.path.join(ROLES, f["file"]) for f in json.load(open(os.path.join(ROLES, "manifest.json")))["validation"]["files"]]
+        ids = upload_all(library + validation, 3)
+        ex = lambda p, gt: {"name": os.path.basename(p)[:-4], "inputs": [{"type": "file", "id": ids[p], "format": "csv"}],  # noqa: E731
+                            "ground_truth": {"state": gt}}
+        one = lambda v: {"type": "categorical", "values": [v]}  # noqa: E731
+        o = request("POST", f"{agents()}/optimizations", body={
+            "name": f"LARCO quickstart embeddings {time.strftime('%Y%m%dT%H%M%SZ', time.gmtime())}",
+            "blueprint_id": bp["id"], "objective": "macro_f1", "budget": {"max_trials": 1},
+            "search_space": {"parameters": {
+                "window_size": {"kind": "value", "spec": one(w)}, "step_size": {"kind": "value", "spec": one(st)},
+                "k_neighbors": {"kind": "fitting", "spec": one(k)}, "metric": {"kind": "fitting", "spec": one(metric)},
+                "weights": {"kind": "fitting", "spec": one(weights)}}},
+            "training_examples": [ex(p, {"from": {"constant": os.path.basename(p).split("__")[0]}}) for p in library],
+            "validation_examples": [ex(p, {"from": {"column": "label"}, "downsampling": "last_record"}) for p in validation],
+            "overrides": pinned_values(bp, {"output_embeddings": True})})
+        state.update({"endpoint": api_base(), "blueprint": test["blueprint"]["key"], "embeddings_optimization": o["id"]})
+        save()
+        log(f"optimization {o['id']}: 1 trial at {tid}'s point (w {w}, step {st}, k {k}, {metric}, {weights}), embeddings on")
+    opt, trials = wait_optimization(state["embeddings_optimization"], label="embeddings", log=log)
+    trial = next((t for t in trials if t["status"] == "completed"), None)
+    if opt["status"] != "completed" or not trial:
+        sys.exit(f"{opt['id']} is {opt['status']} with no completed trial: move fit/out/library_state.json aside to try again")
+    w, st, k, metric, weights = trial_setting(trial)
+    bp = promote(opt["id"], trial, f"OSM LARCO quickstart, embeddings on (w{w}, s{st}, {metric}, k{k}, {weights})")
+    state["embeddings_blueprint"] = {"id": bp["id"], "key": bp["blueprint_key"]}
+    save()
+    return state["embeddings_blueprint"]
+
+
+def outputs(session):
+    """The session's output rows, header first, from every result file it wrote."""
     rows, header = [], None
-    for item in request("GET", f"{agents()}/instances/{agent}/results").get("data") or []:
-        body = list(csv.reader(fetch(item["data"]["filename"]).splitlines()))
+    for item in request("GET", lifecycle_url("sessions", session) + "/results").get("data") or []:
+        body = list(csv.reader(fetch(item["data"]["ref"]).splitlines()))
         if body:
             header = header or body[0]
             rows += body[1:]
     return header, rows
 
 
-def run_all(files, state, save, ensure_bundle):
-    """One batch run per library file; each output saved once it reaches its file's end."""
+def run_all(files, state, save, ensure_deployment):
+    """One batch session per library file; each output saved once it reaches its file's end."""
     paths = [os.path.join(ROLES, f["file"]) for f in files]
     done = lambda f: os.path.exists(os.path.join(DIR, f"{f['state']}.csv"))  # noqa: E731
     if all(done(f) for f in files):
         return
-    ensure_bundle()
+    ensure_deployment()
     ids = upload_all(paths, 3)
     for f, p in zip(files, paths):
         if not done(f) and f["state"] not in state["runs"]:
-            run = request("POST", f"{agents()}/bundles/{state['bundle']}/run",
-                          body={"connectors": {"source": [{"type": "file", "id": ids[p]}]}})
-            state["runs"][f["state"]] = run["id"]
+            ses = open_session(state["deployment"], [ids[p]])
+            state["runs"][f["state"]] = ses["id"]
             save()
-            log(f"  {f['state']}: run {run['id']}")
+            log(f"  {f['state']}: session {ses['id']}")
     os.makedirs(DIR, exist_ok=True)
     pending = {f["state"]: p for f, p in zip(files, paths) if not os.path.exists(os.path.join(DIR, f"{f['state']}.csv"))}
     deadline = {}
@@ -78,13 +128,13 @@ def run_all(files, state, save, ensure_bundle):
         for s, p in list(pending.items()):
             aid = state["runs"][s]
             if s not in deadline:
-                status = request("GET", f"{agents()}/instances/{aid}")["status"]
+                status = request("GET", lifecycle_url("sessions", aid))["status"]
                 if status not in TERMINAL:
                     continue
                 if status != "completed":
                     state["runs"].pop(s)
                     save()
-                    sys.exit(f"{s}: run {aid} {status}; rerun to start it again")
+                    sys.exit(f"{s}: session {aid} {status}; rerun to start it again")
                 deadline[s] = time.time() + OUTPUT_WAIT_S
             header, rows = outputs(aid)
             last = max((to_ms(r[header.index("finish_timestamp")]) for r in rows), default=0) if header else 0
@@ -97,7 +147,7 @@ def run_all(files, state, save, ensure_bundle):
             elif time.time() > deadline[s]:
                 state["runs"].pop(s)
                 save()
-                sys.exit(f"{s}: run {aid} completed {OUTPUT_WAIT_S // 60} min ago but its output stops early; "
+                sys.exit(f"{s}: session {aid} completed {OUTPUT_WAIT_S // 60} min ago but its output stops early; "
                          f"rerun to start it again")
         if pending:
             time.sleep(15 if set(pending) <= set(deadline) else 30)
@@ -155,7 +205,8 @@ def main():
     if test.get("endpoint") and not same_deployment(test):
         sys.exit(f"fit/out/test_state.json is from {test['endpoint']}, a different deployment from {api_base()}")
     key = test["blueprint"]["key"]
-    values = request("GET", f"{agents()}/blueprints/{key}")["document"]["values"]
+    # by id: a key registered in a project resolves only with ?project_id=
+    values = request("GET", f"{agents()}/blueprints/{test['blueprint']['id']}")["document"]["values"]
     window, step = values["window_size"], values["step_size"]
     files = json.load(open(os.path.join(ROLES, "manifest.json")))["library"]["files"]
     channels = json.load(open(os.path.join(ROLES, "zscore_stats.json")))["channels"]
@@ -166,15 +217,22 @@ def main():
                  f"move it aside, or set .env to that deployment")
     save = lambda: json.dump(state, open(STATE, "w"), indent=1)  # noqa: E731
 
-    def ensure_bundle():
-        if not state.get("bundle"):
-            b = request("POST", f"{agents()}/bundles", body={
-                "blueprint": key, "name": "LARCO library embeddings", "values": {"output_embeddings": True}})
-            state.update({"endpoint": api_base(), "bundle": b["id"], "blueprint": key, "runs": {}})
+    if state.get("bundle"):
+        sys.exit(f"{STATE} is from a bundle run: move it and fit/out/library_embeddings/ aside")
+
+    def ensure_deployment():
+        if not state.get("deployment"):
+            emb = embeddings_blueprint(test, state, save)
+            if not state.get("package"):
+                state.update({"endpoint": api_base(), "blueprint": key, "runs": {},
+                              "package": create_package(emb["id"], "LARCO library embeddings")["id"]})
+                save()
+            state["deployment"] = deploy(state["package"], "batch")["id"]
             save()
-            log(f"bundle {b['id']} on {key} (window {window}, step {step}, embeddings on)")
+            log(f"package {state['package']} of {emb['key']} (window {window}, step {step}, embeddings on), "
+                f"batch deployment {state['deployment']}")
     t0 = time.time()
-    run_all(files, state, save, ensure_bundle)
+    run_all(files, state, save, ensure_deployment)
     return write_view({"blueprint": key, "window_size": window, "step_size": step}, t0)
 
 
@@ -222,7 +280,7 @@ def write_view(meta, t0):
     print(f"\nlibrary: {n:,} windows ({', '.join(f'{s} {c}' for s, c in per_state.items())}), window {window}, step {step}")
     print(f"  2 discriminant axes: {separated:.0%} of the windows nearest their own state's centre")
     print(f"  -> app-serving/static/library-view.bin ({offset / 1e3:.0f} KB), library-view.json")
-    print("  python fit/cleanup.py --yes deletes the 4 runs and their bundle")
+    print("  python fit/cleanup.py --yes deletes the 4 sessions, their deployment and package")
     return 0
 
 

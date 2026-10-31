@@ -56,17 +56,14 @@ def chosen_trial(trial_id=None):
     return max(trials, key=lambda ot: ot[1]["objective_value"])
 
 
-def blueprint(opt, trial):
+def blueprint(opt, trial, name=None):
     key = blueprint_key(trial)
     if trial.get("promoted_blueprint"):  # promoted already, perhaps under the platform's key
-        return request("GET", f"{agents()}/blueprints/{trial['promoted_blueprint']['blueprint_key']}")
-    try:
-        return request("GET", f"{agents()}/blueprints/{key}")
-    except RuntimeError:
-        pass  # not promoted yet
+        # by id: a key registered in a project resolves only with ?project_id=
+        return request("GET", f"{agents()}/blueprints/{trial['promoted_blueprint']['id']}")
     w, st, k, metric, weights = trial_setting(trial)
     url = f"{agents()}/optimizations/{opt}/trials/{trial['id']}/promote"
-    body = {"name": f"OSM LARCO quickstart (w{w}, s{st}, {metric}, k{k}, {weights})",
+    body = {"name": name or f"OSM LARCO quickstart (w{w}, s{st}, {metric}, k{k}, {weights})",
         "description": f"Stage 5 model: window {w}, step {st}, {metric}, k {k}, {weights}; "
                        f"library = 4 files, 100 windows per state, 8 short becken cycles."}
     try:

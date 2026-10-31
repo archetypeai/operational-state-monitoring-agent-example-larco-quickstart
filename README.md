@@ -23,15 +23,32 @@
 | 2–3 | build the files the platform receives, and check them against its rules | ~15 s |
 | 4 | **Optimize:** train on the library, score 2 settings on validation | 4 min |
 | 5 | **promote** the best setting to a blueprint, **test** it once with the Evals API | 3 min |
-| 6 | **deliver:** a bundle from that blueprint, run over the faulty unit's cycles | 3 min |
+| 6 | **deliver:** package that blueprint, deploy it in batch, run a session over the faulty unit's cycles | 3 min |
 | 7 | **score** the delivery against the held-back labels | seconds |
-| 8 | **serve** it a window per query over `/query` (agent serving), checked against Stage 6 | 25 min |
-| 9 | **watch** it in a browser (`app-serving/`): a cycle replayed live through a serving agent | as long as you like |
+| 8 | **serve** it: a serving deployment, a session answering a window per query, checked against Stage 6 | 25 min |
+| 9 | **watch** it in a browser (`app-serving/`): a cycle replayed live through a serving session | as long as you like |
 
   About **15 minutes** end to end, 10 of them on the platform; serving (Stage 8,
   optional) adds 25. Platform times vary
   with load: the full example's much larger jobs took ~12 minutes per trial and
   ~40 per eval.
+
+- **The platform lifecycle** (Agent Lifecycle 2.0): everything lives in one
+  **project**. The quickstart copies the canonical `osm` blueprint into it,
+  optimizes the copy, promotes the best trial, tests it, then **packages** it
+  (models resolved once), **deploys** the package as `batch` or `serving`, and
+  runs **sessions** on the deployment: a batch session runs over input files, a
+  serving session answers `/query`. No step makes an admin-only call. Moving from
+  bundles and instances: [MIGRATION.md](MIGRATION.md).
+
+```mermaid
+flowchart LR
+  p["project"] --> c["copy of <code>osm</code>"] --> o["optimization<br/>Stage 4"] --> b["promoted blueprint<br/>Stage 5, + eval"]
+  b --> k["package"]
+  k --> db["deployment: batch"] --> sb["session(s) over the files<br/>Stage 6"]
+  k --> ds["deployment: serving"] --> ss["a session, <code>/query</code><br/>Stage 8"]
+  b -. "Stage 9: 1-trial optimization,<br/>embeddings on" .-> e["embeddings blueprint"] --> ek["package → batch sessions (library view)<br/>package → serving session (the app)"]
+```
 
 - **Skip Stages 0–3:** the role files are in the repo, packed in Git LFS
   (~96 MB). See [Shortcut](#shortcut-skip-stages-03).
@@ -234,12 +251,19 @@ python fit/optimize.py --dry-run                 # the plan; no uploads, no jobs
 python fit/optimize.py --background              # log fit/out/optimize.log
 ```
 
-1. **Upload:** it uploads the 4 library files and 3 validation files once.
+1. **Project:** it creates the project `LARCO OSM quickstart` (or reuses yours of that
+   name) and copies the canonical `osm` blueprint into it as `larco-qs`
+   (`POST /api/projects`, `POST /api/agents/blueprints/osm/copy`). An optimization
+   lands in its blueprint's project, and so does everything made from it; a
+   deployment needs one. **Writes:** `fit/out/project_state.json`.
+2. **Upload:** it uploads the 4 library files and 3 validation files once.
    The ids are cached in `fit/out/uploads.json`.
-2. **Optimize:** it creates an optimization on the `osm` blueprint. Each
+3. **Optimize:** it creates an optimization on that copy, with `data_columns` (the 9
+   channels) and `timestamp_column` pinned: a package can't add values later, and
+   Stage 8's serving source reads them from the blueprint. Each
    library file is a training example labelled by its state; each validation
    file is scored on its `label` column, each window by its last row.
-3. **Search space:** two settings, window 512, step 512, cosine, uniform, with
+4. **Search space:** two settings, window 512, step 512, cosine, uniform, with
    **k = 5** and **k = 31**. The platform embeds every window with Omega 1.5,
    fits a kNN on the library and reports macro-F1 on validation for each.
 
@@ -266,9 +290,10 @@ state at 512 / 512, not 800, so a smaller neighbourhood fits it better.
 python fit/test.py --background                  # log fit/out/test.log
 ```
 
-1. **Promote** the best trial from Stage 4 to a blueprint,
+1. **Promote** the best trial from Stage 4 to a blueprint in the project,
    `osm-larco-quickstart-w512-s512-…-<trial>` (the trial's id makes it unique
-   per run): its setting and fitted kNN become a reusable model. `--trial otr_…` picks another trial.
+   per run; where choosing a key takes the admin role, the platform's default,
+   `larco-qs-<trial>`): its setting and fitted kNN become a reusable model. `--trial otr_…` picks another trial.
 2. **Upload** the 3 test cycles.
 3. **Evaluate** them **once** with the Evals API, which scores the blueprint
    on files it has never seen. Ours took 3 minutes (the full example's evals
@@ -292,19 +317,23 @@ python fit/deliver.py --background               # log fit/out/deliver.log
 ```
 
 1. **Upload** becken-flt's 5 cycles, which have no labels.
-2. **Bundle:** create a bundle from Stage 5's blueprint, unchanged: the
-   deployable agent.
-3. **Run** it over the files. One worker takes the files in turn and writes one
-   output per file: each window's `predicted_state`, its `finish_timestamp`, an
-   `invalid` flag and a probability per state.
-4. **Download** the outputs and match them to files by timestamp.
+2. **Package** Stage 5's blueprint, unchanged (`POST /api/agents/packages`, target
+   `platform`): the encoder and the fitted kNN are resolved once, so every run of
+   it is the same. A package carries no values.
+3. **Deploy** it as `batch` (`POST /api/agents/deployments`), ready at once.
+4. **Run** a session over the files (`POST /api/agents/sessions`, the files as
+   source connectors). One worker takes the files in turn and writes one output per
+   file: each window's `predicted_state`, its `finish_timestamp`, an `invalid` flag
+   and a probability per state.
+5. **Download** the outputs (`/api/agents/sessions/{id}/results`) and match them to
+   files by timestamp.
 
-**Expect:** the upload (5 files, 134 MB), `bundle bnd_… from osm-larco-quickstart-…`,
-one run, then `5 of 5 files have predictions: 3,178 windows (0 invalid); 0 rows
-matched no file; failed runs: none`.
+**Expect:** the upload (5 files, 134 MB), `package pkg_… of osm-larco-quickstart-…,
+batch deployment dpl_…`, one session, then `5 of 5 files have predictions: 3,178
+windows (0 invalid); 0 rows matched no file; failed sessions: none`.
 
 **Writes:** `fit/out/delivery/<file>.csv` and `fit/out/delivery/runs.json`
-(`--resume` collects the runs without starting new ones).
+(`--resume` collects the sessions without starting new ones).
 
 ### Stage 7: score the delivery
 
@@ -343,16 +372,21 @@ python fit/serve.py --files warm_fast-15_0   # one cycle (406 windows, ~4 min)
 python fit/serve.py --windows-per-query 8    # up to 8 consecutive windows a query
 ```
 
-Stage 6 delivers in batch: upload the files, run an agent, download the outputs
+Stage 6 delivers in batch: upload the files, run a session, download the outputs
 when it's done. **Agent serving** keeps an agent loaded and answers a window in one
 round trip, with no upload, queue or polling: what the machine's controller would
 call every 2.56 s with the latest 512 readings.
 
-1. **Bundle:** Stage 5's blueprint as it is, with its source's columns as values,
-   `data_columns` (the 9 channels) and `timestamp_column: "timestamp"`: batch reads
-   them from the CSV header, and a served query has none. No copy of the blueprint
-   is made: the platform supplies the `atai-records` serving connectors itself.
-2. **Serving agent:** the bundle, run with `{"mode": "serving"}`.
+1. **Package:** Stage 5's blueprint as it is. Its serving source reads
+   `data_columns` (the 9 channels) and `timestamp_column` from the blueprint's
+   values, pinned at Stage 4: batch reads them from the CSV header, and a served
+   query has none. No copy of the blueprint is made: the platform supplies the
+   `atai-records` serving connectors itself.
+2. **A serving deployment and a session on it:** `POST /api/agents/deployments` with
+   `kind: "serving"` places the agent on a worker and loads it (seconds);
+   `POST /api/agents/sessions` opens a session on it, which answers over
+   `POST /api/agents/sessions/{id}/query` once it is `running`. The deployment holds
+   the agent; a session is a client's handle on it.
 3. **Each delivery file replayed a window at a time.** Every query carries one
    window, 512 rows of the 9 channels, one list per channel, and gets one record
    back:
@@ -367,8 +401,8 @@ call every 2.56 s with the latest 512 readings.
 4. **Every answer against Stage 6:** `predicted_state` and the four probabilities
    (to within 10⁻⁴), and the macro-F1 against the held-back labels, served and
    batch.
-5. **Cleanup:** the agent is cancelled and deleted, and the bundle deleted, however
-   the replay ends (Ctrl-C, SIGTERM and SIGHUP included); the ids stay in
+5. **Cleanup:** the session is cancelled, the deployment stopped, and the session,
+   deployment and package deleted, however the replay ends (Ctrl-C, SIGTERM and SIGHUP included); the ids stay in
    `fit/out/serve_state.json` until then.
 
 **Expect** (ours, production, 2026-10-29):
@@ -403,26 +437,36 @@ served 3,178 windows of 5 file(s) in 3,178 queries, 1438 s
 ### Stage 9: watch it in a browser
 
 ```sh
-python fit/library_embeddings.py     # once: the library's embeddings, for the app's embedding space
+python fit/library_embeddings.py     # after each Stage 5: the embeddings blueprint, and the library's embeddings for the app
 cd app-serving && npm install && npm run dev     # http://localhost:5182
 ```
 
 Stage 8 in a browser: [`app-serving/`](app-serving/README.md) replays one of the 5
-becken-flt cycles at 200 Hz, a 512-row window every 2.56 s, through a serving agent
-of the Stage 5 model, and shows the state it calls (the machine drawn filling,
+becken-flt cycles at 200 Hz, a 512-row window every 2.56 s, through a serving session
+on the Stage 5 model, and shows the state it calls (the machine drawn filling,
 washing, spinning or draining), the four probabilities, a timeline of the cycle, the
 embedding space and a log of state changes.
 
+- **An embeddings blueprint.** The app and the library view need each window's
+  embeddings, which an agent returns only when its blueprint has
+  `output_embeddings: true`, and Stage 5's has it off (a delivery with it on is
+  far larger). A bundle could switch it on for one run; a package has no values,
+  so `fit/library_embeddings.py` first makes a blueprint with it on: a 1-trial
+  optimization in the project at Stage 5's trial's point, then promoted. Its kNN is
+  refitted, but embeddings depend only on the encoder and the windowing.
 - **`fit/library_embeddings.py`:** the model is a registry artifact, so the library
   it compares windows with can't be read back. This runs the 4 library files
-  through the promoted blueprint in batch with `output_embeddings: true` and writes
-  their 800 windows, on the 2 directions that best separate the four states, to
-  `app-serving/static/library-view.{json,bin}`.
+  through the embeddings blueprint in batch (a package, one batch deployment, a
+  session per file) and writes their 800 windows, on the 2 directions that best
+  separate the four states, to `app-serving/static/library-view.{json,bin}`.
   Ids go to `fit/out/library_state.json`. The repo ships the view (from this
-  README's model), so run it again only after promoting another model.
-- **The app** holds a serving agent while it runs. It deletes its
-  agent and bundle when it stops (Ctrl-C or `npm run stop`); the ids sit in
-  `fit/out/app_serving_state.json` until then.
+  README's model); the app needs the embeddings blueprint for its live trail, so
+  run it once after each Stage 5.
+- **The app** serves the embeddings blueprint (or Stage 5's, without the live
+  trail, if there is none for the current Stage 5 blueprint) from a serving
+  deployment while it runs. It deletes its session, deployment and package when it
+  stops (Ctrl-C or `npm run stop`); the ids sit in `fit/out/app_serving_state.json`
+  until then.
 
 Needs Node 20+ and mosquitto (`brew install mosquitto`). The app's README has the
 architecture, the settings and the ports.
@@ -434,28 +478,25 @@ python fit/cleanup.py            # what would be deleted, and what stays
 python fit/cleanup.py --yes      # delete it
 ```
 
-It deletes, from the ids in `fit/out/`, Stage 6's delivery agents and their bundle
-(the bundle's own listing also finds the runs a rerun replaced; the outputs are
-already in `fit/out/delivery/`), Stage 8's serving agent and bundle if
-`fit/serve.py` was killed before it could (`kill -9`, a closed laptop), and Stage 9's:
-the app's serving agents and bundle if its bridge was killed the same way, and the
-library-embedding runs and their bundle. A running
-serving agent holds a serving worker until it is deleted, or released
-after 20 minutes idle. Agents go first, since a bundle that still has one answers 409,
-then bundles. One object that won't delete doesn't stop the rest:
-they're listed at the end. **What stays:** the promoted blueprint, and the optimization and eval. After a cleanup,
+It deletes the sessions, deployments and packages left on the platform, starting from
+the packages the stages recorded in `fit/out/`: Stage 6's delivery (its outputs are
+already in `fit/out/delivery/`), Stage 8's if `fit/serve.py` was killed before it could
+(`kill -9`, a closed laptop), and Stage 9's: the app's if its bridge was killed the same
+way, and the library embeddings'. For each package it lists the deployments and their
+sessions, so ones a stage never recorded are found too. A serving deployment holds a
+serving worker until it is stopped. Sessions go first, then deployments, then packages:
+each holds the next. One object that won't delete doesn't stop the rest: they're listed
+at the end. **What stays:** the project, its copy of `osm`, the promoted blueprints
+(Stage 5's and the embeddings one), and the optimizations and eval. After a cleanup,
 `fit/deliver.py --resume` can't collect again.
 
-To see whether any of your serving agents is still running:
+To see whether any serving deployment of yours is still up, holding a worker:
 
 ```sh
 set -a; source .env; set +a
-curl -s "$ATAI_API_ENDPOINT/agents/instances?status=running&limit=100" -H "Authorization: Bearer $ATAI_API_KEY" \
-  | jq -c '.data[] | select(.mode=="serving") | {id, blueprint, name, created_at}'
+curl -s "${ATAI_API_ENDPOINT%/api}/api/agents/deployments?status=ready&limit=100" -H "Authorization: Bearer $ATAI_API_KEY" \
+  | jq -c '.data[] | select(.kind=="serving") | {id, package_id, project_id, created_at}'
 ```
-
-`status=running` filters on the server; `mode=serving` is ignored there, so `jq`
-picks the serving agents. `fit/serve.py`'s agent is named `LARCO serve`.
 
 ## Results, and they reproduce
 
@@ -498,15 +539,16 @@ outputs above show at which stage.
 | `prep/build_roles.py`, `prep/preflight_roles.py` | Stages 2 and 3 |
 | `prep/preflight_common.py`, `prep/acknowledged.py`, `prep/background.py` | the shared preflight report, kept FAILs (none here), `--background` |
 | `prep/archive_roles.py` | pack or unpack `data/roles/` (Git LFS) |
-| `fit/atai.py` | stdlib platform helpers: requests, uploads, polling |
+| `fit/atai.py` | stdlib platform helpers: the project, packages, deployments and sessions, requests, uploads, polling |
 | `fit/optimize.py` | Stage 4 |
 | `fit/test.py` | Stage 5 |
 | `fit/deliver.py` | Stage 6 |
 | `fit/score_delivery.py` | Stage 7 |
 | `fit/serve.py` | Stage 8 |
-| `fit/library_embeddings.py` | Stage 9, once: the library's embeddings for the app → `app-serving/static/library-view.{json,bin}` |
+| `fit/library_embeddings.py` | Stage 9, after each Stage 5: the embeddings blueprint, and the library's embeddings for the app → `app-serving/static/library-view.{json,bin}` |
 | `app-serving/` | Stage 9: the browser app ([its README](app-serving/README.md)) |
-| `fit/cleanup.py` | delete the agents and bundles of Stages 6, 8 and 9 |
+| `fit/cleanup.py` | delete the sessions, deployments and packages of Stages 6, 8 and 9 |
+| `MIGRATION.md` | moving from bundles and instances to projects, packages, deployments and sessions |
 | `data/` | the split, the Zenodo listing, the licence, metadata and preflight reports; `data/archives/` holds the packed role files |
 
 ## Licence
