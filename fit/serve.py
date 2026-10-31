@@ -171,7 +171,7 @@ def main():
     finally:
         if end(ex):
             os.remove(sf)
-            log(f"ended and deleted {', '.join(v for k, v in ex.items() if k != 'endpoint' and v)}")
+            log(f"ended and deleted {', '.join(ex[k] for k in ('session', 'deployment', 'package') if ex.get(k))}")
     elapsed = time.time() - t0
 
     rows = []
