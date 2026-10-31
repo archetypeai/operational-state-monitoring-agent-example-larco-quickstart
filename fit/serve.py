@@ -6,23 +6,24 @@
     python fit/serve.py --max-windows 20         # the first 20 windows of each file
     python fit/serve.py --windows-per-query 8    # 8 consecutive windows a query
 
-Stage 6 runs the model in batch: upload the files, run an agent, download the outputs.
+Stage 6 runs the model in batch: upload the files, run a session, download the outputs.
 Agent serving keeps an agent loaded and answers a window in one round trip, as a
 washing machine's controller would ask it every 2.56 s about the latest 512 readings.
 This replays Stage 6's delivery files that way and checks every answer against the
 batch output for the same window:
 
-  1. a bundle of Stage 5's blueprint as it is, with its source's columns given as
-     bundle values (a served query has no CSV header): the platform supplies the
-     `atai-records` serving connectors when it runs a bundle in serving mode, so no
-     served copy is made;
-  2. a bundle of it, run in serving mode;
+  1. a package of Stage 5's blueprint as it is (a package carries no values; the
+     columns its serving source needs, since a served query has no CSV header, were
+     pinned at Stage 4): the platform supplies the `atai-records` serving connectors
+     for a serving deployment, so no served copy is made;
+  2. that package deployed as `serving` (the agent placed on a worker and loaded), and a
+     session opened on it, queried at POST /api/agents/sessions/{id}/query;
   3. each file replayed a window at a time: every query holds one window's 512 rows
      of the 9 channels (--windows-per-query N sends N consecutive windows);
   4. every answer against batch: `predicted_state`, the four probabilities to within
      1e-4, and the macro-F1 against the held-back labels, served and batch (exit 1 if more than
      0.1% of the states differ: a window near a tie can swap one neighbour);
-  5. the agent cancelled and deleted, and the bundle deleted, however it ends (Ctrl-C,
+  5. the session cancelled, the deployment stopped, and all three deleted, however it ends (Ctrl-C,
      SIGTERM and SIGHUP included). Their ids stay in fit/out/serve_state.json until
      then, so fit/cleanup.py finds them after a kill -9.
 
@@ -42,7 +43,8 @@ import numpy as np
 import pandas as pd
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from atai import agents, api_base, load_dotenv, request, same_deployment  # noqa: E402
+from atai import (agents, api_base, create_package, deploy, end as end_one, lifecycle_url, load_dotenv,  # noqa: E402
+                  open_session, request, same_deployment, wait_running)
 from optimize import OUT, ROLES, log  # noqa: E402
 from score_delivery import scores  # noqa: E402
 
@@ -73,20 +75,20 @@ def windows_of(batch, ts_ms, window):
 
 
 def end(ex):
-    """Delete the agent and the bundle; an id already gone counts as done."""
-    calls = [("POST", f"/instances/{ex['agent']}/cancel", {}), ("DELETE", f"/instances/{ex['agent']}", None)]
-    for method, path, body in (calls if ex["agent"] else []) + [("DELETE", f"/bundles/{ex['bundle']}", None)]:
-        try:
-            request(method, f"{agents()}{path}", body=body)
-        except RuntimeError as e:
-            if "(404)" not in str(e):
+    """End the session, then the deployment, then delete the package; an id already gone
+    counts as done. Each holds the next."""
+    for kind in ("sessions", "deployments", "packages"):
+        if ex.get(kind[:-1]):
+            try:
+                end_one(kind, ex[kind[:-1]])
+            except RuntimeError as e:
                 log(f"cleanup: {e}; fit/cleanup.py retries it")
                 return False
     return True
 
 
 def stop(signum, _frame):
-    sys.exit(f"stopped by signal {signum}")       # so `finally` deletes the agent and bundle
+    sys.exit(f"stopped by signal {signum}")       # so `finally` ends the session and deployment
 
 
 def main():
@@ -106,7 +108,10 @@ def main():
     if not same_deployment(test):
         sys.exit(f"{ts_path} is from {test.get('endpoint', 'an earlier run')}, a different deployment from {api_base()}")
     promoted = test["blueprint"]["key"]
-    bp = request("GET", f"{agents()}/blueprints/{promoted}")["document"]["values"]
+    # by id: a key registered in a project resolves only with ?project_id=
+    bp = request("GET", f"{agents()}/blueprints/{test['blueprint']['id']}")["document"]["values"]
+    if "data_columns" not in bp:
+        sys.exit(f"{promoted} doesn't pin data_columns, which serving reads from values: rerun Stages 4-5")
     window = bp["window_size"]
     names = [os.path.basename(f["file"]) for f in json.load(open(os.path.join(ROLES, "manifest.json")))["delivery"]["files"]]
     if args.files:
@@ -133,22 +138,18 @@ def main():
 
     sf = os.path.join(args.out, "serve_state.json")
     if os.path.exists(sf):
-        sys.exit(f"{sf} holds an earlier replay's agent and bundle: run fit/cleanup.py --yes first")
-    ex = {"endpoint": api_base(), "agent": None,
-          "bundle": request("POST", f"{agents()}/bundles", body={
-              "blueprint": promoted, "name": "LARCO serve",
-              "values": {"data_columns": channels, "timestamp_column": "timestamp"}})["id"]}
-    json.dump(ex, open(sf, "w"), indent=1)
+        sys.exit(f"{sf} holds an earlier replay's session, deployment and package: run fit/cleanup.py --yes first")
+    ex = {"endpoint": api_base(), "package": None, "deployment": None, "session": None}
     served, latency = {}, []
     t0 = time.time()
     try:
-        ex["agent"] = request("POST", f"{agents()}/bundles/{ex['bundle']}/run", body={"mode": "serving"})["id"]
-        json.dump(ex, open(sf, "w"), indent=1)
-        log(f"bundle {ex['bundle']} · agent {ex['agent']}")
-        while (status := request("GET", f"{agents()}/instances/{ex['agent']}").get("status")) != "running":
-            if status in ("failed", "cancelled", "canceled", "completed") or time.time() - t0 > 600:
-                sys.exit(f"agent {ex['agent']} is {status}, not running")
-            time.sleep(3)
+        for kind, make in (("package", lambda: create_package(test["blueprint"]["id"], "LARCO serve")),
+                           ("deployment", lambda: deploy(ex["package"], "serving")),
+                           ("session", lambda: open_session(ex["deployment"]))):
+            ex[kind] = make()["id"]
+            json.dump(ex, open(sf, "w"), indent=1)
+        log(f"package {ex['package']} · serving deployment {ex['deployment']} · session {ex['session']}")
+        wait_running(ex["session"])
         for name, X, _, batch, firsts in plan:
             got = served[name] = []
             k = 0
@@ -158,7 +159,7 @@ def main():
                 while count < wpq and k + count < len(firsts) and firsts[k + count] == firsts[k] + count * window:
                     count += 1
                 t = time.time()
-                answer = request("POST", f"{agents()}/instances/{ex['agent']}/query",
+                answer = request("POST", lifecycle_url("sessions", ex["session"]) + "/query",
                                  body=query_body(X[firsts[k]:firsts[k] + count * window]))
                 latency.append(time.time() - t)
                 records = (answer.get("response") or {}).get("data")
@@ -170,7 +171,7 @@ def main():
     finally:
         if end(ex):
             os.remove(sf)
-            log(f"cancelled and deleted {ex['agent']}, deleted {ex['bundle']}")
+            log(f"ended and deleted {', '.join(ex[k] for k in ('session', 'deployment', 'package') if ex.get(k))}")
     elapsed = time.time() - t0
 
     rows = []

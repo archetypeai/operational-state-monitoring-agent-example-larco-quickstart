@@ -38,8 +38,8 @@
 						class={a?.phase === 'running' ? 'text-atai-good' : 'text-atai-warning'}
 						>{a?.phase ?? 'no bridge'}</Badge
 					>
-					<span><span class="text-muted-foreground">agent</span> {a?.agent ?? '—'}</span>
-					<span><span class="text-muted-foreground">bundle</span> {a?.bundle ?? '—'}</span>
+					<span><span class="text-muted-foreground">session</span> {a?.agent ?? '—'}</span>
+					<span><span class="text-muted-foreground">deployment</span> {a?.deployment ?? '—'}</span>
 					<span
 						><span class="text-muted-foreground">median query</span>
 						{a?.medianLatencyMs != null ? `${a.medianLatencyMs} ms` : '—'}</span

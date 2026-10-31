@@ -90,6 +90,111 @@ def request(method, url, body=None):
         delay = min(delay * 2, 60)
 
 
+PROJECT = "LARCO OSM quickstart"
+BASE_KEY = "larco-qs"            # the copy of `osm`; trials it promotes default to <BASE_KEY>-<trial id>
+
+
+def lifecycle_url(kind, obj_id=""):
+    """`packages`, `deployments` or `sessions`, or one of them by id."""
+    return f"{agents()}/{kind}" + (f"/{obj_id}" if obj_id else "")
+
+
+def base_blueprint(out, source="osm", log=print):
+    """The quickstart's project and its copy of `source`, which the optimizations search.
+
+    Everything after it lands in the project: an optimization in its blueprint's project, and
+    so do the blueprints it promotes and their packages, deployments and sessions. A deployment
+    needs one, and the canonical `osm` is outside any, while POST /optimizations takes no
+    project_id. Copying needs only the right to modify the project, not the admin role. An
+    existing project of that name, and an existing copy under BASE_KEY in it, are reused.
+
+    Writes <out>/project_state.json; returns {project, id, key}."""
+    os.makedirs(out, exist_ok=True)
+    path = os.path.join(out, "project_state.json")
+    state = json.load(open(path)) if os.path.exists(path) else {}
+    if state and not same_deployment(state):
+        sys.exit(f"{path} is from {state.get('endpoint')}, a different deployment from {api_base()}: move it aside")
+    state["endpoint"] = api_base()
+    if "project" not in state:
+        found = [p for p in request("GET", f"{api_base()}/projects?limit=1000")["data"] if p["name"] == PROJECT]
+        state["project"] = found[0]["id"] if found else request(
+            "POST", f"{api_base()}/projects", body={"name": PROJECT, "description": "LARCO washing-machine states (OSM quickstart)"})["id"]
+        json.dump(state, open(path, "w"), indent=1)
+        log(f"project {state['project']} ({PROJECT})")
+    if "base" not in state:
+        found = request("GET", f"{agents()}/blueprints?project_id={state['project']}&key={BASE_KEY}")["data"]
+        if found:
+            bp = found[0]
+            log(f"reusing {BASE_KEY} in {state['project']} ({bp['id']})")
+        else:
+            bp = request("POST", f"{agents()}/blueprints/{source}/copy", body={"project_id": state["project"], "blueprint_key": BASE_KEY})
+            log(f"copied {source} into {state['project']} as {BASE_KEY} ({bp['id']})")
+        state["base"] = {"id": bp["id"], "key": bp["blueprint_key"]}
+        json.dump(state, open(path, "w"), indent=1)
+    return {"project": state["project"], **state["base"]}
+
+
+def _wait_for(kind, obj_id, want, waiting, timeout_s=600, every_s=3):
+    t0 = time.time()
+    while True:
+        obj = request("GET", lifecycle_url(kind, obj_id))
+        if obj["status"] == want:
+            return obj
+        if obj["status"] != waiting or time.time() - t0 > timeout_s:
+            sys.exit(f"{obj_id} is {obj['status']}, not {want}: {obj.get('error')}")
+        time.sleep(every_s)
+
+
+def create_package(blueprint_id, name):
+    """Package one blueprint for the platform and wait until it is ready. A package pins the
+    blueprint and the models it resolves to (the Omega encoder, the fitted kNN) and carries no
+    values: it runs the blueprint exactly as promoted."""
+    pkg = request("POST", lifecycle_url("packages"),
+                  body={"blueprint_ids": [blueprint_id], "target": {"kind": "platform"}, "name": name})
+    return _wait_for("packages", pkg["id"], "ready", "building", every_s=5)
+
+
+def deploy(package_id, kind):
+    """Deploy a package as `batch` (ready at once) or `serving` (the agent placed on a worker and
+    loaded, usually within seconds; it holds the worker until stopped)."""
+    dpl = request("POST", lifecycle_url("deployments"), body={"package_id": package_id, "kind": kind})
+    return _wait_for("deployments", dpl["id"], "ready", "deploying")
+
+
+def open_session(deployment_id, file_ids=None):
+    """A batch session over `file_ids` (one output per input), or a serving session, queried at
+    /sessions/{id}/query once `running`, when none are given."""
+    body = {"deployment_id": deployment_id}
+    if file_ids:
+        body["connectors"] = {"source": [{"type": "file", "id": f, "format": "csv"} for f in file_ids]}
+    return request("POST", lifecycle_url("sessions"), body=body)
+
+
+def wait_running(session_id):
+    return _wait_for("sessions", session_id, "running", "pending")
+
+
+def end(kind, obj_id):
+    """Cancel a session still going, or stop a deployment still up, then delete it; a package is
+    deleted as it is. An id already gone counts as done."""
+    try:
+        obj = request("GET", lifecycle_url(kind, obj_id))
+        if kind == "sessions" and obj["status"] not in TERMINAL:
+            request("POST", lifecycle_url(kind, obj_id) + "/cancel", body={})
+        if kind == "deployments" and obj["status"] not in ("stopped", "failed"):
+            request("POST", lifecycle_url(kind, obj_id) + "/stop", body={})
+        request("DELETE", lifecycle_url(kind, obj_id))
+    except RuntimeError as e:
+        if "(404)" not in str(e):
+            raise
+
+
+def result_url(ref):
+    """A session result's `ref` is a root path, `/api/files/<fil_…>/content`, or an absolute URL:
+    resolve it against the deployment root, not against .../api."""
+    return ref if ref.startswith("http") else api_base().removesuffix("/api") + ref
+
+
 def upload_file(path, rename=None):
     """POST a file to /api/files as multipart/form-data; returns the platform's JSON (with file_id)."""
     boundary = uuid.uuid4().hex

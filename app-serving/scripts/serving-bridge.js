@@ -16,11 +16,18 @@
  * - THE ANSWER GETS ITS WINDOW BACK. The served agent numbers rows 0..511 within
  *   the query; the bridge knows which windows it sent and puts their cycle, index
  *   and timestamps on each record.
- * - ONE SERVING WORKER, HELD WHILE THIS RUNS. On exit the
- *   agent is cancelled and deleted, and the bundle deleted; the ids sit in
- *   fit/out/app_serving_state.json until then, so `python fit/cleanup.py --yes`
- *   finds them after a hard kill. An agent the platform released (20 minutes
- *   without a query, e.g. a paused replay) is replaced on the next window.
+ * - ONE SERVING WORKER, HELD WHILE THIS RUNS. The blueprint is packaged, the
+ *   package deployed as `serving` (the agent placed on a worker and loaded), and a
+ *   session opened on the deployment; queries go to the session. On exit the
+ *   session is cancelled, the deployment stopped, and all three deleted; the ids sit
+ *   in fit/out/app_serving_state.json until then, so `python fit/cleanup.py --yes`
+ *   finds them after a hard kill. A session that stops taking queries (cancelled
+ *   elsewhere, or its deployment ended) is replaced on the next window, with a new
+ *   deployment if the old one is gone.
+ * - EMBEDDINGS NEED THEIR OWN BLUEPRINT. A package carries no values, so it can't
+ *   turn `output_embeddings` on: the bridge serves fit/library_embeddings.py's
+ *   embeddings blueprint (Stage 5's configuration with embeddings on) when it was
+ *   made from the current Stage 5 blueprint, else Stage 5's, without the trail.
  *
  * Env (repo .env): ATAI_API_ENDPOINT, ATAI_API_KEY.
  * Env (app-serving/.env): WINDOWS_PER_QUERY (default 1).
@@ -47,7 +54,7 @@ if (!ENDPOINT || !KEY) {
 const STATE = path.join(REPO, 'fit', 'out', 'app_serving_state.json');
 if (fs.existsSync(STATE)) {
 	console.error(
-		`bridge: ${path.relative(REPO, STATE)} holds an earlier bridge's agent: run python fit/cleanup.py --yes`
+		`bridge: ${path.relative(REPO, STATE)} holds an earlier bridge's deployment: run python fit/cleanup.py --yes`
 	);
 	process.exit(1);
 }
@@ -71,7 +78,21 @@ if (test.endpoint && deployment(test.endpoint) !== deployment(ENDPOINT)) {
 	);
 	process.exit(1);
 }
-const PROMOTED = test.blueprint.key;
+/** fit/library_embeddings.py's embeddings blueprint, if it was made from this Stage 5 blueprint here. */
+const library = readJson(path.join(REPO, 'fit', 'out', 'library_state.json'));
+const served =
+	library?.embeddings_blueprint &&
+	library.blueprint === test.blueprint.key &&
+	library.endpoint &&
+	deployment(library.endpoint) === deployment(ENDPOINT)
+		? library.embeddings_blueprint
+		: test.blueprint;
+if (served === test.blueprint)
+	console.warn(
+		'bridge: no embeddings blueprint for this Stage 5 blueprint (python fit/library_embeddings.py makes one): serving it without embeddings'
+	);
+const PROMOTED = served.key;
+const PROMOTED_ID = served.id;
 const MODEL = 'larco-osm'; // the name a query gives in `model`, as fit/serve.py (not checked)
 const CHANNELS = readJson(path.join(REPO, 'data', 'roles', 'zscore_stats.json'))?.channels;
 if (!CHANNELS) {
@@ -104,11 +125,13 @@ async function api(method, p, body) {
 	return text ? JSON.parse(text) : {};
 }
 
-/** `agents`: every agent of the bundle not yet deleted, the current one last. */
+/** `sessions`: every session not yet deleted, the current one last. `agent` is the current
+ *  session, under the name the page reads. */
 const live = {
-	bundle: null,
+	package: null,
+	deployment: null,
 	agent: null,
-	agents: [],
+	sessions: [],
 	running: false,
 	phase: 'starting',
 	model: null,
@@ -118,7 +141,13 @@ const save = () =>
 	fs.writeFileSync(
 		STATE,
 		JSON.stringify(
-			{ endpoint: ENDPOINT, bundle: live.bundle, agent: live.agent, agents: live.agents },
+			{
+				endpoint: ENDPOINT,
+				package: live.package,
+				deployment: live.deployment,
+				session: live.agent,
+				sessions: live.sessions
+			},
 			null,
 			1
 		)
@@ -137,7 +166,8 @@ function announce(phase, detail = '') {
 			detail,
 			running: live.running,
 			agent: live.agent,
-			bundle: live.bundle,
+			deployment: live.deployment,
+			package: live.package,
 			blueprint: PROMOTED,
 			promoted: PROMOTED,
 			model: live.model,
@@ -150,61 +180,95 @@ function announce(phase, detail = '') {
 	);
 }
 
-/** The promoted blueprint's window, and the model name a query gives. Served as it is:
- *  the platform supplies the serving connectors when a bundle runs in serving mode. */
+/** The served blueprint's window, and the model name a query gives. Served as it is: the
+ *  platform supplies the serving connectors for a serving deployment. By id: a key
+ *  registered in a project resolves only with ?project_id=. */
 async function promotedModel() {
-	const doc = (await api('GET', `/blueprints/${PROMOTED}`)).document;
+	const doc = (await api('GET', `/blueprints/${PROMOTED_ID}`)).document;
 	return { model: MODEL, window: doc.values.window_size };
 }
 
+/** Poll `p` while its status is `waiting`; throw unless it then reaches `want`. */
+async function until(p, want, waiting) {
+	const t0 = Date.now();
+	for (;;) {
+		const o = await api('GET', p);
+		if (o.status === want) return o;
+		if (o.status !== waiting || Date.now() - t0 > 600_000)
+			throw new Error(`${p} is ${o.status}${o.error ? `: ${o.error}` : ''}`);
+		await sleep(2000);
+	}
+}
+
 async function startAgent() {
-	if (!live.bundle) {
-		// The promoted blueprint as it is: its source's columns as values (a served
-		// query has no CSV header), and embeddings on for the embedding space.
-		live.bundle = (
-			await api('POST', '/bundles', {
-				blueprint: PROMOTED,
-				name: 'LARCO app-serving',
-				values: { data_columns: CHANNELS, timestamp_column: 'timestamp', output_embeddings: true }
+	if (!live.package) {
+		// The blueprint as it is: its columns (a served query has no CSV header) and, for the
+		// embeddings blueprint, output_embeddings were pinned when it was optimized.
+		live.package = (
+			await api('POST', '/packages', {
+				blueprint_ids: [PROMOTED_ID],
+				target: { kind: 'platform' },
+				name: 'LARCO app-serving'
 			})
 		).id;
 		save();
+		await until(`/packages/${live.package}`, 'ready', 'building');
 	}
-	live.agent = (await api('POST', `/bundles/${live.bundle}/run`, { mode: 'serving' })).id;
-	live.agents.push(live.agent);
+	if (!live.deployment) {
+		live.deployment = (await api('POST', '/deployments', { package_id: live.package, kind: 'serving' })).id;
+		save();
+		announce('starting', `deployment ${live.deployment}`);
+		await until(`/deployments/${live.deployment}`, 'ready', 'deploying');
+	}
+	live.agent = (await api('POST', '/sessions', { deployment_id: live.deployment })).id;
+	live.sessions.push(live.agent);
 	save();
-	announce('starting', `agent ${live.agent}`);
-	const t0 = Date.now();
-	for (;;) {
-		const s = (await api('GET', `/instances/${live.agent}`)).status;
-		if (s === 'running') break;
-		if (['failed', 'completed', 'cancelled', 'canceled'].includes(s) || Date.now() - t0 > 600_000)
-			throw new Error(`agent ${live.agent} is ${s}`);
-		await sleep(2000);
-	}
+	announce('starting', `session ${live.agent}`);
+	await until(`/sessions/${live.agent}`, 'running', 'pending');
 	live.running = true;
 	announce('running');
-	console.log(`bridge: serving agent ${live.agent} running (bundle ${live.bundle}, ${PROMOTED})`);
+	console.log(
+		`bridge: session ${live.agent} running (deployment ${live.deployment}, package ${live.package}, ${PROMOTED})`
+	);
 }
 
-/** Cancel and delete an agent; true once it is gone (404 counts). */
-async function dropAgent(id) {
-	await api('POST', `/instances/${id}/cancel`, {}).catch(() => {}); // a released agent is already stopped
+/** Delete `p`, after `prep` (cancel or stop) where that still applies; true once it is gone (404 counts). */
+async function drop(p, prep) {
+	if (prep) await api('POST', `${p}/${prep}`, {}).catch(() => {}); // already ended: nothing to do
 	try {
-		await api('DELETE', `/instances/${id}`);
+		await api('DELETE', p);
+		return true;
 	} catch (e) {
-		if (e.status !== 404) {
-			console.error(`bridge: ${e.message}`);
-			return false;
-		}
+		if (e.status === 404) return true;
+		console.error(`bridge: ${e.message}`);
+		return false;
 	}
-	live.agents = live.agents.filter((a) => a !== id);
+}
+
+async function dropSession(id) {
+	if (!(await drop(`/sessions/${id}`, 'cancel'))) return false;
+	live.sessions = live.sessions.filter((s) => s !== id);
 	if (live.agent === id) live.agent = null;
 	save();
 	return true;
 }
 
-/** Start an agent, retrying while the serving workers are all taken. */
+async function dropDeployment() {
+	if (!live.deployment) return true;
+	if (!(await drop(`/deployments/${live.deployment}`, 'stop'))) return false;
+	live.deployment = null;
+	save();
+	return true;
+}
+
+/** True unless the current deployment is known to be gone or ended. */
+async function deploymentReady() {
+	if (!live.deployment) return false;
+	const d = await api('GET', `/deployments/${live.deployment}`).catch(() => ({}));
+	return d.status === 'ready';
+}
+
+/** Open a session (deploying first if needed), retrying while the serving workers are all taken. */
 async function startWithRetry() {
 	live.running = false;
 	for (let wait = 15_000; !stopping; wait = Math.min(wait * 2, 120_000)) {
@@ -212,11 +276,10 @@ async function startWithRetry() {
 			await startAgent();
 			return;
 		} catch (e) {
-			console.error(
-				`bridge: could not start a serving agent (${e.message}); retrying in ${wait / 1000} s`
-			);
+			console.error(`bridge: could not start serving (${e.message}); retrying in ${wait / 1000} s`);
 			announce('waiting', `no serving worker free; retrying in ${wait / 1000} s`);
-			if (live.agent) await dropAgent(live.agent);
+			if (live.agent) await dropSession(live.agent);
+			if (live.deployment && !(await deploymentReady())) await dropDeployment();
 			await sleep(wait);
 		}
 	}
@@ -230,24 +293,16 @@ async function shutdown(sig) {
 	live.running = false;
 	let left = 0;
 	try {
-		for (const id of [...live.agents]) if (!(await dropAgent(id))) left++;
-		if (live.bundle && !left) {
-			try {
-				await api('DELETE', `/bundles/${live.bundle}`);
-			} catch (e) {
-				if (e.status !== 404) {
-					console.error(`bridge: ${e.message}`);
-					left++;
-				}
-			}
-		}
+		for (const id of [...live.sessions]) if (!(await dropSession(id))) left++;
+		if (!left && !(await dropDeployment())) left++;
+		if (!left && live.package && !(await drop(`/packages/${live.package}`))) left++;
 		if (left) {
 			console.error(
 				`bridge: not everything was deleted; run python fit/cleanup.py --yes (ids in ${path.relative(REPO, STATE)})`
 			);
 		} else {
 			fs.rmSync(STATE, { force: true });
-			console.log(`bridge: deleted its agent(s) and bundle ${live.bundle ?? '(none)'}`);
+			console.log(`bridge: deleted its session(s), deployment and package ${live.package ?? '(none)'}`);
 		}
 		announce('stopped');
 		await new Promise((r) => client.end(false, {}, r));
@@ -256,7 +311,7 @@ async function shutdown(sig) {
 	}
 }
 for (const sig of ['SIGINT', 'SIGTERM', 'SIGHUP']) process.on(sig, () => shutdown(sig));
-// Anything unexpected still cleans up: an exit without it would hold a Dev worker.
+// Anything unexpected still cleans up: an exit without it would hold a serving worker.
 process.on('uncaughtException', (e) => {
 	console.error('bridge:', e);
 	shutdown('error');
@@ -307,17 +362,18 @@ async function drain() {
 			const t = Date.now();
 			let answer;
 			try {
-				answer = await api('POST', `/instances/${live.agent}/query`, {
+				answer = await api('POST', `/sessions/${live.agent}/query`, {
 					model: live.model,
 					query: '',
 					events: [{ type: 'data.numeric_array', event_data: { contents } }]
 				});
 			} catch (e) {
 				if (e.status === 409) {
-					// Released after 20 minutes without a query, or cancelled elsewhere.
-					console.warn(`bridge: agent ${live.agent} no longer running; replacing it`);
-					announce('replacing', `agent ${live.agent} was released`);
-					if (live.agent) await dropAgent(live.agent);
+					// The session was cancelled elsewhere, or its deployment ended.
+					console.warn(`bridge: session ${live.agent} no longer taking queries; replacing it`);
+					announce('replacing', `session ${live.agent} ended`);
+					if (live.agent) await dropSession(live.agent);
+					if (!(await deploymentReady())) await dropDeployment();
 					queue.unshift(...batch);
 					busy = false;
 					await startWithRetry();
