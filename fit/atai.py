@@ -146,19 +146,27 @@ def _wait_for(kind, obj_id, want, waiting, timeout_s=600, every_s=3):
 
 
 def create_package(blueprint_id, name):
-    """Package one blueprint for the platform and wait until it is ready. A package pins the
+    """Package one blueprint for the platform; it starts `building`. A package pins the
     blueprint and the models it resolves to (the Omega encoder, the fitted kNN) and carries no
-    values: it runs the blueprint exactly as promoted."""
-    pkg = request("POST", lifecycle_url("packages"),
-                  body={"blueprint_ids": [blueprint_id], "target": {"kind": "platform"}, "name": name})
-    return _wait_for("packages", pkg["id"], "ready", "building", every_s=5)
+    values: it runs the blueprint exactly as promoted. Record its id before `package_ready`, so
+    a build that fails or is interrupted can still be deleted."""
+    return request("POST", lifecycle_url("packages"),
+                   body={"blueprint_ids": [blueprint_id], "target": {"kind": "platform"}, "name": name})
+
+
+def package_ready(package_id):
+    return _wait_for("packages", package_id, "ready", "building", every_s=5)
 
 
 def deploy(package_id, kind):
-    """Deploy a package as `batch` (ready at once) or `serving` (the agent placed on a worker and
-    loaded, usually within seconds; it holds the worker until stopped)."""
-    dpl = request("POST", lifecycle_url("deployments"), body={"package_id": package_id, "kind": kind})
-    return _wait_for("deployments", dpl["id"], "ready", "deploying")
+    """Deploy a ready package as `batch` (ready at once) or `serving` (the agent placed on a worker
+    and loaded, usually within seconds; it holds the worker until stopped). It starts
+    `deploying`: record its id before `deployment_ready`."""
+    return request("POST", lifecycle_url("deployments"), body={"package_id": package_id, "kind": kind})
+
+
+def deployment_ready(deployment_id):
+    return _wait_for("deployments", deployment_id, "ready", "deploying")
 
 
 def open_session(deployment_id, file_ids=None):

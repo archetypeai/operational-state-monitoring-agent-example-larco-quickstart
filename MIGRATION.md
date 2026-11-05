@@ -2,13 +2,14 @@
 
 How this quickstart moved from bundles and instances to **projects, packages,
 deployments and sessions**, and what to watch for if you move your own scripts.
-Stages 4–9 were run end to end on 2026-10-30. That run used an org-admin key, but the
-scripts make no admin-only call (see 6 below); a run with a member key is still to be
-confirmed.
+Stages 4–9 were run end to end on 2026-10-30 with an org-admin key, and again on
+2026-11-04 with a member key in a new project: the scripts make no admin-only call (see 6
+below), and the second run reproduced the first's scores, Stages 4–9 and the app.
 
-`/api/agents/bundles` and `/api/agents/instances` are being retired: move to the calls
-below. To check that your deployment of the platform serves them, `GET
-{root}/api/agents/sessions?limit=1` should answer 200, not 404.
+`/api/agents/bundles` and `/api/agents/instances` are being removed: some deployments of
+the platform already answer 404 for them, and the rest keep them only until their next
+platform release. Move to the calls below. A deployment serves the new calls
+when `GET {root}/api/agents/sessions?limit=1` answers 200, not 404.
 
 ## Before and after
 
@@ -110,9 +111,9 @@ All paths are under `{root}/api/agents` unless shown otherwise.
 | `DELETE /bundles/{id}` | `POST /deployments/{id}/stop`, `DELETE /deployments/{id}`, then `DELETE /packages/{id}` |
 | `GET /instances?bundle_id=` | `GET /deployments?package_id=`, `GET /sessions?deployment_id=` |
 
-Statuses: package `building → ready | failed`; deployment `deploying → ready → stopping →
-stopped | failed`; session `pending → running → completed | failed | cancelled` (and
-`paused`).
+Statuses: package `building → ready | failed`; deployment `deploying → ready → stopping
+→ stopped | failed`; session `pending → running → completed | failed | cancelled` (and
+`paused`). A package's `latest_runs` lists its sessions (`ses_…` ids).
 
 ## What changed in practice
 
@@ -147,8 +148,9 @@ stopped | failed`; session `pending → running → completed | failed | cancell
    have a fallback:
    - `POST /blueprints` (registering an edited copy of a promoted blueprint, e.g. with
      embeddings on) takes the admin role; the 1-trial optimization doesn't;
-   - choosing `blueprint_key` on promote takes it too: `fit/test.py` tries its own key and,
-     on a 403, lets the platform choose (`larco-qs-<trial id>`).
+   - choosing `blueprint_key` on promote can take it too: `fit/test.py` tries its own key and,
+     on a 403, lets the platform choose (`larco-qs-<trial id>`). The 2026-11-04 member-key
+     run kept its own key.
 
 7. **A session's result `ref` is a root path.** `/sessions/{id}/results` returns
    `ref: "/api/files/<fil_…>/content"`, which already includes `/api`: resolve it against
@@ -164,7 +166,7 @@ stopped | failed`; session `pending → running → completed | failed | cancell
 
 | File | Change |
 |---|---|
-| `fit/atai.py` | `base_blueprint()` (the project and its copy of `osm`), `create_package`, `deploy`, `open_session`, `wait_running`, `end`, `result_url` |
+| `fit/atai.py` | `base_blueprint()` (the project and its copy of `osm`), `create_package` and `package_ready`, `deploy` and `deployment_ready`, `open_session`, `wait_running`, `end`, `result_url` |
 | `fit/optimize.py` | optimize the project's copy; `data_columns`, `timestamp_column` (and `states`) pinned |
 | `fit/test.py` | an earlier promotion looked up by id |
 | `fit/deliver.py` | a package, one batch deployment, a session over the files; results through their ref |

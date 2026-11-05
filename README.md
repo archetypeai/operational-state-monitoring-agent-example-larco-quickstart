@@ -517,6 +517,10 @@ and sessions (2026-10-30, [MIGRATION.md](MIGRATION.md)):
 
 Macro-F1 is the mean of the four states' F1 scores, so each state counts equally.
 
+A rerun with a member key, in its own project (2026-11-04), gave the same scores again
+in Stages 4–7, the same served states as batch in Stage 8 (one cycle, 406/406), and the
+same library view to within 1.4×10⁻⁵.
+
 So the pipeline and the platform are deterministic here. If your run gives
 different numbers, something differs in your data or setup, and the expected
 outputs above show at which stage.

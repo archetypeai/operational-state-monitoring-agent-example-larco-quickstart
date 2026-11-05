@@ -31,8 +31,8 @@ import time
 import urllib.request
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from atai import (TERMINAL, api_base, create_package, deploy, lifecycle_url, load_dotenv, open_session,  # noqa: E402
-                  request, result_url, same_deployment)
+from atai import (TERMINAL, api_base, create_package, deploy, deployment_ready, lifecycle_url, load_dotenv,  # noqa: E402
+                  open_session, package_ready, request, result_url, same_deployment)
 from optimize import OUT, ROLES, log, upload_all  # noqa: E402
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "prep"))
@@ -108,8 +108,10 @@ def start(files, per_run, jobs):
     os.makedirs(DELIVERY, exist_ok=True)
     state["package"] = create_package(ts["blueprint"]["id"], f"LARCO quickstart delivery to becken-flt {stamp}")["id"]
     json.dump(state, open(STATE, "w"), indent=1)
+    package_ready(state["package"])
     state["deployment"] = deploy(state["package"], "batch")["id"]
     json.dump(state, open(STATE, "w"), indent=1)
+    deployment_ready(state["deployment"])
     log(f"package {state['package']} of {KEY}, batch deployment {state['deployment']}")
     for i in range(0, len(paths), per_run):
         batch = [f["file"] for f in files[i:i + per_run]]

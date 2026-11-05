@@ -42,8 +42,9 @@ import time
 import numpy as np
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from atai import (TERMINAL, agents, api_base, create_package, deploy, lifecycle_url, list_trials, load_dotenv,  # noqa: E402
-                  open_session, request, same_deployment, trial_setting, wait_optimization)
+from atai import (TERMINAL, agents, api_base, create_package, deploy, deployment_ready, lifecycle_url,  # noqa: E402
+                  list_trials, load_dotenv, open_session, package_ready, request, same_deployment, trial_setting,
+                  wait_optimization)
 from deliver import END_SLACK_MS, OUTPUT_WAIT_S, fetch, time_range, to_ms  # noqa: E402
 from optimize import OUT, ROLES, log, pinned_values, upload_all  # noqa: E402
 from test import blueprint as promote  # noqa: E402
@@ -227,8 +228,10 @@ def main():
                 state.update({"endpoint": api_base(), "blueprint": key, "runs": {},
                               "package": create_package(emb["id"], "LARCO library embeddings")["id"]})
                 save()
+            package_ready(state["package"])
             state["deployment"] = deploy(state["package"], "batch")["id"]
             save()
+            deployment_ready(state["deployment"])
             log(f"package {state['package']} of {emb['key']} (window {window}, step {step}, embeddings on), "
                 f"batch deployment {state['deployment']}")
     t0 = time.time()

@@ -43,8 +43,8 @@ import numpy as np
 import pandas as pd
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from atai import (agents, api_base, create_package, deploy, end as end_one, lifecycle_url, load_dotenv,  # noqa: E402
-                  open_session, request, same_deployment, wait_running)
+from atai import (agents, api_base, create_package, deploy, deployment_ready, end as end_one, lifecycle_url,  # noqa: E402
+                  load_dotenv, open_session, package_ready, request, same_deployment, wait_running)
 from optimize import OUT, ROLES, log  # noqa: E402
 from score_delivery import scores  # noqa: E402
 
@@ -143,11 +143,14 @@ def main():
     served, latency = {}, []
     t0 = time.time()
     try:
-        for kind, make in (("package", lambda: create_package(test["blueprint"]["id"], "LARCO serve")),
-                           ("deployment", lambda: deploy(ex["package"], "serving")),
-                           ("session", lambda: open_session(ex["deployment"]))):
+        # each id is recorded before waiting on it, so cleanup.py can delete what fails
+        for kind, make, ready in (("package", lambda: create_package(test["blueprint"]["id"], "LARCO serve"), package_ready),
+                                  ("deployment", lambda: deploy(ex["package"], "serving"), deployment_ready),
+                                  ("session", lambda: open_session(ex["deployment"]), None)):
             ex[kind] = make()["id"]
             json.dump(ex, open(sf, "w"), indent=1)
+            if ready:
+                ready(ex[kind])
         log(f"package {ex['package']} · serving deployment {ex['deployment']} · session {ex['session']}")
         wait_running(ex["session"])
         for name, X, _, batch, firsts in plan:
