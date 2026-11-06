@@ -36,7 +36,7 @@
 - **Skip Stages 0–3:** the role files are in the repo, packed in Git LFS
   (~96 MB). See [Shortcut](#shortcut-skip-stages-03).
 - **On the free trial** (`try.archetypeai.app`) the same commands work, with no
-  extra flags; Stages 4–8 take about **1.5 hours** there. See
+  extra flags; Stages 4–8 take about **30 minutes** there, most of it Stage 8's serving. See
   [On the free trial](#on-the-free-trial).
 
 > **The scores here aren't the full example's.** The quickstart uses only short
@@ -123,11 +123,11 @@ Then go to [Stage 4](#stage-4-optimize).
 ### On the free trial
 
 The free trial (`ATAI_API_ENDPOINT=https://try.archetypeai.app/api`, in
-`.env.example`) runs on CPU, at most 3 jobs per org at once, and stops every job
-after 2 hours (`DeadlineExceeded`, with no output). An eval or agent run there
-scores about 950 windows × channels a minute, so this quickstart's jobs fit as
-they are: Stage 5's eval is 3,520 windows of 9 channels (~35 min), Stage 6's run
-3,178 (~30 min).
+`.env.example`) runs optimizations on GPU (always), evals and agent runs on GPU
+since 2026-11-06 (CPU before), and agent serving on CPU, at most 3 jobs per org at
+once, and stops every job after 2 hours (`DeadlineExceeded`, with no output). This
+quickstart's jobs fit as they are: Stage 5's eval (3,520 windows of 9 channels) and
+Stage 6's run (3,178) take about 3 minutes each, and took about 35 and 30 on CPU.
 
 **How the scripts know:** `fit/atai.py`'s `free_trial()` is true when the
 endpoint's host is `try.archetypeai.app` (a free-trial key works nowhere else).
@@ -137,24 +137,26 @@ Then one default changes, and the script says so when it starts:
 |---|---|---|---|
 | 9 `fit/library_embeddings.py` | 4 runs at once | 3 at a time | 3 jobs at once |
 
-**What it gives** (ours, 2026-10-31):
+**What it gives** (ours, 2026-11-06, evals and agent runs on GPU; on CPU, 2026-10-31,
+the same numbers took about 1.5 hours):
 
 | stage | free trial | production |
 |---|---|---|
 | 4 | 5 min; the same 2 trials and scores | 4 min |
-| 5 | 34 min; macro-F1 0.8617 and the confusion matrix **identical** | 3 min |
-| 6 | 31 min, one run of the 5 files | 3 min |
+| 5 | 3 min; macro-F1 0.8617 and the confusion matrix **identical** | 3 min |
+| 6 | 3.5 min, one run of the 5 files | 3 min |
 | 7 | macro-F1 0.7707, every cycle's scores **identical** | the same |
-| 8 | 3,178 windows in 20 min, every state and probability matching Stage 6, median 377 ms a query | 25 min, 448 ms |
-| 9 | `fit/library_embeddings.py` 6 min, the view the repo's to within 5e-4 | – |
+| 8 | 3,178 windows in 20 min, every state and probability matching Stage 6, median 372 ms a query (serving is on CPU) | 25 min, 448 ms |
+| 9 | `fit/library_embeddings.py` 2.7 min, the view the repo's to within 2e-5; the app's agent running in ~15 s | – |
 
 - **A queued job may already be on the clock** (it reports `running`). Keep other jobs
   (another example, a serving agent, `app-serving/`) off the account while Stages 5
   and 6 run.
-- **With your own data,** keep each eval or run under ~100,000 windows × channels
-  (about 1 h 45 min): `fit/deliver.py --files-per-run N` splits a delivery into
-  runs; `fit/test.py` runs one eval of the whole test role, so keep that role
-  under it too.
+- **With your own data,** a job is far from the 2 hours on GPU: the AD TEP
+  quickstart's runs of about 660,000 windows × channels took ~3.5 min. On CPU,
+  100,000 took about 1 h 45 min. If a delivery run does reach the limit,
+  `fit/deliver.py --files-per-run N` splits it into runs; `fit/test.py` runs one
+  eval of the whole test role.
 
 ## The stages
 
@@ -311,7 +313,7 @@ python fit/test.py --background                  # log fit/out/test.log
 2. **Upload** the 3 test cycles.
 3. **Evaluate** them **once** with the Evals API, which scores the blueprint
    on files it has never seen. Ours took 3 minutes (the full example's evals
-   took ~40; this one 34 on the [free trial](#on-the-free-trial)).
+   took ~40; this one 3 on the [free trial](#on-the-free-trial), 34 when evals there ran on CPU).
 
 **Expect** (ours):
 
@@ -345,7 +347,7 @@ matched no file; failed runs: none`.
 **Writes:** `fit/out/delivery/<file>.csv` and `fit/out/delivery/runs.json`
 (`--resume` collects the runs without starting new ones).
 
-**On the free trial** the run took 31 minutes, with the same outputs.
+**On the free trial** the run took about 3.5 minutes (31 on CPU), with the same outputs.
 
 ### Stage 7: score the delivery
 
