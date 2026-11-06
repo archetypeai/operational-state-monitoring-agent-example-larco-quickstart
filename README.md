@@ -307,9 +307,10 @@ state at 512 / 512, not 800, so a smaller neighbourhood fits it better.
 python fit/test.py --background                  # log fit/out/test.log
 ```
 
-1. **Promote** the best trial from Stage 4 to a blueprint,
-   `osm-larco-quickstart-w512-s512-…-<trial>` (the trial's id makes it unique
-   per run): its setting and fitted kNN become a reusable model. `--trial otr_…` picks another trial.
+1. **Promote** the best trial from Stage 4 to a blueprint under the platform's key,
+   `osm-otr_<trial>` (the trial's id makes it unique per run): its setting and fitted kNN
+   become a reusable model. `--trial otr_…` picks another trial; `--blueprint-key` chooses
+   the key, which needs the admin role.
 2. **Upload** the 3 test cycles.
 3. **Evaluate** them **once** with the Evals API, which scores the blueprint
    on files it has never seen. Ours took 3 minutes (the full example's evals

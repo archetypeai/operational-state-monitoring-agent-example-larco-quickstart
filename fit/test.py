@@ -35,12 +35,6 @@ from states import STATES  # noqa: E402
 STATE = os.path.join(OUT, "test_state.json")
 
 
-def blueprint_key(trial):
-    """Unique per trial: a rerun of Stage 4 with the same setting gets its own blueprint."""
-    w, st, k, metric, weights = trial_setting(trial)
-    return f"osm-larco-quickstart-w{w}-s{st}-{metric}-k{k}-{weights}-{trial['id'][-6:]}"
-
-
 def chosen_trial(trial_id=None):
     """(optimization id, trial) of the best completed Stage 4b trial, or of --trial."""
     # only this deployment's runs: a trial from another deployment can't be promoted here
@@ -56,26 +50,16 @@ def chosen_trial(trial_id=None):
     return max(trials, key=lambda ot: ot[1]["objective_value"])
 
 
-def blueprint(opt, trial):
-    key = blueprint_key(trial)
-    if trial.get("promoted_blueprint"):  # promoted already, perhaps under the platform's key
+def blueprint(opt, trial, key=None):
+    if trial.get("promoted_blueprint"):
         return request("GET", f"{agents()}/blueprints/{trial['promoted_blueprint']['blueprint_key']}")
-    try:
-        return request("GET", f"{agents()}/blueprints/{key}")
-    except RuntimeError:
-        pass  # not promoted yet
     w, st, k, metric, weights = trial_setting(trial)
     url = f"{agents()}/optimizations/{opt}/trials/{trial['id']}/promote"
     body = {"name": f"OSM LARCO quickstart (w{w}, s{st}, {metric}, k{k}, {weights})",
         "description": f"Stage 5 model: window {w}, step {st}, {metric}, k {k}, {weights}; "
                        f"library = 4 files, 100 windows per state, 8 short becken cycles."}
-    try:
-        bp = request("POST", url, body={"blueprint_key": key, **body})
-    except RuntimeError as e:
-        # choosing the key needs the admin role (a free-trial org has none): let the platform choose it
-        if "(403)" not in str(e) or "blueprint_key" not in str(e):
-            raise
-        bp = request("POST", url, body=body)
+    # the platform's key unless one is asked for: choosing it needs the admin role outside projects
+    bp = request("POST", url, body={**body, "blueprint_key": key} if key else body)
     log(f"promoted {trial['id']} -> {bp['blueprint_key']} ({bp['id']})")
     return bp
 
@@ -99,6 +83,7 @@ def scores(cm):
 def main():
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--trial", metavar="OTR_ID", help="test this Stage 4b trial instead of the best one")
+    ap.add_argument("--blueprint-key", help="promote under this key (needs the admin role outside projects); default: the platform's, <blueprint>-otr_<trial id>")
     ap.add_argument("--upload-jobs", type=int, default=3)
     add_background_flag(ap, default_log="fit/out/test.log")
     args = ap.parse_args()
@@ -122,7 +107,7 @@ def main():
     log(f"model: {opt} trial {trial['id']} (w {w}, step {st}, k {k}, {metric}, {weights}; "
         f"validation macro-F1 {trial['objective_value']:.4f})")
     if "blueprint" not in state:
-        bp = blueprint(opt, trial)
+        bp = blueprint(opt, trial, args.blueprint_key)
         state["blueprint"] = {"id": bp["id"], "key": bp["blueprint_key"]}
         save()
 
