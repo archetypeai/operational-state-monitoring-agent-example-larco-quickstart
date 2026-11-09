@@ -251,7 +251,7 @@ python fit/optimize.py --dry-run                 # the plan; no uploads, no jobs
 python fit/optimize.py --background              # log fit/out/optimize.log
 ```
 
-1. **Project:** it creates the project `LARCO OSM quickstart` (or reuses yours of that
+1. **Project:** it creates the project `OSM LARCO quickstart` (or reuses yours of that
    name) and copies the canonical `osm` blueprint into it as `larco-qs`
    (`POST /api/projects`, `POST /api/agents/blueprints/osm/copy`). An optimization
    lands in its blueprint's project, and so does everything made from it; a

@@ -90,7 +90,8 @@ def request(method, url, body=None):
         delay = min(delay * 2, 60)
 
 
-PROJECT = "LARCO OSM quickstart"
+PROJECT = "OSM LARCO quickstart"
+OLD_PROJECTS = ("LARCO OSM quickstart",)   # found and reused, never created
 BASE_KEY = "larco-qs"            # the copy of `osm`; trials it promotes default to <BASE_KEY>-<trial id>
 
 
@@ -116,9 +117,9 @@ def base_blueprint(out, source="osm", log=print):
         sys.exit(f"{path} is from {state.get('endpoint')}, a different deployment from {api_base()}: move it aside")
     state["endpoint"] = api_base()
     if "project" not in state:
-        found = [p for p in request("GET", f"{api_base()}/projects?limit=1000")["data"] if p["name"] == PROJECT]
+        found = [p for p in request("GET", f"{api_base()}/projects?limit=1000")["data"] if p["name"] in (PROJECT, *OLD_PROJECTS)]
         state["project"] = found[0]["id"] if found else request(
-            "POST", f"{api_base()}/projects", body={"name": PROJECT, "description": "LARCO washing-machine states (OSM quickstart)"})["id"]
+            "POST", f"{api_base()}/projects", body={"name": PROJECT, "description": "Operational State Monitoring agent on LARCO washing-machine states"})["id"]
         json.dump(state, open(path, "w"), indent=1)
         log(f"project {state['project']} ({PROJECT})")
     if "base" not in state:
