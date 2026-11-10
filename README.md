@@ -521,6 +521,11 @@ A rerun with a member key, in its own project (2026-11-04), gave the same scores
 in Stages 4–7, the same served states as batch in Stage 8 (one cycle, 406/406), and the
 same library view to within 1.4×10⁻⁵.
 
+A rerun of Stages 4–9 on the staging platform, which now serves Agent Lifecycle 2.0 too
+(2026-11-09), gave the same scores in Stages 4–7 and the same Stage 6 outputs byte for
+byte, the same served states as batch in Stage 8 (3,178/3,178, the same 2 windows a vote
+off; 431 ms median), and the same library view to within 3.5×10⁻⁵. The app ran on it too.
+
 So the pipeline and the platform are deterministic here. If your run gives
 different numbers, something differs in your data or setup, and the expected
 outputs above show at which stage.
