@@ -4,7 +4,8 @@ How this quickstart moved from bundles and instances to **projects, packages,
 deployments and sessions**, and what to watch for if you move your own scripts.
 Stages 4–9 were run end to end on 2026-10-30 with an org-admin key, and again on
 2026-11-04 with a member key in a new project: the scripts make no admin-only call (see 6
-below), and the second run reproduced the first's scores, Stages 4–9 and the app.
+below), and the second run reproduced the first's scores, Stages 4–9 and the app. A third
+run, on the staging platform (2026-11-09), reproduced them too.
 
 `/api/agents/bundles` and `/api/agents/instances` are being removed: some deployments of
 the platform already answer 404 for them, and the rest keep them only until their next
@@ -177,14 +178,14 @@ Statuses: package `building → ready | failed`; deployment `deploying → ready
 
 ## Results against the bundle version
 
-| Stage | Measure | Bundles (production, 2026-10-29) | Packages and sessions (2026-10-30) |
-|---|---|---|---|
-| 4 | validation macro-F1, k 5 / k 31 | 0.8305 / 0.7980 | 0.8305 / 0.7980 |
-| 5 | test macro-F1 | 0.8617 | 0.8617, the same confusion matrix |
-| 6 | delivery | 3,178 windows | 3,178 windows, one session, 140 s |
-| 7 | delivery macro-F1 | 0.7707 | 0.7707, per cycle too |
-| 8 | served against batch | 3,178/3,178 states, 448 ms median | 3,178/3,178 states (the same 2 windows a vote off), 512 ms median |
-| 9 | library view | 800 windows, 86% nearest their own state | the same, to within 1.4×10⁻⁵ |
+| Stage | Measure | Bundles (production, 2026-10-29) | Packages and sessions (2026-10-30) | Packages and sessions, staging (2026-11-09) |
+|---|---|---|---|---|
+| 4 | validation macro-F1, k 5 / k 31 | 0.8305 / 0.7980 | 0.8305 / 0.7980 | 0.8305 / 0.7980 |
+| 5 | test macro-F1 | 0.8617 | 0.8617, the same confusion matrix | the same |
+| 6 | delivery | 3,178 windows | 3,178 windows, one session, 140 s | 3,178 windows, outputs byte-identical |
+| 7 | delivery macro-F1 | 0.7707 | 0.7707, per cycle too | the same |
+| 8 | served against batch | 3,178/3,178 states, 448 ms median | 3,178/3,178 states (the same 2 windows a vote off), 512 ms median | the same, 431 ms median |
+| 9 | library view | 800 windows, 86% nearest their own state | the same, to within 1.4×10⁻⁵ | the same, to within 3.5×10⁻⁵ |
 
 ## Moving your own scripts
 
