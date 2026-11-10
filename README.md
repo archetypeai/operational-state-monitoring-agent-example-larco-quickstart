@@ -52,6 +52,9 @@ flowchart LR
 
 - **Skip Stages 0–3:** the role files are in the repo, packed in Git LFS
   (~96 MB). See [Shortcut](#shortcut-skip-stages-03).
+- **On the free trial** (`try.archetypeai.app`) the same commands work, with no
+  extra flags; Stages 4–8 take about **30 minutes** there, most of it Stage 8's serving. See
+  [On the free trial](#on-the-free-trial).
 
 > **The scores here aren't the full example's.** The quickstart uses only short
 > `warm_*` programs. It has no cotton or eco cycles, and its state mix is
@@ -133,6 +136,46 @@ files with `data/prepared/`, which only Stage 1 makes. The other checks run as
 usual, and the result is still `PASS`.
 
 Then go to [Stage 4](#stage-4-optimize).
+
+### On the free trial
+
+The free trial (`ATAI_API_ENDPOINT=https://try.archetypeai.app/api`, in
+`.env.example`) runs optimizations on GPU (always), evals and agent runs on GPU
+since 2026-11-06 (CPU before), and agent serving on CPU, at most 3 jobs per org at
+once, and stops every job after 2 hours (`DeadlineExceeded`, with no output). This
+quickstart's jobs fit as they are: Stage 5's eval (3,520 windows of 9 channels) and
+Stage 6's run (3,178) take about 3 minutes each, and took about 35 and 30 on CPU.
+
+**How the scripts know:** `fit/atai.py`'s `free_trial()` is true when the
+endpoint's host is `try.archetypeai.app` (a free-trial key works nowhere else).
+Then one default changes, and the script says so when it starts:
+
+| stage | production default | free-trial default | why |
+|---|---|---|---|
+| 9 `fit/library_embeddings.py` | 4 sessions at once | 3 at a time | 3 jobs at once |
+
+**What it gives** (ours, 2026-11-06, through bundles and agent runs, which the free trial
+still serves; evals and agent runs on GPU; on CPU, 2026-10-31, the same numbers took
+about 1.5 hours). The free trial doesn't serve packages, deployments and sessions yet, so
+Stages 6, 8 and 9 of this version can't run there until it does:
+
+| stage | free trial | production |
+|---|---|---|
+| 4 | 5 min; the same 2 trials and scores | 4 min |
+| 5 | 3 min; macro-F1 0.8617 and the confusion matrix **identical** | 3 min |
+| 6 | 3.5 min, one run of the 5 files | 3 min |
+| 7 | macro-F1 0.7707, every cycle's scores **identical** | the same |
+| 8 | 3,178 windows in 20 min, every state and probability matching Stage 6, median 372 ms a query (serving is on CPU) | 25 min, 448 ms |
+| 9 | `fit/library_embeddings.py` 2.7 min, the view the repo's to within 2e-5; the app's agent running in ~15 s | – |
+
+- **A queued job may already be on the clock** (it reports `running`). Keep other jobs
+  (another example, a serving session, `app-serving/`) off the account while Stages 5
+  and 6 run.
+- **With your own data,** a job is far from the 2 hours on GPU: the AD TEP
+  quickstart's runs of about 660,000 windows × channels took ~3.5 min. On CPU,
+  100,000 took about 1 h 45 min. If a delivery run does reach the limit,
+  `fit/deliver.py --files-per-run N` splits it into runs; `fit/test.py` runs one
+  eval of the whole test role.
 
 ## The stages
 
@@ -290,14 +333,14 @@ state at 512 / 512, not 800, so a smaller neighbourhood fits it better.
 python fit/test.py --background                  # log fit/out/test.log
 ```
 
-1. **Promote** the best trial from Stage 4 to a blueprint in the project,
-   `osm-larco-quickstart-w512-s512-…-<trial>` (the trial's id makes it unique
-   per run; where choosing a key takes the admin role, the platform's default,
-   `larco-qs-<trial>`): its setting and fitted kNN become a reusable model. `--trial otr_…` picks another trial.
+1. **Promote** the best trial from Stage 4 to a blueprint in the project, under the
+   platform's key, `larco-qs-otr_<trial>` (the trial's id makes it unique per run): its
+   setting and fitted kNN become a reusable model. `--trial otr_…` picks another trial;
+   `--blueprint-key` chooses the key, which needs the admin role.
 2. **Upload** the 3 test cycles.
 3. **Evaluate** them **once** with the Evals API, which scores the blueprint
    on files it has never seen. Ours took 3 minutes (the full example's evals
-   took ~40).
+   took ~40; this one 3 on the [free trial](#on-the-free-trial), 34 when evals there ran on CPU).
 
 **Expect** (ours):
 
@@ -334,6 +377,8 @@ windows (0 invalid); 0 rows matched no file; failed sessions: none`.
 
 **Writes:** `fit/out/delivery/<file>.csv` and `fit/out/delivery/runs.json`
 (`--resume` collects the sessions without starting new ones).
+
+**On the free trial** the run took about 3.5 minutes (31 on CPU), with the same outputs.
 
 ### Stage 7: score the delivery
 
@@ -437,7 +482,7 @@ served 3,178 windows of 5 file(s) in 3,178 queries, 1438 s
 ### Stage 9: watch it in a browser
 
 ```sh
-python fit/library_embeddings.py     # after each Stage 5: the embeddings blueprint, and the library's embeddings for the app
+python fit/library_embeddings.py     # after each Stage 5: the embeddings blueprint, and the library's embeddings for the app (3 sessions at a time on the free trial)
 cd app-serving && npm install && npm run dev     # http://localhost:5182
 ```
 

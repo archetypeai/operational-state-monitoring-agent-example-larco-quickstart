@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Stage 9 prep, once: the library's embeddings, for app-serving/'s embedding space.
 
-    python fit/library_embeddings.py          # the embeddings blueprint, 4 batch sessions, then the view
+    python fit/library_embeddings.py          # the embeddings blueprint, 4 batch sessions (3 at a time on the free trial), then the view
     python fit/library_embeddings.py --view   # the view again from the saved outputs, no platform calls
 
 The Stage 5 model is a kNN over the library's windows (window 512, step 512), but it
@@ -42,9 +42,9 @@ import time
 import numpy as np
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from atai import (TERMINAL, agents, api_base, create_package, deploy, deployment_ready, lifecycle_url,  # noqa: E402
-                  list_trials, load_dotenv, open_session, package_ready, request, same_deployment, trial_setting,
-                  wait_optimization)
+from atai import (TERMINAL, agents, api_base, create_package, deploy, deployment_ready, free_trial,  # noqa: E402
+                  lifecycle_url, list_trials, load_dotenv, open_session, package_ready, request, same_deployment,
+                  trial_setting, wait_optimization)
 from deliver import END_SLACK_MS, OUTPUT_WAIT_S, fetch, time_range, to_ms  # noqa: E402
 from optimize import OUT, ROLES, log, pinned_values, upload_all  # noqa: E402
 from test import blueprint as promote  # noqa: E402
@@ -91,7 +91,7 @@ def embeddings_blueprint(test, state, save):
     if opt["status"] != "completed" or not trial:
         sys.exit(f"{opt['id']} is {opt['status']} with no completed trial: move fit/out/library_state.json aside to try again")
     w, st, k, metric, weights = trial_setting(trial)
-    bp = promote(opt["id"], trial, f"OSM LARCO quickstart, embeddings on (w{w}, s{st}, {metric}, k{k}, {weights})")
+    bp = promote(opt["id"], trial, name=f"OSM LARCO quickstart, embeddings on (w{w}, s{st}, {metric}, k{k}, {weights})")
     state["embeddings_blueprint"] = {"id": bp["id"], "key": bp["blueprint_key"]}
     save()
     return state["embeddings_blueprint"]
@@ -108,25 +108,28 @@ def outputs(session):
     return header, rows
 
 
-def run_all(files, state, save, ensure_deployment):
-    """One batch session per library file; each output saved once it reaches its file's end."""
+def run_all(files, state, save, ensure_deployment, parallel):
+    """One batch session per library file, at most `parallel` at once; each output saved
+    once it reaches its file's end."""
     paths = [os.path.join(ROLES, f["file"]) for f in files]
     done = lambda f: os.path.exists(os.path.join(DIR, f"{f['state']}.csv"))  # noqa: E731
     if all(done(f) for f in files):
         return
     ensure_deployment()
     ids = upload_all(paths, 3)
-    for f, p in zip(files, paths):
-        if not done(f) and f["state"] not in state["runs"]:
-            ses = open_session(state["deployment"], [ids[p]])
-            state["runs"][f["state"]] = ses["id"]
-            save()
-            log(f"  {f['state']}: session {ses['id']}")
     os.makedirs(DIR, exist_ok=True)
-    pending = {f["state"]: p for f, p in zip(files, paths) if not os.path.exists(os.path.join(DIR, f"{f['state']}.csv"))}
+    pending = {f["state"]: p for f, p in zip(files, paths) if not done(f)}
     deadline = {}
     while pending:
+        for s, p in pending.items():
+            if s not in state["runs"] and len(set(pending) & set(state["runs"])) < parallel:
+                ses = open_session(state["deployment"], [ids[p]])
+                state["runs"][s] = ses["id"]
+                save()
+                log(f"  {s}: session {ses['id']}")
         for s, p in list(pending.items()):
+            if s not in state["runs"]:
+                continue
             aid = state["runs"][s]
             if s not in deadline:
                 status = request("GET", lifecycle_url("sessions", aid))["status"]
@@ -235,7 +238,11 @@ def main():
             log(f"package {state['package']} of {emb['key']} (window {window}, step {step}, embeddings on), "
                 f"batch deployment {state['deployment']}")
     t0 = time.time()
-    run_all(files, state, save, ensure_deployment)
+    parallel = len(files)
+    if free_trial():
+        parallel = 3
+        log("free trial (try.archetypeai.app): at most 3 jobs at once, so 3 sessions at a time")
+    run_all(files, state, save, ensure_deployment, parallel)
     return write_view({"blueprint": key, "window_size": window, "step_size": step}, t0)
 
 

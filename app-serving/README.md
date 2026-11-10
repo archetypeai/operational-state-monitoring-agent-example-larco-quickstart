@@ -72,7 +72,7 @@ loads it at start; without it the tab says so and the rest of the app works. To
 recompute it, for instance after promoting another model:
 
 ```sh
-python fit/library_embeddings.py      # the embeddings blueprint, 4 batch sessions, then the view
+python fit/library_embeddings.py      # the embeddings blueprint, 4 batch sessions (3 at a time on the free trial), then the view
 ```
 
 It first makes the embeddings blueprint the bridge serves: a 1-trial optimization at

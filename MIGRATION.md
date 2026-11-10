@@ -145,13 +145,12 @@ Statuses: package `building → ready | failed`; deployment `deploying → ready
 5. **Look blueprints up by id.** `GET /blueprints/{key}` resolves a key registered in a
    project only with `?project_id=`; the scripts and the bridge use the `blp_` id.
 
-6. **No admin-only calls.** Two calls that would need the org-admin role are avoided or
-   have a fallback:
+6. **No admin-only calls.** Two calls that would need the org-admin role are avoided:
    - `POST /blueprints` (registering an edited copy of a promoted blueprint, e.g. with
      embeddings on) takes the admin role; the 1-trial optimization doesn't;
-   - choosing `blueprint_key` on promote can take it too: `fit/test.py` tries its own key and,
-     on a 403, lets the platform choose (`larco-qs-<trial id>`). The 2026-11-04 member-key
-     run kept its own key.
+   - choosing `blueprint_key` on promote can take it too, so `fit/test.py` and
+     `fit/library_embeddings.py` let the platform choose (`larco-qs-otr_<trial id>`);
+     `fit/test.py --blueprint-key` chooses one, for an admin.
 
 7. **A session's result `ref` is a root path.** `/sessions/{id}/results` returns
    `ref: "/api/files/<fil_…>/content"`, which already includes `/api`: resolve it against
