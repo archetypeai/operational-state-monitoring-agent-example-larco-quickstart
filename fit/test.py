@@ -50,12 +50,13 @@ def chosen_trial(trial_id=None):
     return max(trials, key=lambda ot: ot[1]["objective_value"])
 
 
-def blueprint(opt, trial, key=None):
-    if trial.get("promoted_blueprint"):
-        return request("GET", f"{agents()}/blueprints/{trial['promoted_blueprint']['blueprint_key']}")
+def blueprint(opt, trial, key=None, name=None):
+    if trial.get("promoted_blueprint"):  # promoted on an earlier, interrupted run
+        # by id: a key registered in a project resolves only with ?project_id=
+        return request("GET", f"{agents()}/blueprints/{trial['promoted_blueprint']['id']}")
     w, st, k, metric, weights = trial_setting(trial)
     url = f"{agents()}/optimizations/{opt}/trials/{trial['id']}/promote"
-    body = {"name": f"OSM LARCO quickstart (w{w}, s{st}, {metric}, k{k}, {weights})",
+    body = {"name": name or f"OSM LARCO quickstart (w{w}, s{st}, {metric}, k{k}, {weights})",
         "description": f"Stage 5 model: window {w}, step {st}, {metric}, k {k}, {weights}; "
                        f"library = 4 files, 100 windows per state, 8 short becken cycles."}
     # the platform's key unless one is asked for: choosing it needs the admin role outside projects

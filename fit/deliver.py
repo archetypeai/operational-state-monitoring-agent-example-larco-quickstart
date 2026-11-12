@@ -2,23 +2,27 @@
 """Stage 6: run the tested model over becken-flt, as a customer would.
 
 The delivery files (data/roles/delivery/, the 5 becken-flt cycles, whole) carry no
-labels. This uploads them (ids cached), creates one bundle from the Stage 5 blueprint
-(fit/out/test_state.json, unchanged), runs it over the files (one run by default;
---files-per-run N makes batches), downloads every output and writes one predictions
-CSV per delivery file:
+labels. This uploads them (ids cached), packages the Stage 5 blueprint
+(fit/out/test_state.json, unchanged: a package carries no values), deploys the package as
+`batch`, runs it over the files in sessions (one by default; --files-per-run N makes
+batches), downloads every output and writes one predictions CSV per delivery file:
 
     fit/out/delivery/<file>.csv    the platform's output rows for that file
                                    (finish_timestamp, predicted_state, invalid, ...),
                                    time-sorted
-    fit/out/delivery/runs.json     bundle, runs and each file's time range, so a rerun
+    fit/out/delivery/runs.json     package, deployment, sessions and each file's time range, so a rerun
                                    (or --resume) collects without starting anything again
 
-A run's outputs don't name their inputs, so rows are matched to files by timestamp:
+A rerun also replaces what can't finish: a failed package is rebuilt once, and a session
+that failed, or ended `completed` with an output short of its file's end, is ended and
+dropped, and its files get a new session.
+
+A session's outputs don't name their inputs, so rows are matched to files by timestamp:
 becken-flt's cycles never overlap in time. Stage 7 (fit/score_delivery.py) scores the
 files against the labels held back in data/roles/delivery_labels/.
 
     python fit/deliver.py --background                   # detached, log fit/out/deliver.log
-    python fit/deliver.py --resume                       # collect the runs in runs.json
+    python fit/deliver.py --resume                       # collect the sessions in runs.json
 """
 import argparse
 import csv
@@ -31,7 +35,8 @@ import time
 import urllib.request
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from atai import TERMINAL, agents, api_base, load_dotenv, request, same_deployment  # noqa: E402
+from atai import (TERMINAL, api_base, deploy, deployment_ready, end, lifecycle_url, load_dotenv,  # noqa: E402
+                  open_session, ready_package, request, result_url, same_deployment)
 from optimize import OUT, ROLES, log, upload_all  # noqa: E402
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "prep"))
@@ -83,40 +88,78 @@ def time_range(path):
     return to_ms(first.decode()), to_ms(last.decode())
 
 
-def fetch(filename):
-    req = urllib.request.Request(f"{api_base()}/files/download/{filename}")
+def fetch(ref):
+    """A result file, by its `ref`: a root path (`/api/files/<fil_…>/content`) or a URL."""
+    req = urllib.request.Request(result_url(ref))
     req.add_header("Authorization", f"Bearer {os.environ['ATAI_API_KEY']}")
     with urllib.request.urlopen(req, timeout=600) as resp:
         return resp.read().decode("utf-8", errors="replace")
 
 
-def start(files, per_run, jobs):
-    paths = [os.path.join(ROLES, f["file"]) for f in files]
-    ids = upload_all(paths, jobs)
+def stage5_blueprint():
     test_state = os.path.join(OUT, "test_state.json")
     if not os.path.exists(test_state):
         sys.exit("no Stage 5 blueprint yet: run fit/test.py first")
     ts = json.load(open(test_state))
     if not same_deployment(ts):
         sys.exit(f"{test_state} is from {ts.get('endpoint', 'an earlier run')}, a different deployment from {api_base()}: run fit/test.py here first")
-    KEY = ts["blueprint"]["key"]
-    bp = request("GET", f"{agents()}/blueprints/{KEY}")
-    stamp = datetime.datetime.now(datetime.timezone.utc).strftime("%Y%m%dT%H%M%SZ")
-    bundle = request("POST", f"{agents()}/bundles", body={
-        "blueprint": KEY, "name": f"LARCO quickstart delivery to becken-flt {stamp}",
-        "description": "Stage 6: the Stage 5 model run over the unlabelled becken-flt cycles"})
-    log(f"bundle {bundle['id']} from {KEY} ({bp['id']})")
-    state = {"endpoint": api_base(), "bundle": bundle["id"], "blueprint": KEY, "runs": [],
-             "files": {f["file"]: dict(zip(("first_ms", "last_ms"), time_range(p))) for f, p in zip(files, paths)}}
+    return ts["blueprint"]
+
+
+def start(files, per_run, jobs, bp, state=None):
+    """The package and batch deployment (once), then a session for every delivery file no run
+    holds yet: all of them on a first run, those of dropped sessions on a rerun."""
+    paths = [os.path.join(ROLES, f["file"]) for f in files]
+    if state is None:
+        state = {"endpoint": api_base(), "blueprint": bp["key"], "runs": [],
+                 "files": {f["file"]: dict(zip(("first_ms", "last_ms"), time_range(p))) for f, p in zip(files, paths)}}
     os.makedirs(DELIVERY, exist_ok=True)
-    for i in range(0, len(paths), per_run):
-        batch = [f["file"] for f in files[i:i + per_run]]
-        run = request("POST", f"{agents()}/bundles/{bundle['id']}/run", body={
-            "connectors": {"source": [{"type": "file", "id": ids[os.path.join(ROLES, n)]} for n in batch]}})
-        state["runs"].append({"agent": run["id"], "files": batch})
-        json.dump(state, open(STATE, "w"), indent=1)      # saved per run, so --resume sees every one
-        log(f"  run {run['id']} over {len(batch)} file(s) ({len(state['runs'])} of {-(-len(paths) // per_run)})")
+
+    def save():
+        json.dump(state, open(STATE, "w"), indent=1)
+
+    save()
+    if "deployment" not in state:
+        stamp = datetime.datetime.now(datetime.timezone.utc).strftime("%Y%m%dT%H%M%SZ")
+        ready_package(state, bp["id"], f"LARCO quickstart delivery to becken-flt {stamp}", save, log)
+        state["deployment"] = deploy(state["package"], "batch")["id"]
+        save()
+        log(f"package {state['package']} of {bp['key']}, batch deployment {state['deployment']}")
+        deployment_ready(state["deployment"])
+    held = {n for r in state["runs"] for n in r["files"]}
+    todo = [f["file"] for f in files if f["file"] not in held]
+    if not todo:
+        return state
+    ids = upload_all([os.path.join(ROLES, n) for n in todo], jobs)
+    per = per_run or len(todo)
+    for i in range(0, len(todo), per):
+        batch = todo[i:i + per]
+        ses = open_session(state["deployment"], [ids[os.path.join(ROLES, n)] for n in batch])
+        state["runs"].append({"session": ses["id"], "files": batch})
+        save()                                            # saved per session, so --resume sees every one
+        log(f"  session {ses['id']} over {len(batch)} file(s) ({i // per + 1} of {-(-len(todo) // per)})")
     return state
+
+
+def drop_unfinished(state):
+    """End and forget every session that failed or ended `completed` with an output short of
+    a file's end, so the next run opens new sessions for its files."""
+    keep = []
+    for r in state["runs"]:
+        failed = r.get("status") in TERMINAL and r.get("status") != "completed"
+        short = (r.get("error") or "").startswith("outputs incomplete")
+        if not (failed or short):
+            keep.append(r)
+            continue
+        try:
+            end("sessions", r["session"])
+        except (RuntimeError, OSError) as e:
+            log(f"  could not end {r['session']}: {e}; fit/cleanup.py retries it")
+        log(f"  dropped {r['session']} ({r.get('status')}{', ' + r['error'] if r.get('error') else ''}): "
+            f"a rerun opens a new session for its {len(r['files'])} file(s)")
+    if len(keep) != len(state["runs"]):
+        state["runs"] = keep
+        json.dump(state, open(STATE, "w"), indent=1)
 
 
 def artifact_status(item):
@@ -142,11 +185,11 @@ def download(runs, ranges):
     """
     per_file, header, unmatched = {}, None, 0
     for r in runs:
-        for item in request("GET", f"{agents()}/instances/{r['agent']}/results").get("data") or []:
+        for item in request("GET", lifecycle_url("sessions", r["session"]) + "/results").get("data") or []:
             status = artifact_status(item)
             if status is not None and status != "complete":
                 continue
-            body = list(csv.reader(io.StringIO(fetch(item["data"]["filename"]))))
+            body = list(csv.reader(io.StringIO(fetch(item["data"]["ref"]))))
             if not body:
                 continue
             if header is None:
@@ -175,13 +218,13 @@ def incomplete(names, state, per_file, header):
 
 def collect(state):
     ranges = sorted((v["first_ms"], v["last_ms"], n) for n, v in state["files"].items())
-    pending = {r["agent"] for r in state["runs"] if r.get("status") not in TERMINAL}
+    pending = {r["session"] for r in state["runs"] if r.get("status") not in TERMINAL}
     finishing = {}                 # run -> deadline, once the platform says completed
     while pending:
         for aid in sorted(pending):
-            r = next(r for r in state["runs"] if r["agent"] == aid)
+            r = next(r for r in state["runs"] if r["session"] == aid)
             if aid not in finishing:
-                a = request("GET", f"{agents()}/instances/{aid}")
+                a = request("GET", lifecycle_url("sessions", aid))
                 if a["status"] not in TERMINAL:
                     continue
                 if a["status"] != "completed":
@@ -202,14 +245,14 @@ def collect(state):
                 r["status"], r["error"] = "completed", f"outputs incomplete: {', '.join(short)}"
                 log(f"  {aid} WARNING platform completed {OUTPUT_WAIT_S // 60} min ago but {len(short)} of {n} "
                     f"outputs still end early ({', '.join(os.path.basename(x) for x in short)}); "
-                    f"--resume downloads them again")
+                    f"a rerun downloads them again, then replaces the session")
             else:
                 log(f"  {aid} run reports completed; outputs {n - len(short)} of {n} ready "
                     f"({', '.join(os.path.basename(x) for x in short)} still being written)")
         json.dump(state, open(STATE, "w"), indent=1)
         if pending:
             if pending - set(finishing):
-                log(f"  {len(pending - set(finishing))} of {len(state['runs'])} runs still going")
+                log(f"  {len(pending - set(finishing))} of {len(state['runs'])} sessions still going")
             time.sleep(15 if pending <= set(finishing) else 60)
 
     done = [r for r in state["runs"] if r.get("status") == "completed"]
@@ -229,18 +272,18 @@ def collect(state):
     inv = header.index("invalid") if header and "invalid" in header else None
     n = sum(len(v) for v in per_file.values())
     bad = sum(1 for v in per_file.values() for row in v if inv is not None and row[inv].lower() == "true")
-    failed = [r["agent"] for r in state["runs"] if r.get("status") != "completed"]
+    failed = [r["session"] for r in state["runs"] if r.get("status") != "completed"]
     log(f"{len(per_file)} of {len(state['files'])} files have predictions: {n:,} windows ({bad:,} invalid); "
-        f"{unmatched:,} rows matched no file; failed runs: {failed or 'none'}; "
+        f"{unmatched:,} rows matched no file; failed sessions: {failed or 'none'}; "
         f"incomplete outputs: {[os.path.basename(x) for x in short] or 'none'} -> {DELIVERY}/")
 
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--only", nargs="+", metavar="CYCLE", help="deliver just these becken-flt cycles (wm_... .csv)")
-    ap.add_argument("--files-per-run", type=int, default=0, help="files per run (default 0: all in one run)")
+    ap.add_argument("--files-per-run", type=int, default=0, help="files per session (default 0: all in one session)")
     ap.add_argument("--upload-jobs", type=int, default=3)
-    ap.add_argument("--resume", action="store_true", help="collect the runs recorded in runs.json")
+    ap.add_argument("--resume", action="store_true", help="collect the sessions recorded in runs.json")
     add_background_flag(ap, default_log="fit/out/deliver.log")
     args = ap.parse_args()
     maybe_detach(args)
@@ -249,19 +292,28 @@ def main():
     if args.only:                  # a check goes to its own folder, never mixed with the delivery
         DELIVERY = os.path.join(OUT, "delivery_check")
         STATE = os.path.join(DELIVERY, "runs.json")
+    bp = stage5_blueprint()
+    files = json.load(open(os.path.join(ROLES, "manifest.json")))["delivery"]["files"]
+    if args.only:
+        files = [f for f in files if f["cycle"] in set(args.only)]
+    state = None
     if args.resume or os.path.exists(STATE):
         if not args.resume:
-            log(f"{STATE} exists: collecting those runs (delete it to deliver again)")
+            log(f"{STATE} exists: collecting those sessions (delete it to deliver again)")
         state = json.load(open(STATE))
+        if state.get("bundle"):
+            sys.exit(f"{STATE} is from a bundle delivery: move fit/out/delivery/ aside to deliver through a package")
         if not same_deployment(state):
             sys.exit(f"{STATE} is from {state.get('endpoint', 'an earlier run')}, a different deployment from {api_base()}: "
                      f"move fit/out/delivery/ aside to deliver on this deployment")
-    else:
-        files = json.load(open(os.path.join(ROLES, "manifest.json")))["delivery"]["files"]
-        if args.only:
-            files = [f for f in files if f["cycle"] in set(args.only)]
-        state = start(files, args.files_per_run or len(files), args.upload_jobs)
-    collect(state)
+        if state.get("blueprint") != bp["key"]:
+            sys.exit(f"{STATE} is for {state.get('blueprint')}: move fit/out/delivery/ aside to deliver {bp['key']}")
+        collect(state)                           # download what the saved sessions have, first
+        drop_unfinished(state)
+    before = [r["session"] for r in (state or {}).get("runs", [])]
+    state = start(files, args.files_per_run, args.upload_jobs, bp, state)
+    if [r["session"] for r in state["runs"]] != before:
+        collect(state)
 
 
 if __name__ == "__main__":

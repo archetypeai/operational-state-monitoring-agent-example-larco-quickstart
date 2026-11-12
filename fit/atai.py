@@ -4,6 +4,7 @@ Reads ATAI_API_KEY and ATAI_API_ENDPOINT from .env. Every platform surface
 lives under one versionless /api prefix: <endpoint>/api/agents/... for the
 Agents API, <endpoint>/api/files for uploads.
 """
+import http.client
 import json
 import os
 import re
@@ -25,8 +26,11 @@ def load_dotenv(path=os.path.join(ROOT, ".env")):
         line = line.strip()
         if line and not line.startswith("#") and "=" in line:
             key, _, value = line.partition("=")
+            value = value.strip()
+            if len(value) >= 2 and value[0] == value[-1] and value[0] in "\"'":
+                value = value[1:-1]                 # KEY="value" or KEY='value'
             if not os.environ.get(key.strip()):     # unset, or exported but empty
-                os.environ[key.strip()] = value.strip()
+                os.environ[key.strip()] = value
 
 
 def api_base():
@@ -75,8 +79,11 @@ def agents():
     return f"{api_base()}/agents"
 
 
-def request(method, url, body=None):
-    """JSON request. GETs retry through brief outages; POSTs never retry (a repeat could duplicate)."""
+def request(method, url, body=None, idempotent=None):
+    """JSON request. GETs and DELETEs retry through brief outages, and so do POSTs marked
+    idempotent (cancel, stop, a serving query); other POSTs never retry, since a repeated
+    create could make a second object that nothing records."""
+    retry = method in ("GET", "HEAD", "DELETE") if idempotent is None else idempotent
     data = json.dumps(body).encode() if body is not None else None
     delay, waited = 5, 0
     while True:
@@ -89,17 +96,153 @@ def request(method, url, body=None):
                 return json.loads(resp.read() or b"null")
         except urllib.error.HTTPError as e:
             detail = e.read().decode(errors="replace")
-            if method != "GET" or e.code not in (502, 503, 504) or waited >= 600:
+            if not retry or e.code not in (502, 503, 504) or waited >= 600:
                 raise RuntimeError(f"{method} {url} failed ({e.code}): {detail}") from None
             reason = f"HTTP {e.code}"
-        except urllib.error.URLError as e:
-            if method != "GET" or waited >= 600:
+        except (urllib.error.URLError, TimeoutError, ConnectionError, http.client.HTTPException) as e:
+            if not retry or waited >= 600:
                 raise
-            reason = str(e.reason)
+            reason = str(getattr(e, "reason", e))
         print(f"  {method} {url} unavailable ({reason}); retrying in {delay}s", file=sys.stderr)
         time.sleep(delay)
         waited += delay
         delay = min(delay * 2, 60)
+
+
+PROJECT = "OSM LARCO quickstart"
+BASE_KEY = "larco-qs"            # the copy of `osm`; trials it promotes default to <BASE_KEY>-otr_<trial id>
+
+
+def lifecycle_url(kind, obj_id=""):
+    """`packages`, `deployments` or `sessions`, or one of them by id."""
+    return f"{agents()}/{kind}" + (f"/{obj_id}" if obj_id else "")
+
+
+def base_blueprint(out, source="osm", log=print):
+    """The quickstart's project and its copy of `source`, which the optimizations search.
+
+    Everything after it lands in the project: an optimization in its blueprint's project, and
+    so do the blueprints it promotes and their packages, deployments and sessions. A deployment
+    needs one, and the canonical `osm` is outside any, while POST /optimizations takes no
+    project_id. Copying needs only the right to modify the project, not the admin role. An
+    existing project of that name, and an existing copy under BASE_KEY in it, are reused.
+
+    Writes <out>/project_state.json; returns {project, id, key}."""
+    os.makedirs(out, exist_ok=True)
+    path = os.path.join(out, "project_state.json")
+    state = json.load(open(path)) if os.path.exists(path) else {}
+    if state and not same_deployment(state):
+        sys.exit(f"{path} is from {state.get('endpoint')}, a different deployment from {api_base()}: move it aside")
+    state["endpoint"] = api_base()
+    if "project" not in state:
+        found = [p for p in request("GET", f"{api_base()}/projects?limit=1000")["data"] if p["name"] == PROJECT]
+        state["project"] = found[0]["id"] if found else request(
+            "POST", f"{api_base()}/projects", body={"name": PROJECT, "description": "Operational State Monitoring agent on LARCO washing-machine states"})["id"]
+        json.dump(state, open(path, "w"), indent=1)
+        log(f"project {state['project']} ({PROJECT})")
+    if "base" not in state:
+        found = [bp for bp in request("GET", f"{agents()}/blueprints?project_id={state['project']}&key={BASE_KEY}")["data"]
+                 if bp["blueprint_key"] == BASE_KEY]   # never a blueprint promoted from it
+        if found:
+            bp = found[0]
+            log(f"reusing {BASE_KEY} in {state['project']} ({bp['id']})")
+        else:
+            bp = request("POST", f"{agents()}/blueprints/{source}/copy", body={"project_id": state["project"], "blueprint_key": BASE_KEY})
+            log(f"copied {source} into {state['project']} as {BASE_KEY} ({bp['id']})")
+        state["base"] = {"id": bp["id"], "key": bp["blueprint_key"]}
+        json.dump(state, open(path, "w"), indent=1)
+    return {"project": state["project"], **state["base"]}
+
+
+def _wait_for(kind, obj_id, want, waiting, timeout_s=600, every_s=3, exit=True):
+    t0 = time.time()
+    while True:
+        obj = request("GET", lifecycle_url(kind, obj_id))
+        if obj["status"] == want:
+            return obj
+        if obj["status"] != waiting or time.time() - t0 > timeout_s:
+            if exit:
+                sys.exit(f"{obj_id} is {obj['status']}, not {want}: {obj.get('error')}")
+            return obj
+        time.sleep(every_s)
+
+
+def create_package(blueprint_id, name):
+    """Package one blueprint for the platform; it starts `building`. A package pins the
+    blueprint and the models it resolves to (the Omega encoder, the fitted kNN) and carries no
+    values: it runs the blueprint exactly as promoted. Record its id before `package_ready`, so
+    a build that fails or is interrupted can still be deleted."""
+    return request("POST", lifecycle_url("packages"),
+                   body={"blueprint_ids": [blueprint_id], "target": {"kind": "platform"}, "name": name})
+
+
+def package_ready(package_id):
+    return _wait_for("packages", package_id, "ready", "building", every_s=5)
+
+
+def ready_package(state, blueprint_id, name, save, log=print):
+    """state["package"] once ready, created (and saved) first if there is none. A failed
+    package never becomes ready, so it is deleted and built again, once: a rerun after a failed
+    build doesn't stop on the same package."""
+    for attempt in range(2):
+        if not state.get("package"):
+            state["package"] = create_package(blueprint_id, name)["id"]
+            save()
+            log(f"package {state['package']} ({name})")
+        pkg = _wait_for("packages", state["package"], "ready", "building", every_s=5, exit=False)
+        if pkg["status"] == "ready":
+            return pkg
+        if pkg["status"] != "failed" or attempt:
+            sys.exit(f"{state['package']} is {pkg['status']}, not ready: {pkg.get('error')}")
+        log(f"{state['package']} failed ({pkg.get('error')}): deleting it and building a new one")
+        end("packages", state["package"])
+        state.pop("package")
+        save()
+
+
+def deploy(package_id, kind):
+    """Deploy a ready package as `batch` (ready at once) or `serving` (the agent placed on a worker
+    and loaded, usually within seconds; it holds the worker until stopped). It starts
+    `deploying`: record its id before `deployment_ready`."""
+    return request("POST", lifecycle_url("deployments"), body={"package_id": package_id, "kind": kind})
+
+
+def deployment_ready(deployment_id):
+    return _wait_for("deployments", deployment_id, "ready", "deploying")
+
+
+def open_session(deployment_id, file_ids=None):
+    """A batch session over `file_ids` (one output per input), or a serving session, queried at
+    /sessions/{id}/query once `running`, when none are given."""
+    body = {"deployment_id": deployment_id}
+    if file_ids:
+        body["connectors"] = {"source": [{"type": "file", "id": f, "format": "csv"} for f in file_ids]}
+    return request("POST", lifecycle_url("sessions"), body=body)
+
+
+def wait_running(session_id):
+    return _wait_for("sessions", session_id, "running", "pending")
+
+
+def end(kind, obj_id):
+    """Cancel a session still going, or stop a deployment still up, then delete it; a package is
+    deleted as it is. An id already gone counts as done."""
+    try:
+        obj = request("GET", lifecycle_url(kind, obj_id))
+        if kind == "sessions" and obj["status"] not in TERMINAL:
+            request("POST", lifecycle_url(kind, obj_id) + "/cancel", body={}, idempotent=True)
+        if kind == "deployments" and obj["status"] not in ("stopped", "failed"):
+            request("POST", lifecycle_url(kind, obj_id) + "/stop", body={}, idempotent=True)
+        request("DELETE", lifecycle_url(kind, obj_id))
+    except RuntimeError as e:
+        if "(404)" not in str(e):
+            raise
+
+
+def result_url(ref):
+    """A session result's `ref` is a root path, `/api/files/<fil_…>/content`, or an absolute URL:
+    resolve it against the deployment root, not against .../api."""
+    return ref if ref.startswith("http") else api_base().removesuffix("/api") + ref
 
 
 def upload_file(path, rename=None):
