@@ -154,10 +154,10 @@ Then one default changes, and the script says so when it starts:
 |---|---|---|---|
 | 9 `fit/library_embeddings.py` | 4 sessions at once | 3 at a time | 3 jobs at once |
 
-**What it gives** (ours, 2026-11-06, through bundles and agent runs, which the free trial
-still serves; evals and agent runs on GPU; on CPU, 2026-10-31, the same numbers took
-about 1.5 hours). The free trial doesn't serve packages, deployments and sessions yet, so
-Stages 6, 8 and 9 of this version can't run there until it does:
+**What it gives** (ours, 2026-11-06, through bundles and agent runs; evals and agent runs on
+GPU; on CPU, 2026-10-31, the same numbers took about 1.5 hours). This version's Stages 6, 8
+and 9 haven't been run on the free trial yet: check that it serves the new calls first
+(`GET /api/agents/sessions?limit=1` answers 200, not 404):
 
 | stage | free trial | production |
 |---|---|---|
@@ -371,7 +371,7 @@ python fit/deliver.py --background               # log fit/out/deliver.log
 5. **Download** the outputs (`/api/agents/sessions/{id}/results`) and match them to
    files by timestamp.
 
-**Expect:** the upload (5 files, 134 MB), `package pkg_… of osm-larco-quickstart-…,
+**Expect:** the upload (5 files, 134 MB), `package pkg_… of larco-qs-otr_…,
 batch deployment dpl_…`, one session, then `5 of 5 files have predictions: 3,178
 windows (0 invalid); 0 rows matched no file; failed sessions: none`.
 
@@ -414,7 +414,7 @@ same drop from test to delivery, mainly on spin and fill.
 ```sh
 python fit/serve.py                          # the 5 becken-flt cycles, every window (~25 min)
 python fit/serve.py --files warm_fast-15_0   # one cycle (406 windows, ~4 min)
-python fit/serve.py --windows-per-query 8    # up to 8 consecutive windows a query
+python fit/serve.py --windows-per-query 8    # up to 16 consecutive windows a query
 ```
 
 Stage 6 delivers in batch: upload the files, run a session, download the outputs
@@ -450,12 +450,12 @@ call every 2.56 s with the latest 512 readings.
    deployment and package deleted, however the replay ends (Ctrl-C, SIGTERM and SIGHUP included); the ids stay in
    `fit/out/serve_state.json` until then.
 
-**Expect** (ours, production, 2026-10-29):
+**Expect** (ours, production, 2026-11-12):
 
 ```
-served 3,178 windows of 5 file(s) in 3,178 queries, 1438 s
+served 3,178 windows of 5 file(s) in 3,178 queries, 1289 s
   against the delivery (batch): predicted_state identical in 3,178/3,178, probabilities within 1e-4 in 3,176/3,178 (max difference 2.0e-01); invalid 0
-  latency per query: median 448 ms, p95 515 ms, max 810 ms
+  latency per query: median 389 ms, p95 515 ms, max 924 ms
   served  macro-F1 0.7707  fill 0.84  wash 0.86  spin 0.67  drain 0.71
   batch   macro-F1 0.7707  fill 0.84  wash 0.86  spin 0.67  drain 0.71
   -> fit/out/serving/serve_5files_wpq1.csv / .json
@@ -546,30 +546,24 @@ curl -s "${ATAI_API_ENDPOINT%/api}/api/agents/deployments?status=ready&limit=100
 ## Results, and they reproduce
 
 We ran the quickstart twice from Stage 0: the second time with a fresh download
-from Zenodo and `fit/out/` moved aside. Every number came out the same. A run on
-production through bundles (Stages 4–7 on 2026-10-29, from Stage 4; Stage 8 the same
-day) did too, and so did a run of Stages 4–9 through projects, packages, deployments
-and sessions (2026-10-30, [MIGRATION.md](MIGRATION.md)):
+from Zenodo and `fit/out/` moved aside. Every number came out the same. So did a run on
+production through the earlier bundles (2026-10-29), and a run of Stages 4–9 on
+production through projects, packages, deployments and sessions (2026-11-12, a member
+key in a new project, [MIGRATION.md](MIGRATION.md)):
 
-| stage | measure | first run | fresh run | production, 2026-10-29 | packages and sessions, 2026-10-30 |
+| stage | measure | first run | fresh run | production, bundles | production, packages and sessions |
 |---|---|---|---|---|---|
 | 1–3 | prepared rows; validation / test / delivery windows (1,024 rows) | 9,826,559; 1,224 / 1,760 / 1,587 | same | (reused) | (reused) |
 | 4 | validation macro-F1, k 5 / k 31 | 0.8305 / 0.7980 | same | same | same |
 | 5 | test macro-F1 | 0.8617 | same, with the same confusion matrix | same, with the same confusion matrix | same, with the same confusion matrix |
 | 7 | delivery macro-F1 | 0.7707 | same, per cycle too | same, per cycle too | same, per cycle too |
-| 8 | served macro-F1; states matching batch | – | – | 0.7707; 3,178/3,178 (2 probabilities a vote off) | the same, the same 2 windows; 512 ms median |
-| 9 | the library view | – | – | 800 windows, 86% nearest their own state | the same to within 1.4×10⁻⁵ |
+| 8 | served macro-F1; states matching batch | – | – | 0.7707; 3,178/3,178 (2 probabilities a vote off) | the same, the same 2 windows; 389 ms median |
+| 9 | the library view | – | – | 800 windows, 86% nearest their own state | the same to within 3.1×10⁻⁵; the app ran on it |
 
 Macro-F1 is the mean of the four states' F1 scores, so each state counts equally.
 
-A rerun with a member key, in its own project (2026-11-04), gave the same scores again
-in Stages 4–7, the same served states as batch in Stage 8 (one cycle, 406/406), and the
-same library view to within 1.4×10⁻⁵.
-
-A rerun of Stages 4–9 on the staging platform, which now serves Agent Lifecycle 2.0 too
-(2026-11-09), gave the same scores in Stages 4–7 and the same Stage 6 outputs byte for
-byte, the same served states as batch in Stage 8 (3,178/3,178, the same 2 windows a vote
-off; 431 ms median), and the same library view to within 3.5×10⁻⁵. The app ran on it too.
+Earlier runs through packages and sessions, with an org-admin key and with a member key,
+each in its own project, gave the same numbers at every stage.
 
 So the pipeline and the platform are deterministic here. If your run gives
 different numbers, something differs in your data or setup, and the expected
