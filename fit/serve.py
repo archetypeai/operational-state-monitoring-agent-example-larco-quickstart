@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Stage 8: serve the Stage 5 model over /query, checked against Stage 6's delivery.
 
-    python fit/serve.py                          # the 5 becken-flt cycles, every window (25-35 min)
+    python fit/serve.py                          # the 5 becken-flt cycles, every window (~25 min)
     python fit/serve.py --files warm_fast-15_0   # one cycle (406 windows, ~4 min)
     python fit/serve.py --max-windows 20         # the first 20 windows of each file
     python fit/serve.py --windows-per-query 8    # 8 consecutive windows a query
@@ -76,15 +76,17 @@ def windows_of(batch, ts_ms, window):
 
 def end(ex):
     """End the session, then the deployment, then delete the package; an id already gone
-    counts as done. Each holds the next."""
+    counts as done. Each is tried even when one before it fails: a session that won't delete
+    must not leave the serving deployment holding its worker."""
+    ok = True
     for kind in ("sessions", "deployments", "packages"):
         if ex.get(kind[:-1]):
             try:
                 end_one(kind, ex[kind[:-1]])
-            except RuntimeError as e:
+            except (RuntimeError, OSError) as e:
                 log(f"cleanup: {e}; fit/cleanup.py retries it")
-                return False
-    return True
+                ok = False
+    return ok
 
 
 def stop(signum, _frame):
@@ -163,7 +165,7 @@ def main():
                     count += 1
                 t = time.time()
                 answer = request("POST", lifecycle_url("sessions", ex["session"]) + "/query",
-                                 body=query_body(X[firsts[k]:firsts[k] + count * window]))
+                                 body=query_body(X[firsts[k]:firsts[k] + count * window]), idempotent=True)
                 latency.append(time.time() - t)
                 records = (answer.get("response") or {}).get("data")
                 if not isinstance(records, list) or len(records) != count:
@@ -172,9 +174,13 @@ def main():
                 k += count
             log(f"  {name}: {len(firsts)} windows, {time.time() - t0:.0f} s so far")
     finally:
+        handlers = {sig: signal.signal(sig, signal.SIG_IGN)   # a second signal mustn't cut the cleanup short
+                    for sig in (signal.SIGINT, signal.SIGTERM, signal.SIGHUP)}
         if end(ex):
             os.remove(sf)
             log(f"ended and deleted {', '.join(ex[k] for k in ('session', 'deployment', 'package') if ex.get(k))}")
+        for sig, handler in handlers.items():
+            signal.signal(sig, handler)
     elapsed = time.time() - t0
 
     rows = []

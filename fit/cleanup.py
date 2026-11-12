@@ -84,7 +84,7 @@ def main():
             sys.exit(f"ids in {args.out} are from {st['endpoint']}, a different deployment from {api_base()}: "
                      f"set .env to that deployment")
         if st.get("bundle"):
-            sys.exit(f"{paths[k]} holds bundle ids from before packages: delete them with the bundle-era fit/cleanup.py")
+            sys.exit(f"{paths[k]} holds bundle ids from before packages, which the platform no longer serves: move it aside")
 
     def exists(pkg):
         try:

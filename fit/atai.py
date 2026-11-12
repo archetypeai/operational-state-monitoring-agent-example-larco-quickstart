@@ -4,6 +4,7 @@ Reads ATAI_API_KEY and ATAI_API_ENDPOINT from .env. Every platform surface
 lives under one versionless /api prefix: <endpoint>/api/agents/... for the
 Agents API, <endpoint>/api/files for uploads.
 """
+import http.client
 import json
 import os
 import re
@@ -78,8 +79,11 @@ def agents():
     return f"{api_base()}/agents"
 
 
-def request(method, url, body=None):
-    """JSON request. GETs retry through brief outages; POSTs never retry (a repeat could duplicate)."""
+def request(method, url, body=None, idempotent=None):
+    """JSON request. GETs and DELETEs retry through brief outages, and so do POSTs marked
+    idempotent (cancel, stop, a serving query); other POSTs never retry, since a repeated
+    create could make a second object that nothing records."""
+    retry = method in ("GET", "HEAD", "DELETE") if idempotent is None else idempotent
     data = json.dumps(body).encode() if body is not None else None
     delay, waited = 5, 0
     while True:
@@ -92,13 +96,13 @@ def request(method, url, body=None):
                 return json.loads(resp.read() or b"null")
         except urllib.error.HTTPError as e:
             detail = e.read().decode(errors="replace")
-            if method != "GET" or e.code not in (502, 503, 504) or waited >= 600:
+            if not retry or e.code not in (502, 503, 504) or waited >= 600:
                 raise RuntimeError(f"{method} {url} failed ({e.code}): {detail}") from None
             reason = f"HTTP {e.code}"
-        except urllib.error.URLError as e:
-            if method != "GET" or waited >= 600:
+        except (urllib.error.URLError, TimeoutError, ConnectionError, http.client.HTTPException) as e:
+            if not retry or waited >= 600:
                 raise
-            reason = str(e.reason)
+            reason = str(getattr(e, "reason", e))
         print(f"  {method} {url} unavailable ({reason}); retrying in {delay}s", file=sys.stderr)
         time.sleep(delay)
         waited += delay
@@ -106,8 +110,7 @@ def request(method, url, body=None):
 
 
 PROJECT = "OSM LARCO quickstart"
-OLD_PROJECTS = ("LARCO OSM quickstart",)   # found and reused, never created
-BASE_KEY = "larco-qs"            # the copy of `osm`; trials it promotes default to <BASE_KEY>-<trial id>
+BASE_KEY = "larco-qs"            # the copy of `osm`; trials it promotes default to <BASE_KEY>-otr_<trial id>
 
 
 def lifecycle_url(kind, obj_id=""):
@@ -132,13 +135,14 @@ def base_blueprint(out, source="osm", log=print):
         sys.exit(f"{path} is from {state.get('endpoint')}, a different deployment from {api_base()}: move it aside")
     state["endpoint"] = api_base()
     if "project" not in state:
-        found = [p for p in request("GET", f"{api_base()}/projects?limit=1000")["data"] if p["name"] in (PROJECT, *OLD_PROJECTS)]
+        found = [p for p in request("GET", f"{api_base()}/projects?limit=1000")["data"] if p["name"] == PROJECT]
         state["project"] = found[0]["id"] if found else request(
             "POST", f"{api_base()}/projects", body={"name": PROJECT, "description": "Operational State Monitoring agent on LARCO washing-machine states"})["id"]
         json.dump(state, open(path, "w"), indent=1)
         log(f"project {state['project']} ({PROJECT})")
     if "base" not in state:
-        found = request("GET", f"{agents()}/blueprints?project_id={state['project']}&key={BASE_KEY}")["data"]
+        found = [bp for bp in request("GET", f"{agents()}/blueprints?project_id={state['project']}&key={BASE_KEY}")["data"]
+                 if bp["blueprint_key"] == BASE_KEY]   # never a blueprint promoted from it
         if found:
             bp = found[0]
             log(f"reusing {BASE_KEY} in {state['project']} ({bp['id']})")
@@ -150,14 +154,16 @@ def base_blueprint(out, source="osm", log=print):
     return {"project": state["project"], **state["base"]}
 
 
-def _wait_for(kind, obj_id, want, waiting, timeout_s=600, every_s=3):
+def _wait_for(kind, obj_id, want, waiting, timeout_s=600, every_s=3, exit=True):
     t0 = time.time()
     while True:
         obj = request("GET", lifecycle_url(kind, obj_id))
         if obj["status"] == want:
             return obj
         if obj["status"] != waiting or time.time() - t0 > timeout_s:
-            sys.exit(f"{obj_id} is {obj['status']}, not {want}: {obj.get('error')}")
+            if exit:
+                sys.exit(f"{obj_id} is {obj['status']}, not {want}: {obj.get('error')}")
+            return obj
         time.sleep(every_s)
 
 
@@ -172,6 +178,26 @@ def create_package(blueprint_id, name):
 
 def package_ready(package_id):
     return _wait_for("packages", package_id, "ready", "building", every_s=5)
+
+
+def ready_package(state, blueprint_id, name, save, log=print):
+    """state["package"] once ready, created (and saved) first if there is none. A failed
+    package never becomes ready, so it is deleted and built again, once: a rerun after a failed
+    build doesn't stop on the same package."""
+    for attempt in range(2):
+        if not state.get("package"):
+            state["package"] = create_package(blueprint_id, name)["id"]
+            save()
+            log(f"package {state['package']} ({name})")
+        pkg = _wait_for("packages", state["package"], "ready", "building", every_s=5, exit=False)
+        if pkg["status"] == "ready":
+            return pkg
+        if pkg["status"] != "failed" or attempt:
+            sys.exit(f"{state['package']} is {pkg['status']}, not ready: {pkg.get('error')}")
+        log(f"{state['package']} failed ({pkg.get('error')}): deleting it and building a new one")
+        end("packages", state["package"])
+        state.pop("package")
+        save()
 
 
 def deploy(package_id, kind):
@@ -204,9 +230,9 @@ def end(kind, obj_id):
     try:
         obj = request("GET", lifecycle_url(kind, obj_id))
         if kind == "sessions" and obj["status"] not in TERMINAL:
-            request("POST", lifecycle_url(kind, obj_id) + "/cancel", body={})
+            request("POST", lifecycle_url(kind, obj_id) + "/cancel", body={}, idempotent=True)
         if kind == "deployments" and obj["status"] not in ("stopped", "failed"):
-            request("POST", lifecycle_url(kind, obj_id) + "/stop", body={})
+            request("POST", lifecycle_url(kind, obj_id) + "/stop", body={}, idempotent=True)
         request("DELETE", lifecycle_url(kind, obj_id))
     except RuntimeError as e:
         if "(404)" not in str(e):

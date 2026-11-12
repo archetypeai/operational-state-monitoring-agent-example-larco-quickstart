@@ -42,8 +42,8 @@ import time
 import numpy as np
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from atai import (TERMINAL, agents, api_base, create_package, deploy, deployment_ready, free_trial,  # noqa: E402
-                  lifecycle_url, list_trials, load_dotenv, open_session, package_ready, request, same_deployment,
+from atai import (TERMINAL, agents, api_base, deploy, deployment_ready, free_trial, lifecycle_url,  # noqa: E402
+                  list_trials, load_dotenv, open_session, ready_package, request, same_deployment,
                   trial_setting, wait_optimization)
 from deliver import END_SLACK_MS, OUTPUT_WAIT_S, fetch, time_range, to_ms  # noqa: E402
 from optimize import OUT, ROLES, log, pinned_values, upload_all  # noqa: E402
@@ -228,10 +228,8 @@ def main():
         if not state.get("deployment"):
             emb = embeddings_blueprint(test, state, save)
             if not state.get("package"):
-                state.update({"endpoint": api_base(), "blueprint": key, "runs": {},
-                              "package": create_package(emb["id"], "LARCO library embeddings")["id"]})
-                save()
-            package_ready(state["package"])
+                state.update({"endpoint": api_base(), "blueprint": key, "runs": {}})
+            ready_package(state, emb["id"], "LARCO library embeddings", save, log)
             state["deployment"] = deploy(state["package"], "batch")["id"]
             save()
             deployment_ready(state["deployment"])
